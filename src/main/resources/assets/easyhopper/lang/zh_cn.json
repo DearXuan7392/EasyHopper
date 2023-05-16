@@ -1,0 +1,6 @@
+{
+  "text.autoconfig.easyhopper.title": "轻松漏斗(Easy Hopper)",
+  "text.autoconfig.easyhopper.option.TRANSFER_COOLDOWN": "传送冷却时间",
+  "text.autoconfig.easyhopper.option.TRANSFER_INPUT_COUNT": "输入物品数量",
+  "text.autoconfig.easyhopper.option.TRANSFER_OUTPUT_COUNT": "输出物品数量"
+}

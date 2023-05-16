@@ -39,6 +39,7 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-fabric:10.0.96") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+    modApi "com.terraformersmc:modmenu:6.2.1"
     /**
      * Cloth Config 结束
      */
@@ -102,4 +103,9 @@ publishing {
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
     }
+}
+
+
+loom {
+    accessWidenerPath = file("src/main/resources/easyhopper.accesswidener")
 }

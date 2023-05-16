@@ -4,9 +4,10 @@
   "package": "com.dearxuan.easyhopper.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "EasyHopperMixin",
+    "IEasyHopperEntity"
   ],
   "client": [
-    "EasyHopperMixin"
   ],
   "injectors": {
     "defaultRequire": 1

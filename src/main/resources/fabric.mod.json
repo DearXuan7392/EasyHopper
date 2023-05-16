@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "easy-hopper",
+  "id": "easyhopper",
   "version": "${version}",
   "name": "EasyHopper",
   "description": "",
@@ -9,7 +9,7 @@
     "repo": "https://github.com/Administrator/EasyHopper"
   },
   "license": "Apache-2.0",
-  "icon": "assets/EasyHopper/icon.png",
+  "icon": "assets/easyhopper/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
@@ -17,10 +17,13 @@
     ],
     "main": [
       "com.dearxuan.easyhopper.EasyHopper"
+    ],
+    "modmenu": [
+      "com.dearxuan.easyhopper.Config.ModMenu"
     ]
   },
   "mixins": [
-    "EasyHopper.mixins.json"
+    "easyhopper.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",

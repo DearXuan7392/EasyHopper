@@ -1,6 +1,6 @@
 {
   "text.autoconfig.easyhopper.title": "Easy Hopper",
-  "text.autoconfig.easyhopper.option.TRANSFER_COOLDOWN": "Transfer Cooldown",
+  "text.autoconfig.easyhopper.option.TRANSFER_COOLDOWN": "Transfer Cooldown(tick)",
   "text.autoconfig.easyhopper.option.TRANSFER_INPUT_COUNT": "Input Item Count",
   "text.autoconfig.easyhopper.option.TRANSFER_OUTPUT_COUNT": "Output Item Count"
 }

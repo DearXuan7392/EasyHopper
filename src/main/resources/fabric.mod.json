@@ -3,10 +3,12 @@
   "id": "easyhopper",
   "version": "${version}",
   "name": "EasyHopper",
-  "description": "",
-  "authors": [],
+  "description": "一个修改漏斗速度的MOD.",
+  "authors": ["DearXuan"],
   "contact": {
-    "repo": "https://github.com/Administrator/EasyHopper"
+    "repo": "https://gitee.com/dearxuan/EasyHopper.git",
+    "sources": "https://gitee.com/dearxuan/EasyHopper",
+    "issues": "https://gitee.com/dearxuan/EasyHopper/issues"
   },
   "license": "Apache-2.0",
   "icon": "assets/easyhopper/icon.png",
@@ -28,6 +30,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
+    "fabric-api": "*",
     "minecraft": "${minecraft_version}",
     "modmenu": ">=6.2.1"
   }

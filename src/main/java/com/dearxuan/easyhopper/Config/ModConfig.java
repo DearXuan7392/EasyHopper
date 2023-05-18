@@ -23,6 +23,9 @@ public class ModConfig implements ConfigData {
     @Comment("控制漏斗每次输出多少个物品")
     public int TRANSFER_OUTPUT_COUNT = 1;
 
+    @Comment("启用时,会占用漏斗的最后一格作为分类格,这个漏斗只会允许与最后一格相同的物品通过")
+    public boolean CLASSIFICATION_HOPPER = false;
+
     public ModConfig(){
 
     }

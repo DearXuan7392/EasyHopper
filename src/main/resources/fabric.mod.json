@@ -14,11 +14,15 @@
   "icon": "assets/easyhopper/icon.png",
   "environment": "client",
   "entrypoints": {
-    "client": [
-      "com.dearxuan.easyhopper.client.EasyHopperClient"
-    ],
     "main": [
       "com.dearxuan.easyhopper.EasyHopper"
+    ],
+    "server": [
+
+    ],
+    "client": [
+
+      "com.dearxuan.easyhopper.client.EasyHopperClient"
     ],
     "modmenu": [
       "com.dearxuan.easyhopper.Config.ModMenu"

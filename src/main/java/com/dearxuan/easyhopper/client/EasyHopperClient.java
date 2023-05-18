@@ -1,5 +1,6 @@
 package com.dearxuan.easyhopper.client;
 
+import com.dearxuan.easyhopper.Config.ModConfig;
 import net.fabricmc.api.ClientModInitializer;
 
 public class EasyHopperClient implements ClientModInitializer {
@@ -8,6 +9,6 @@ public class EasyHopperClient implements ClientModInitializer {
      */
     @Override
     public void onInitializeClient() {
-
+        ModConfig.init();
     }
 }

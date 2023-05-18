@@ -12,6 +12,6 @@ public class EasyHopper implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ModConfig.init();
+
     }
 }

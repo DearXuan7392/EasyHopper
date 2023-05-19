@@ -1,12 +1,13 @@
 package com.dearxuan.easyhopper.mixin;
 
 import com.dearxuan.easyhopper.Config.ModConfig;
-import com.dearxuan.easyhopper.EasyHopper;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HopperBlock;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.Hopper;
 import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
@@ -21,8 +22,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Arrays;
 import java.util.function.BooleanSupplier;
+import java.util.stream.IntStream;
 
 @Mixin(HopperBlockEntity.class)
 public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
@@ -50,12 +51,30 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
     }
 
     @Shadow
+    private static Inventory getInputInventory(World world, Hopper hopper) {
+        return null;
+    }
+
+    @Shadow
     private static Inventory getOutputInventory(World world, BlockPos pos, BlockState state){
         return null;
     }
 
     @Shadow
+    private static boolean isInventoryEmpty(Inventory inv, Direction facing) {
+        return false;
+    }
+
+    @Shadow
     private static boolean isInventoryFull(Inventory inventory, Direction direction){
+        return false;
+    }
+
+    @Shadow
+    private static IntStream getAvailableSlots(Inventory inventory, Direction side){ return null; }
+
+    @Shadow
+    private static boolean extract(Hopper hopper, Inventory inventory, int slot, Direction side){
         return false;
     }
 
@@ -89,6 +108,8 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
             CallbackInfoReturnable<Boolean> info){
         if (world.isClient) {
             info.setReturnValue(false);
+            info.cancel();
+            return;
         }
 
         IEasyHopperBlockEntity iBlockEntity =  (IEasyHopperBlockEntity) blockEntity;
@@ -103,7 +124,6 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
                     }else{
                         bl |= insert(world, pos, state, blockEntity);
                     }
-
                 }
             }
             // 输入一个物品
@@ -116,6 +136,7 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
                 iBlockEntity.Invoke_setTransferCooldown(8);
                 HopperBlockEntity.markDirty(world, pos, state);
                 info.setReturnValue(true);
+                return;
             }
         }
         info.setReturnValue(false);
@@ -125,7 +146,7 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
      * 将漏斗里的物品输出到另一个容器
      * @param world 当前世界
      * @param pos 输出容器坐标
-     * @param state 输出容器状态
+     * @param state 输出容器方块状态
      * @param inventory 漏斗
      * @return 是否输出成功
      */
@@ -168,23 +189,37 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
             at = {@At("HEAD")},
             cancellable = true
     )
-    private static void EasyTransfer(
+    private static void EasyTransfer_1(
             Inventory from,
             Inventory to,
             ItemStack stack,
             Direction side,
             CallbackInfoReturnable<ItemStack> info){
+        if(ModConfig.INSTANCE.CLASSIFICATION_HOPPER){
+            if(from instanceof HopperBlockEntity && !CanHopperTransfer((HopperBlockEntity) from, stack)){
+                info.setReturnValue(stack);
+                return;
+            }
+            if(to instanceof HopperBlockEntity && !CanHopperTransfer((HopperBlockEntity) to, stack)){
+                info.setReturnValue(stack);
+                return;
+            }
+        }
         if (to instanceof SidedInventory) {
             SidedInventory sidedInventory = (SidedInventory)to;
             if (side != null) {
                 int[] is = sidedInventory.getAvailableSlots(side);
                 int i = 0;
                 while (i < is.length) {
-                    if (stack.isEmpty()) info.setReturnValue(stack);
+                    if (stack.isEmpty()) {
+                        info.setReturnValue(stack);
+                        return;
+                    }
                     stack = transfer(from, to, stack, is[i], side);
                     ++i;
                 }
                 info.setReturnValue(stack);
+                return;
             }
         }
         int j = to.size();
@@ -194,7 +229,10 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
         }
         int i = 0;
         while (i < j) {
-            if (stack.isEmpty()) info.setReturnValue(stack);
+            if (stack.isEmpty()) {
+                info.setReturnValue(stack);
+                return;
+            }
             stack = transfer(from, to, stack, i, side);
             ++i;
         }
@@ -206,34 +244,66 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
             at = {@At("HEAD")},
             cancellable = true
     )
-    private static void EasyTransfer(
+    private static void EasyTransfer_2(
             Inventory from,
             Inventory to,
             ItemStack stack,
             int slot,
             Direction side,
             CallbackInfoReturnable<ItemStack> info){
-        if(from instanceof HopperBlockEntity && StopHopperTransfer((HopperBlockEntity) from, stack)){
-            info.setReturnValue(stack);
-            return;
-        }
-        if(to instanceof HopperBlockEntity && StopHopperTransfer((HopperBlockEntity) to, stack)){
-            info.setReturnValue(stack);
-            return;
-        }
-    }
-
-    private static boolean StopHopperTransfer(HopperBlockEntity hopper, ItemStack itemStack){
         if(ModConfig.INSTANCE.CLASSIFICATION_HOPPER){
-            // 该物品是禁止传入的物品
-            ItemStack classificationItemStack = ((IEasyHopperBlockEntity)hopper).getInventory().get(4);
-            return !classificationItemStack.isEmpty() && itemStack.getItem() != classificationItemStack.getItem();
-        }else{
-            // 未开启分类,则无需停止传输
-            return false;
+            if(from instanceof HopperBlockEntity && !CanHopperTransfer((HopperBlockEntity) from, stack)){
+                info.setReturnValue(stack);
+                return;
+            }
+            if(to instanceof HopperBlockEntity && !CanHopperTransfer((HopperBlockEntity) to, stack)){
+                info.setReturnValue(stack);
+                return;
+            }
         }
     }
 
+    private static boolean CanHopperTransfer(HopperBlockEntity hopper, ItemStack itemStack){
+        ItemStack classificationItemStack = ((IEasyHopperBlockEntity)hopper).getInventory().get(4);
+        if(classificationItemStack.isEmpty()){
+            return true;
+        }else{
+            return itemStack.getItem() == classificationItemStack.getItem();
+        }
+    }
 
+    @Inject(
+            method = {"extract(Lnet/minecraft/world/World;Lnet/minecraft/block/entity/Hopper;)Z"},
+            at = {@At("HEAD")},
+            cancellable = true
+    )
+    private static void EasyExtract(
+            World world,
+            Hopper hopper,
+            CallbackInfoReturnable<Boolean> info){
+        Inventory inventory = getInputInventory(world, hopper);
+        if (inventory != null) {
+            Direction direction = Direction.DOWN;
+            if (isInventoryEmpty(inventory, direction)) {
+                info.setReturnValue(false);
+                return;
+            }else{
+                IntStream is;
+                if(ModConfig.INSTANCE.CLASSIFICATION_HOPPER && inventory instanceof HopperBlockEntity){
+                    is = IntStream.range(0, 4);
+                }else{
+                    is = getAvailableSlots(inventory, direction);
+                }
+                info.setReturnValue(is.anyMatch(slot -> extract(hopper, inventory, slot, direction)));
+                return;
+            }
+        }
+        for (ItemEntity itemEntity : HopperBlockEntity.getInputItemEntities(world, hopper)) {
+            if (!HopperBlockEntity.extract(hopper, itemEntity)) continue;
+            info.setReturnValue(true);
+            return;
+        }
+        info.setReturnValue(false);
+    }
 }
 

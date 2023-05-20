@@ -1,7 +1,10 @@
 package com.dearxuan.easyhopper.mixin;
 
 import com.dearxuan.easyhopper.Config.ModConfig;
+import com.dearxuan.easyhopper.EasyHopper;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.DropperBlock;
 import net.minecraft.block.HopperBlock;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.Hopper;
@@ -11,6 +14,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -83,6 +87,17 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
     }
 
     @Inject(
+            method = {"serverTick"},
+            at = {@At("HEAD")},
+            cancellable = true
+    )
+    private static void EasyServerTick(World world, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, CallbackInfo ci){
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+            EasyHopper.LOGGER.info(element.getClassName() + "." + element.getMethodName() + " (" + element.getFileName() + ":" + element.getLineNumber() + ")");
+        }
+    }
+
+    @Inject(
             method = {"setTransferCooldown"},
             at = {@At("HEAD")},
             cancellable = true
@@ -116,22 +131,45 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
 
         if (!iBlockEntity.Invoke_needsCooldown() && state.get(HopperBlock.ENABLED).booleanValue()) {
             boolean bl = false;
-            // 输出一个物品
+            boolean outputBl = false;
+            // 输出若干个物品
             for(int i = 0; i < ModConfig.INSTANCE.TRANSFER_OUTPUT_COUNT; ++i){
-                if (!blockEntity.isEmpty()) {
+                if (blockEntity.isEmpty()) {
+                    break;
+                }else{
                     if(ModConfig.INSTANCE.CLASSIFICATION_HOPPER && !iBlockEntity.getInventory().get(4).isEmpty()){
-                        bl = EasyClassificationInsert(world, pos, state, blockEntity);
+                        bl |= EasyClassificationInsert(world, pos, state, blockEntity);
                     }else{
                         bl |= insert(world, pos, state, blockEntity);
                     }
                 }
             }
-            // 输入一个物品
+            outputBl = bl;
+            // 输入若干个物品
             for(int i = 0; i < ModConfig.INSTANCE.TRANSFER_INPUT_COUNT; ++i){
-                if (!iBlockEntity.Invoke_isFull()) {
+                if (iBlockEntity.Invoke_isFull()) {
+                    break;
+                }else{
                     bl |= booleanSupplier.getAsBoolean();
                 }
             }
+
+            if(ModConfig.INSTANCE.DROPPER_AUTO_DISPENSE && outputBl){
+                try{
+                    BlockPos dropperPos = pos.offset(state.get(HopperBlock.FACING));
+                    Block block = world.getBlockState(dropperPos).getBlock();
+                    EasyHopper.LOGGER.info(String.valueOf(block.getName()));
+                    if(block instanceof DropperBlock){
+                        EasyHopper.LOGGER.info("发射!");
+                        IEasyDropperBlock dropperBlock = (IEasyDropperBlock) block;
+                        dropperBlock.Invoke_dispense((ServerWorld) world, dropperPos);
+                    }
+                }catch (Exception e){
+                    EasyHopper.LOGGER.info(e.toString());
+                }
+
+            }
+
             if (bl) {
                 iBlockEntity.Invoke_setTransferCooldown(8);
                 HopperBlockEntity.markDirty(world, pos, state);
@@ -145,9 +183,9 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
     /**
      * 将漏斗里的物品输出到另一个容器
      * @param world 当前世界
-     * @param pos 输出容器坐标
-     * @param state 输出容器方块状态
-     * @param inventory 漏斗
+     * @param pos 漏斗坐标
+     * @param state 漏斗状态
+     * @param inventory 漏斗容器
      * @return 是否输出成功
      */
     private static boolean EasyClassificationInsert(

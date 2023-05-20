@@ -2,6 +2,7 @@ package com.dearxuan.easyhopper.client;
 
 import com.dearxuan.easyhopper.Config.ModConfig;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
 public class EasyHopperClient implements ClientModInitializer {
     /**
@@ -10,5 +11,8 @@ public class EasyHopperClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModConfig.init();
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+
+        });
     }
 }

@@ -1,60 +1,64 @@
 ## EasyHopper
 
-此MOD用于优化漏斗性能,并在原版基础上提供分类功能
+This mod is used to optimize the performance of hoppers and provides a classification function without new blocks.
 
-[开发历程](https://blog.dearxuan.com/2023/05/16/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8Cmod%E5%BC%80%E5%8F%91/)
+[This page(Chinese Simplify)](https://blog.dearxuan.com/2023/05/16/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8Cmod%E5%BC%80%E5%8F%91/) will show you my development process.
 
-![屏幕截图](res/screenshot.jpg)
+![Screenshot](res/screenshot.jpg)
 
-## 下载
+## Download
 
-[发行版](https://gitee.com/dearxuan/EasyHopper/releases/)
+[Download from Gitee](https://gitee.com/dearxuan/EasyHopper/releases/)
 
-## 功能说明
+## Features
 
-### 冷却时间
+### Cooldown
 
-漏斗在经过一次输入或输出后会进入冷却,原版冷却时间是8(单位为tick,每秒20个tick).本mod提供了修改冷却时间的功能,如果漏斗较多(如500个),则可以增大冷却时间,以提高性能.
+After each input or output, the hopper will enter a cooldown period. The original cooldown is 8 ticks (20 ticks per second). This mod provides the ability to modify the cooldown. If you have many hoppers (such as 500), you can increase the cooldown to improve performance.
 
-### 输入输出数量
+### Input/Output Count
 
-每个漏斗会尝试先输出物品,再输入物品(如果你需要修改顺序,可以在issues里提出).修改漏斗每次输入或输出数量,使得漏斗单次可以输出或取走更多物品.注意掉落物仅受冷却时间影响.
+Each hopper will attempt to output items first and then input items (you can raise an issue to modify the order if needed). By modifying the number of items input or output by each hopper, each hopper can output or retrieve more items at a time. 
 
-### 分类
+>Note that the drop items are only affected by the cooldown, not input count.
 
-在设置中开启分类功能后,将会改用漏斗的最后一格为分类物品格,只有相同的物品(包括不可堆叠的物品,或者不同磨损度的工具)才可以输入或输出,无论是掉落物,或是漏斗矿车.
+### Classification
 
-如果玩家强行放入不相同的物品,则会**永远**在漏斗中无法流出,直到玩家手动取走.
+When the classification function is enabled in the settings, the last slot of hopper will be used as the classification item slot. Only the same items(including non-stackable items or tools with different wear) can be input or output, whether they are dropped items or hopper minecarts.
 
-当漏斗的最后一格为空时,该漏斗不再分类.而即使为空,物品也无法流入最后一格,只能由玩家手动放置.
+If a player forcibly puts in different items, they will **never** flow out of the hopper until the player manually takes them.
 
-例如,你在最后一格放入红石,那么只有红石能进入或离开本漏斗.当你取走红石的那一刻,漏斗的分类功能会失效.
+When the last slot of the hopper is empty, the classification function of it will be disabled. Even if it is empty, items cannot flow into the last slot, and can only be placed manually by players.
 
-## 小技巧
+For example, if you put redstone in the last slot, only redstone can enter or leave the hopper. The hopper's classification function will be disabled when you take out the redstone.
 
-### 漏斗链分类
+## Tips
 
-使用漏斗链来代替水流分类.它在下届仍然奏效.你可以增大冷却时间和单次输入输出个数,来提升多漏斗时的性能(实际上十几个漏斗并不会造成可见的性能降低).
+### Hopper Chain Classification
 
-以下是使用漏斗分类时的推荐配置.你可以根据自己需求修改.注意输入和输出数量最好相等,输入数量可以大于输出数量.
+Use hopper chains instead of water flow classification. It still works in The Nether. You can increase the cooldown and input/output count to improve performance when using multiple hoppers.(In fact, around a dozen hoppers will not cause visible performance degradation)
 
-| 冷却时间 | 输入输出数量 | 远距离传输速度 |
-|:----:|:------:|:-------:|
-|  16  |   32   |    慢    |
-|  8   |   16   |    中    |
-|  4   |   8    |    快    |
+The following is the recommended configuration when using hopper classification. You can modify it according to your needs. 
 
-除非你在用漏斗来远程传递物品,否则不建议把冷却时间设置为4或更低.冷却时间对性能的影响大于输入输出数量.
+>Note that the input and output count are best equal, and the input count can be greater than the output.
 
-### 电路相关
+| Cooldown | Input/Output Count	 | Long-Distance Transfer Speed |
+|:--------:|:-------------------:|:----------------------------:|
+|    16    |         32          |             Slow             |
+|    8     |         16          |            Medium            |
+|    4     |          8          |             Fast             |
 
-你可能无法使用红石电路来精准控制漏斗内物品数量(大部分人用不到),因为红石的更新频率是2,且每次输入或输出物品数大于1.
+Unless you're using hoppers to transmit items remotely, it's not recommended to set cooldown to 4 or lower. The cooldown has a greater impact on performance than the input/output count.
 
-### 计时器
+### Redstone Related
 
-如果你使用相向漏斗来计时,那么你需要根据你的具体配置,重新计算漏斗内物品数量.或者你可以根据计时要求,修改相关配置来更精准地计时.(1 tick = 0.05 s)
+You may not be able to use redstone circuits to precisely control the number of items in the hopper (most people don't need it), because the update frequency of redstone is 2, and the input or output each time is greater than 1.
 
-## 依赖
+### Timer
+
+If you are timing with hoppers, then you need to recalculate the number of items in the hopper based on your specific configuration. Alternatively, you can modify the relevant configuration to time more accurately according to your timing requirements. (1 tick = 0.05 s)
+
+## Dependencies
 
 ``minecraft 1.19.4``
 
@@ -62,10 +66,8 @@
 
 ``modmenu >=6.2.1``
 
-其中前置mod``modmenu``可在以下链接下载
+``modmenu`` can be downloaded at the following link
 
 [https://modrinth.com/mod/modmenu/versions](https://modrinth.com/mod/modmenu/versions)
 
-仅在客户端上测试通过,服务器不保证有效
-
-
+> This mod is only for client and LAN multiplayer. Only the host needs to install it.

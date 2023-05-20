@@ -86,15 +86,15 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
         super(blockEntityType, blockPos, blockState);
     }
 
+    private static boolean haha = true;
+
     @Inject(
             method = {"serverTick"},
             at = {@At("HEAD")},
             cancellable = true
     )
-    private static void EasyServerTick(World world, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, CallbackInfo ci){
-        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
-            EasyHopper.LOGGER.info(element.getClassName() + "." + element.getMethodName() + " (" + element.getFileName() + ":" + element.getLineNumber() + ")");
-        }
+    private static void EasyServerTick(World world, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, CallbackInfo info){
+
     }
 
     @Inject(
@@ -131,7 +131,6 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
 
         if (!iBlockEntity.Invoke_needsCooldown() && state.get(HopperBlock.ENABLED).booleanValue()) {
             boolean bl = false;
-            boolean outputBl = false;
             // 输出若干个物品
             for(int i = 0; i < ModConfig.INSTANCE.TRANSFER_OUTPUT_COUNT; ++i){
                 if (blockEntity.isEmpty()) {
@@ -144,7 +143,6 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
                     }
                 }
             }
-            outputBl = bl;
             // 输入若干个物品
             for(int i = 0; i < ModConfig.INSTANCE.TRANSFER_INPUT_COUNT; ++i){
                 if (iBlockEntity.Invoke_isFull()) {
@@ -152,22 +150,6 @@ public abstract class EasyHopperMixin extends LootableContainerBlockEntity {
                 }else{
                     bl |= booleanSupplier.getAsBoolean();
                 }
-            }
-
-            if(ModConfig.INSTANCE.DROPPER_AUTO_DISPENSE && outputBl){
-                try{
-                    BlockPos dropperPos = pos.offset(state.get(HopperBlock.FACING));
-                    Block block = world.getBlockState(dropperPos).getBlock();
-                    EasyHopper.LOGGER.info(String.valueOf(block.getName()));
-                    if(block instanceof DropperBlock){
-                        EasyHopper.LOGGER.info("发射!");
-                        IEasyDropperBlock dropperBlock = (IEasyDropperBlock) block;
-                        dropperBlock.Invoke_dispense((ServerWorld) world, dropperPos);
-                    }
-                }catch (Exception e){
-                    EasyHopper.LOGGER.info(e.toString());
-                }
-
             }
 
             if (bl) {

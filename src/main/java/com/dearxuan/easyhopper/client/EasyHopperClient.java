@@ -11,8 +11,5 @@ public class EasyHopperClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModConfig.init();
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-
-        });
     }
 }

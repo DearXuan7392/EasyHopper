@@ -3,5 +3,11 @@
   "text.autoconfig.easyhopper.option.TRANSFER_COOLDOWN": "Transfer Cooldown(tick)",
   "text.autoconfig.easyhopper.option.TRANSFER_INPUT_COUNT": "Input Item Count",
   "text.autoconfig.easyhopper.option.TRANSFER_OUTPUT_COUNT": "Output Item Count",
-  "text.autoconfig.easyhopper.option.CLASSIFICATION_HOPPER": "Enable Classification"
+  "text.autoconfig.easyhopper.option.CLASSIFICATION_HOPPER": "Enable Classification Hopper",
+
+  "text.autoconfig.easydropper.title": "Easy Dropper",
+  "text.autoconfig.easydropper.option.DROPPER_AUTO_DISPENSE": "Enable Auto Dropper",
+  "text.autoconfig.easydropper.option.DISPENSER_AUTO_DISPENSE": "Enable Auto Dispenser",
+  "text.autoconfig.easydropper.option.DISPENSE_COOLDOWN": "Dropper Cooldown(tick)",
+  "text.autoconfig.easydropper.option.DISPENSER_COOLDOWN": "Dispenser Cooldown(tick)"
 }

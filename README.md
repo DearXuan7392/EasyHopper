@@ -2,13 +2,15 @@
 
 This mod is used to optimize the performance of hoppers and provides a classification function without new blocks.
 
-[This page(Chinese Simplify)](https://blog.dearxuan.com/2023/05/16/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8Cmod%E5%BC%80%E5%8F%91/) will show you my development process.
+[This page(中文 Chinese Simplify)](https://blog.dearxuan.com/2023/05/16/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8Cmod%E5%BC%80%E5%8F%91/) will show you my development process.
 
-![Screenshot](res/screenshot.jpg)
+![Screenshot](res/screenshot_EN.jpg)
 
 ## Download
 
 [Download from Gitee](https://gitee.com/dearxuan/EasyHopper/releases/)
+
+[Download from GitHub](https://github.com/DearXuan7392/EasyHopper/releases/)
 
 ## Features
 
@@ -20,7 +22,7 @@ After each input or output, the hopper will enter a cooldown period. The origina
 
 Each hopper will attempt to output items first and then input items (you can raise an issue to modify the order if needed). By modifying the number of items input or output by each hopper, each hopper can output or retrieve more items at a time. 
 
->Note that the drop items are only affected by the cooldown, not input count.
+>Drop items are only affected by the cooldown, not input count.
 
 ### Classification
 
@@ -40,7 +42,7 @@ Use hopper chains instead of water flow classification. It still works in The Ne
 
 The following is the recommended configuration when using hopper classification. You can modify it according to your needs. 
 
->Note that the input and output count are best equal, and the input count can be greater than the output.
+>The input and output count are best equal, and the input count can be greater than the output.
 
 | Cooldown | Input/Output Count	 | Long-Distance Transfer Speed |
 |:--------:|:-------------------:|:----------------------------:|
@@ -70,4 +72,4 @@ If you are timing with hoppers, then you need to recalculate the number of items
 
 [https://modrinth.com/mod/modmenu/versions](https://modrinth.com/mod/modmenu/versions)
 
-> This mod is only for client and LAN multiplayer. Only the host needs to install it.
+> EasyHopper is only for client and LAN multiplayer. Only the host needs to install it.

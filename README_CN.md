@@ -4,11 +4,13 @@
 
 [开发历程](https://blog.dearxuan.com/2023/05/16/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8Cmod%E5%BC%80%E5%8F%91/)
 
-![屏幕截图](res/screenshot.jpg)
+![屏幕截图](res/screenshot_ZH.jpg)
 
 ## 下载
 
-[发行版](https://gitee.com/dearxuan/EasyHopper/releases/)
+[从Gitee下载](https://gitee.com/dearxuan/EasyHopper/releases/)
+
+[从GitHub下载](https://github.com/DearXuan7392/EasyHopper/releases/)
 
 ## 功能说明
 

@@ -26,9 +26,6 @@ public class ModConfig implements ConfigData {
     @Comment("若启用,会占用漏斗的最后一格作为分类格,这个漏斗只会允许与最后一格相同的物品通过")
     public boolean CLASSIFICATION_HOPPER = false;
 
-    @Comment("若启用,漏斗每次向投掷器输出物品时,会同时激活投掷器进行一次投掷")
-    public boolean DROPPER_AUTO_DISPENSE = false;
-
     public ModConfig(){
 
     }

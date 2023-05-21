@@ -8,6 +8,9 @@
   "text.autoconfig.easydropper.title": "轻松投掷",
   "text.autoconfig.easydropper.option.DROPPER_AUTO_DISPENSE": "投掷器自动投掷",
   "text.autoconfig.easydropper.option.DISPENSER_AUTO_DISPENSE": "发射器自动投掷",
-  "text.autoconfig.easydropper.option.DISPENSE_COOLDOWN": "投掷器冷却时间(刻)",
-  "text.autoconfig.easydropper.option.DISPENSER_COOLDOWN": "发射器冷却时间(刻)"
+  "text.autoconfig.easydropper.option.BETTER_ITEM_POSITION": "修正抛射物落点",
+  "text.autoconfig.easydropper.option.DROPPER_COOLDOWN": "投掷器冷却(刻)",
+  "text.autoconfig.easydropper.option.DISPENSER_COOLDOWN": "发射器冷却时间(刻)",
+  "text.autoconfig.easydropper.option.DISPENSE_SPEED": "投掷速度",
+  "text.autoconfig.easydropper.option.DISPENSE_DISTANCE": "投掷距离"
 }

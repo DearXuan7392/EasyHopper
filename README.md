@@ -2,8 +2,6 @@
 
 This mod is used to optimize the performance of hoppers and provides a classification function without new blocks.
 
-[This page(中文 Chinese Simplify)](https://blog.dearxuan.com/2023/05/16/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8Cmod%E5%BC%80%E5%8F%91/) will show you my development process.
-
 ![Screenshot](res/screenshot_EN.jpg)
 
 ## Download

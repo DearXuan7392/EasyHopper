@@ -1,16 +1,38 @@
 {
-  "text.autoconfig.easyhopper.title": "Easy Hopper",
-  "text.autoconfig.easyhopper.option.TRANSFER_COOLDOWN": "Transfer Cooldown(tick)",
-  "text.autoconfig.easyhopper.option.TRANSFER_INPUT_COUNT": "Input Item Count",
-  "text.autoconfig.easyhopper.option.TRANSFER_OUTPUT_COUNT": "Output Item Count",
-  "text.autoconfig.easyhopper.option.CLASSIFICATION_HOPPER": "Enable Classification Hopper",
+  "easyhopper.title": "Easy Hopper",
 
-  "text.autoconfig.easydropper.title": "Easy Dropper",
-  "text.autoconfig.easydropper.option.DROPPER_AUTO_DISPENSE": "Enable Auto Dropper",
-  "text.autoconfig.easydropper.option.DISPENSER_AUTO_DISPENSE": "Enable Auto Dispenser",
-  "text.autoconfig.easydropper.option.BETTER_ITEM_POSITION": "Fix the landing point of dropped items",
-  "text.autoconfig.easydropper.option.DROPPER_COOLDOWN": "Dropper Cooldown(tick)",
-  "text.autoconfig.easydropper.option.DISPENSER_COOLDOWN": "Dispenser Cooldown(tick)",
-  "text.autoconfig.easydropper.option.DISPENSE_SPEED": "Dispense speed",
-  "text.autoconfig.easydropper.option.DISPENSE_DISTANCE": "Dispense distance"
+  "easyhopper.TRANSFER_COOLDOWN": "Transfer Cooldown (ticks)",
+  "easyhopper.TRANSFER_COOLDOWN.tooltip": "Controls the cooldown for item transfer by the hopper",
+
+  "easyhopper.TRANSFER_INPUT_COUNT": "Input Count each time",
+  "easyhopper.TRANSFER_INPUT_COUNT.tooltip": "Controls the number of items transferred by the hopper at a time",
+
+  "easyhopper.TRANSFER_OUTPUT_COUNT": "Output Count each time",
+  "easyhopper.TRANSFER_OUTPUT_COUNT.tooltip": "Controls the number of items outputted by the hopper at a time",
+
+  "easyhopper.CLASSIFICATION_HOPPER": "Enable Classification Hopper",
+  "easyhopper.CLASSIFICATION_HOPPER.tooltip": "If enabled, the last slot of the hopper will act as a classification slot, and the hopper will only allow items of the same type as the classification slot to transfer",
+
+  "easydropper.title": "Easy Dropper",
+
+  "easydropper.DROPPER_AUTO_DISPENSE": "Auto Dispense for Dropper",
+  "easydropper.DROPPER_AUTO_DISPENSE.tooltip": "If enabled, the dropper will automatically dispense items when it has items inside",
+
+  "easydropper.DISPENSER_AUTO_DISPENSE": "Auto Dispense for Dispenser",
+  "easydropper.DISPENSER_AUTO_DISPENSE.tooltip": "If enabled, the dispenser will automatically dispense items when it has items inside",
+
+  "easydropper.BETTER_ITEM_POSITION": "Fix Item Position",
+  "easydropper.BETTER_ITEM_POSITION.tooltip": "If enabled, the items dispensed by the dropper will not be offset to the left or right, you can control the landing position",
+
+  "easydropper.DROPPER_COOLDOWN": "Dropper Cooldown (ticks)",
+  "easydropper.DROPPER_COOLDOWN.tooltip": "Cooldown for droppers to automatically dispense items",
+
+  "easydropper.DISPENSER_COOLDOWN": "Dispenser Cooldown (ticks)",
+  "easydropper.DISPENSER_COOLDOWN.tooltip": "Cooldown for dispensers to automatically dispense items",
+
+  "easydropper.DISPENSE_SPEED": "Dispense Speed",
+  "easydropper.DISPENSE_SPEED.tooltip": "The speed of the items dispensed by droppers; directly affects the trajectory height; if negative, the items will be dispensed downwards",
+
+  "easydropper.DISPENSE_DISTANCE": "Dispense Distance",
+  "easydropper.DISPENSE_DISTANCE.tooltip": "The distance the items are dispensed by the dropper; works in conjunction with the \"Dispense Speed\"; if negative, the items will be dispensed in front of the dropper"
 }

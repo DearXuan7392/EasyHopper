@@ -1,16 +1,38 @@
 {
-  "text.autoconfig.easyhopper.title": "轻松漏斗",
-  "text.autoconfig.easyhopper.option.TRANSFER_COOLDOWN": "漏斗冷却时间(刻)",
-  "text.autoconfig.easyhopper.option.TRANSFER_INPUT_COUNT": "每次输入物品数量(个)",
-  "text.autoconfig.easyhopper.option.TRANSFER_OUTPUT_COUNT": "每次输出物品数量(个)",
-  "text.autoconfig.easyhopper.option.CLASSIFICATION_HOPPER": "启用漏斗分类",
+  "easyhopper.title": "轻松漏斗",
 
-  "text.autoconfig.easydropper.title": "轻松投掷",
-  "text.autoconfig.easydropper.option.DROPPER_AUTO_DISPENSE": "投掷器自动投掷",
-  "text.autoconfig.easydropper.option.DISPENSER_AUTO_DISPENSE": "发射器自动投掷",
-  "text.autoconfig.easydropper.option.BETTER_ITEM_POSITION": "修正抛射物落点",
-  "text.autoconfig.easydropper.option.DROPPER_COOLDOWN": "投掷器冷却(刻)",
-  "text.autoconfig.easydropper.option.DISPENSER_COOLDOWN": "发射器冷却时间(刻)",
-  "text.autoconfig.easydropper.option.DISPENSE_SPEED": "投掷速度",
-  "text.autoconfig.easydropper.option.DISPENSE_DISTANCE": "投掷距离"
+  "easyhopper.TRANSFER_COOLDOWN": "漏斗冷却时间(刻)",
+  "easyhopper.TRANSFER_COOLDOWN.tooltip": "控制漏斗输送物品冷却时间",
+
+  "easyhopper.TRANSFER_INPUT_COUNT": "每次输入物品数量(个)",
+  "easyhopper.TRANSFER_INPUT_COUNT.tooltip": "漏斗每次输入多少个物品",
+
+  "easyhopper.TRANSFER_OUTPUT_COUNT": "每次输出物品数量(个)",
+  "easyhopper.TRANSFER_OUTPUT_COUNT.tooltip": "漏斗每次输出多少个物品",
+
+  "easyhopper.CLASSIFICATION_HOPPER": "启用漏斗分类",
+  "easyhopper.CLASSIFICATION_HOPPER.tooltip": "若启用,会占用漏斗的最后一格作为分类格,这个漏斗只会允许与最后一格相同的物品通过",
+
+  "easydropper.title": "轻松投掷",
+
+  "easydropper.DROPPER_AUTO_DISPENSE": "投掷器自动投掷",
+  "easydropper.DROPPER_AUTO_DISPENSE.tooltip": "当投掷器中含有物品时,会立即自动投掷",
+
+  "easydropper.DISPENSER_AUTO_DISPENSE": "发射器自动投掷",
+  "easydropper.DISPENSER_AUTO_DISPENSE.tooltip": "当发射器中含有物品时,会立即自动投掷",
+
+  "easydropper.BETTER_ITEM_POSITION": "修正抛射物落点",
+  "easydropper.BETTER_ITEM_POSITION.tooltip": "若启用,则投掷器抛出的物品不会左右偏移,且抛射曲线固定",
+
+  "easydropper.DROPPER_COOLDOWN": "投掷器冷却(刻)",
+  "easydropper.DROPPER_COOLDOWN.tooltip": "投掷器自动投掷的冷却时间",
+
+  "easydropper.DISPENSER_COOLDOWN": "发射器冷却时间(刻)",
+  "easydropper.DISPENSER_COOLDOWN.tooltip": "发射器自动投掷的冷却时间",
+
+  "easydropper.DISPENSE_SPEED": "投掷速度",
+  "easydropper.DISPENSE_SPEED.tooltip": "抛射速度,直接影响到抛射曲线高度;若为负,则会向下抛射",
+
+  "easydropper.DISPENSE_DISTANCE": "投掷距离",
+  "easydropper.DISPENSE_DISTANCE.tooltip": "抛射距离,与抛射速度一同作用;若为负,则会落于投掷器面前"
 }

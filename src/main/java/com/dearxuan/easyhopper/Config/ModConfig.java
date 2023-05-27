@@ -1,18 +1,21 @@
 package com.dearxuan.easyhopper.Config;
 
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.Config;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Excluded;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import net.fabricmc.loader.api.FabricLoader;
 
-@Config(
-        name = "easyhopper"
-)
-public class ModConfig implements ConfigData {
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class ModConfig{
 
     @Excluded
     public static ModConfig INSTANCE;
+
+    @Excluded
+    private final static String configPath = FabricLoader.getInstance().getGameDir() + "/config/easyhopper.json";
 
     public int TRANSFER_COOLDOWN = 8;
 
@@ -26,10 +29,44 @@ public class ModConfig implements ConfigData {
 
     }
 
-    public static void init(){
-        AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
-        INSTANCE = (ModConfig) AutoConfig
-                .getConfigHolder(ModConfig.class)
-                .getConfig();
+    public static boolean Save(){
+        return WriteConfig();
+    }
+
+    public static void init() {
+        if(!ReadConfig()){
+            ModConfig.INSTANCE = new ModConfig();
+            WriteConfig();
+        }
+    }
+
+    private static boolean WriteConfig(){
+        try {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            try(FileWriter writer = new FileWriter(configPath)){
+                writer.write(gson.toJson(ModConfig.INSTANCE));
+                return true;
+            }
+        } catch (Exception ignored) {
+
+        }
+        return false;
+    }
+
+    private static boolean ReadConfig(){
+        File file = new File(configPath);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            if(file.exists()){
+                try (BufferedReader reader = Files.newBufferedReader(Path.of(configPath))) {
+                    ModConfig modConfig = gson.fromJson(reader, ModConfig.class);
+                    ModConfig.INSTANCE = modConfig;
+                    return true;
+                }
+            }
+        } catch (Exception ignored){
+
+        }
+        return false;
     }
 }

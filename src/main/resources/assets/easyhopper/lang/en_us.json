@@ -1,5 +1,11 @@
 {
+  "easymod.DONT_WORK_IN_SERVER": "It does NOT work in server!",
+
+
+
   "easyhopper.title": "Easy Hopper",
+  "modmenu.nameTranslation.easyhopper": "Easy Hopper",
+  "modmenu.descriptionTranslation.easyhopper": "Speed up hoppers, or enable classification without using new block",
 
   "easyhopper.TRANSFER_COOLDOWN": "Transfer Cooldown (ticks)",
   "easyhopper.TRANSFER_COOLDOWN.tooltip": "Controls the cooldown for item transfer by the hopper",
@@ -13,7 +19,11 @@
   "easyhopper.CLASSIFICATION_HOPPER": "Enable Classification Hopper",
   "easyhopper.CLASSIFICATION_HOPPER.tooltip": "If enabled, the last slot of the hopper will act as a classification slot, and the hopper will only allow items of the same type as the classification slot to transfer",
 
+
+
   "easydropper.title": "Easy Dropper",
+  "modmenu.nameTranslation.easydropper": "Easy Dropper",
+  "modmenu.descriptionTranslation.easydropper": "The dropper will automatically dispense",
 
   "easydropper.DROPPER_AUTO_DISPENSE": "Auto Dispense for Dropper",
   "easydropper.DROPPER_AUTO_DISPENSE.tooltip": "If enabled, the dropper will automatically dispense items when it has items inside",

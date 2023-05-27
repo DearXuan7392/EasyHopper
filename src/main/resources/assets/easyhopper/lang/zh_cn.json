@@ -1,5 +1,11 @@
 {
+  "easymod.DONT_WORK_IN_SERVER": "此设置在服务器中不会生效!",
+
+
+
   "easyhopper.title": "轻松漏斗",
+  "modmenu.nameTranslation.easyhopper": "轻松漏斗",
+  "modmenu.descriptionTranslation.easyhopper": "修改漏斗冷却时间,或启用分类功能,而无需引入新的方块",
 
   "easyhopper.TRANSFER_COOLDOWN": "漏斗冷却时间(刻)",
   "easyhopper.TRANSFER_COOLDOWN.tooltip": "控制漏斗输送物品冷却时间",
@@ -13,7 +19,11 @@
   "easyhopper.CLASSIFICATION_HOPPER": "启用漏斗分类",
   "easyhopper.CLASSIFICATION_HOPPER.tooltip": "若启用,会占用漏斗的最后一格作为分类格,这个漏斗只会允许与最后一格相同的物品通过",
 
+
+
   "easydropper.title": "轻松投掷",
+  "modmenu.nameTranslation.easydropper": "轻松投掷",
+  "modmenu.descriptionTranslation.easydropper": "投掷器将会自动投掷,并支持修改投掷力度,移除其中的随机因素",
 
   "easydropper.DROPPER_AUTO_DISPENSE": "投掷器自动投掷",
   "easydropper.DROPPER_AUTO_DISPENSE.tooltip": "当投掷器中含有物品时,会立即自动投掷",

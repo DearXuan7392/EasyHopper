@@ -3,26 +3,26 @@
   "id": "easyhopper",
   "version": "${version}",
   "name": "EasyHopper",
-  "description": "一个修改漏斗速度的MOD.",
+  "description": "Speed up the hopper or enable classification!",
   "authors": ["DearXuan"],
   "contact": {
-    "repo": "https://gitee.com/dearxuan/EasyHopper.git",
-    "sources": "https://gitee.com/dearxuan/EasyHopper",
-    "issues": "https://gitee.com/dearxuan/EasyHopper/issues"
+    "repo": "https://github.com/DearXuan7392/EasyHopper.git",
+    "sources": "https://github.com/DearXuan7392/EasyHopper",
+    "issues": "https://github.com/DearXuan7392/EasyHopper/issues",
+    "website": "https://www.curseforge.com/minecraft/mc-mods/easyhopper"
   },
-  "license": "Apache-2.0",
+  "license": "MIT",
   "icon": "assets/easyhopper/icon.png",
-  "environment": "client",
+  "environment": "*",
   "entrypoints": {
     "main": [
-      "com.dearxuan.easyhopper.EasyHopper"
+      "com.dearxuan.easyhopper.EntryPoint.EasyHopper"
     ],
     "server": [
 
     ],
     "client": [
 
-      "com.dearxuan.easyhopper.client.EasyHopperClient"
     ],
     "modmenu": [
       "com.dearxuan.easyhopper.Config.ModMenu"
@@ -31,11 +31,18 @@
   "mixins": [
     "easyhopper.mixins.json"
   ],
+  "jars": [
+    {
+      "file": "META-INF/jars/cloth-config-10.0.96-fabric.jar"
+    }
+  ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "fabric-api": "*",
-    "minecraft": "${minecraft_version}",
+    "minecraft": "${minecraft_version}"
+  },
+  "recommends": {
     "modmenu": ">=6.2.1"
   }
 }

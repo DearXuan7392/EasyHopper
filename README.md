@@ -1,14 +1,28 @@
-## EasyHopper
+## Easy Hopper
 
-This mod is used to optimize the performance of hoppers and provides a classification function without new blocks.
+This mod is used to optimize the performance of hoppers and provides a classification function without using new blocks.
 
 ![Screenshot](res/screenshot_EN.jpg)
 
+## Dependencies
+
+``minecraft 1.19.4``
+
+``fabric >=0.14.19``
+
+``modmenu>=6.2.1``(Only Client)
+
+**<font color=red>Important</font>**:
+
+If this mod is installed on a client, not a server, it is recommended to install ``modmenu>=6.2.1``, or you will not see the configuration screen.
+
 ## Download
 
-[Download from Gitee](https://gitee.com/dearxuan/EasyHopper/releases/)
+[Get It From CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper)
 
-[Download from GitHub](https://github.com/DearXuan7392/EasyHopper/releases/)
+[Get It From Gitee](https://gitee.com/dearxuan/EasyHopper/releases/)
+
+[Get It From GitHub](https://github.com/DearXuan7392/EasyHopper/releases/)
 
 ## Features
 
@@ -57,17 +71,3 @@ You may not be able to use redstone circuits to precisely control the number of 
 ### Timer
 
 If you are timing with hoppers, then you need to recalculate the number of items in the hopper based on your specific configuration. Alternatively, you can modify the relevant configuration to time more accurately according to your timing requirements. (1 tick = 0.05 s)
-
-## Dependencies
-
-``minecraft 1.19.4``
-
-``fabric >=0.14.19``
-
-``modmenu >=6.2.1``
-
-``modmenu`` can be downloaded at the following link
-
-[https://modrinth.com/mod/modmenu/versions](https://modrinth.com/mod/modmenu/versions)
-
-> EasyHopper is only for client and LAN multiplayer. Only the host needs to install it.

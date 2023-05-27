@@ -1,16 +1,32 @@
 ## EasyHopper
 
-此MOD用于优化漏斗性能,并在原版基础上提供分类功能
+此MOD用于优化漏斗性能,并在原版基础上提供分类功能.
 
-[开发历程](https://blog.dearxuan.com/2023/05/16/%E6%88%91%E7%9A%84%E4%B8%96%E7%95%8Cmod%E5%BC%80%E5%8F%91/)
+它在服务器上也能运行,但你需要前往``config``文件夹中手动修改配置文件.
 
 ![屏幕截图](res/screenshot_ZH.jpg)
 
+## 依赖
+
+``minecraft 1.19.4``
+
+``fabric >=0.14.19``
+
+``modmenu>=6.2.1``(仅客户端)
+
+**<font color=red>重要</font>**:
+
+如果此Mod被安装在客户端上,则你最好安装``modmenu>=6.2.1``. 否则不会显示配置界面,你只能前往``config``文件夹中手动修改配置文件.
+
 ## 下载
+
+[从CurseForge下载](https://www.curseforge.com/minecraft/mc-mods/easyhopper)
 
 [从Gitee下载](https://gitee.com/dearxuan/EasyHopper/releases/)
 
 [从GitHub下载](https://github.com/DearXuan7392/EasyHopper/releases/)
+
+[MC百科(不提供下载)](https://www.mcmod.cn/class/10443.html)
 
 ## 功能说明
 
@@ -55,19 +71,5 @@
 ### 计时器
 
 如果你使用相向漏斗来计时,那么你需要根据你的具体配置,重新计算漏斗内物品数量.或者你可以根据计时要求,修改相关配置来更精准地计时.(1 tick = 0.05 s)
-
-## 依赖
-
-``minecraft 1.19.4``
-
-``fabric >=0.14.19``
-
-``modmenu >=6.2.1``
-
-其中前置mod``modmenu``可在以下链接下载
-
-[https://modrinth.com/mod/modmenu/versions](https://modrinth.com/mod/modmenu/versions)
-
-仅在客户端上测试通过,服务器不保证有效
 
 

@@ -8,23 +8,15 @@
 
 ## 依赖
 
-``minecraft 1.19.4``
-
-``fabric >=0.14.19``
-
-``modmenu>=6.2.1``(仅客户端)
+``modmenu``(仅客户端)
 
 **<font color=red>重要</font>**:
 
-如果此Mod被安装在客户端上,则你最好安装``modmenu>=6.2.1``. 否则不会显示配置界面,你只能前往``config``文件夹中手动修改配置文件.
+如果此Mod被安装在客户端上,则你最好安装``modmenu``. 否则不会显示配置界面,你只能前往``config``文件夹中手动修改配置文件.
 
 ## 下载
 
 [从CurseForge下载](https://www.curseforge.com/minecraft/mc-mods/easyhopper)
-
-[从Gitee下载](https://gitee.com/dearxuan/EasyHopper/releases/)
-
-[从GitHub下载](https://github.com/DearXuan7392/EasyHopper/releases/)
 
 [MC百科(不提供下载)](https://www.mcmod.cn/class/10443.html)
 

@@ -20,10 +20,6 @@ If this mod is installed on a client, not a server, it is recommended to install
 
 [Get It From CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper)
 
-[Get It From Gitee](https://gitee.com/dearxuan/EasyHopper/releases/)
-
-[Get It From GitHub](https://github.com/DearXuan7392/EasyHopper/releases/)
-
 ## Features
 
 ### Cooldown

@@ -6,15 +6,11 @@ This mod is used to optimize the performance of hoppers and provides a classific
 
 ## Dependencies
 
-``minecraft 1.19.4``
-
-``fabric >=0.14.19``
-
-``modmenu>=6.2.1``(Only Client)
+``modmenu``(Only Client)
 
 **<font color=red>Important</font>**:
 
-If this mod is installed on a client, not a server, it is recommended to install ``modmenu>=6.2.1``, or you will not see the configuration screen.
+If this mod is installed on a client, not a server, it is recommended to install ``modmenu``, or you will not see the configuration screen.
 
 ## Download
 

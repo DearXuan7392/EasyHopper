@@ -1,9 +1,13 @@
 package com.dearxuan.easyhopper.Config;
 
+
 import com.dearxuan.easyhopper.EntryPoint.EasyHopper;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import me.shedaniel.clothconfig2.api.*;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
+import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import me.shedaniel.clothconfig2.api.ConfigCategory;
+import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.AbstractFieldBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,6 +19,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.lang.reflect.Field;
+
+
 
 @Environment(EnvType.CLIENT)
 public class ModMenu implements ModMenuApi {
@@ -32,7 +38,7 @@ public class ModMenu implements ModMenuApi {
                         .create()
                         .setParentScreen(parent)
                         .setTitle(Text.translatable(ModId + ".title"));
-                builder.setSavingRunnable(ModConfig::Save);
+                builder.setSavingRunnable(ModSaver::Save);
                 ConfigCategory general = builder
                         .getOrCreateCategory(Text.translatable(ModId + ".title"));
                 ConfigEntryBuilder entryBuilder = builder.entryBuilder();

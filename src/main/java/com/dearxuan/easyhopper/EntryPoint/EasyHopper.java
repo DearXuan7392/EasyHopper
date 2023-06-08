@@ -1,6 +1,7 @@
 package com.dearxuan.easyhopper.EntryPoint;
 
 import com.dearxuan.easyhopper.Config.ModConfig;
+import com.dearxuan.easyhopper.Config.ModSaver;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,6 @@ public class EasyHopper implements ModInitializer {
     @Override
     public void onInitialize() {
 
-        ModConfig.init();
+        ModSaver.InitModConfig(ModConfig.class);
     }
 }

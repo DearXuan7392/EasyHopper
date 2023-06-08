@@ -33,7 +33,7 @@
   ],
   "jars": [
     {
-      "file": "META-INF/jars/cloth-config-10.0.96-fabric.jar"
+      "file": "META-INF/jars/cloth-config-11.0.99-fabric.jar"
     }
   ],
   "depends": {
@@ -43,6 +43,6 @@
     "minecraft": "${minecraft_version}"
   },
   "recommends": {
-    "modmenu": ">=6.2.1"
+    "modmenu": ">=7.0.0"
   }
 }

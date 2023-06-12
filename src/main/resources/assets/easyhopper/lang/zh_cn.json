@@ -1,48 +1,54 @@
 {
-  "easymod.DONT_WORK_IN_SERVER": "此设置在服务器中不会生效!",
-
-
-
+  "error.DONT_WORK_IN_SERVER": "你无法修改服务器配置!",
+  "error.KeyDuplication": "重复的实体类型: ",
+  "error.WHITE_LIST_CONTAIN_ILLEGAL_CHARACTERS": "白名单中含有非法字符,只能包含英文字母或逗号",
+  "error.BLACK_LIST_CONTAIN_ILLEGAL_CHARACTERS": "黑名单中含有非法字符,只能包含英文字母或逗号",
   "easyhopper.title": "轻松漏斗",
   "modmenu.nameTranslation.easyhopper": "轻松漏斗",
   "modmenu.descriptionTranslation.easyhopper": "修改漏斗冷却时间,或启用分类功能,而无需引入新的方块",
-
   "easyhopper.TRANSFER_COOLDOWN": "漏斗冷却时间(刻)",
   "easyhopper.TRANSFER_COOLDOWN.tooltip": "控制漏斗输送物品冷却时间",
-
   "easyhopper.TRANSFER_INPUT_COUNT": "每次输入物品数量(个)",
   "easyhopper.TRANSFER_INPUT_COUNT.tooltip": "漏斗每次输入多少个物品",
-
   "easyhopper.TRANSFER_OUTPUT_COUNT": "每次输出物品数量(个)",
   "easyhopper.TRANSFER_OUTPUT_COUNT.tooltip": "漏斗每次输出多少个物品",
-
   "easyhopper.CLASSIFICATION_HOPPER": "启用漏斗分类",
   "easyhopper.CLASSIFICATION_HOPPER.tooltip": "若启用,会占用漏斗的最后一格作为分类格,这个漏斗只会允许与最后一格相同的物品通过",
-
-
-
+  "easyhopper.PERFORMANCE_ENHANCEMENT": "性能增强",
+  "easyhopper.PERFORMANCE_ENHANCEMENT.tooltip": "优化漏斗性能,主要包括:\n1. 为漏斗检测掉落物加入冷却\n2. 当漏斗上方为容器或完整方块时,不再检测掉落物",
   "easydropper.title": "轻松投掷",
   "modmenu.nameTranslation.easydropper": "轻松投掷",
   "modmenu.descriptionTranslation.easydropper": "投掷器将会自动投掷,并支持修改投掷力度,移除其中的随机因素",
-
   "easydropper.DROPPER_AUTO_DISPENSE": "投掷器自动投掷",
   "easydropper.DROPPER_AUTO_DISPENSE.tooltip": "当投掷器中含有物品时,会立即自动投掷",
-
   "easydropper.DISPENSER_AUTO_DISPENSE": "发射器自动投掷",
   "easydropper.DISPENSER_AUTO_DISPENSE.tooltip": "当发射器中含有物品时,会立即自动投掷",
 
   "easydropper.BETTER_ITEM_POSITION": "修正抛射物落点",
   "easydropper.BETTER_ITEM_POSITION.tooltip": "若启用,则投掷器抛出的物品不会左右偏移,且抛射曲线固定",
-
   "easydropper.DROPPER_COOLDOWN": "投掷器冷却(刻)",
   "easydropper.DROPPER_COOLDOWN.tooltip": "投掷器自动投掷的冷却时间",
-
   "easydropper.DISPENSER_COOLDOWN": "发射器冷却时间(刻)",
   "easydropper.DISPENSER_COOLDOWN.tooltip": "发射器自动投掷的冷却时间",
-
   "easydropper.DISPENSE_SPEED": "投掷速度",
   "easydropper.DISPENSE_SPEED.tooltip": "抛射速度,直接影响到抛射曲线高度;若为负,则会向下抛射",
-
   "easydropper.DISPENSE_DISTANCE": "投掷距离",
-  "easydropper.DISPENSE_DISTANCE.tooltip": "抛射距离,与抛射速度一同作用;若为负,则会落于投掷器面前"
+  "easydropper.DISPENSE_DISTANCE.tooltip": "抛射距离,与抛射速度一同作用;若为负,则会落于投掷器面前",
+  "easyportal.title": "轻松传送门",
+  "modmenu.nameTranslation.easyportal": "轻松传送门",
+  "modmenu.descriptionTranslation.easyportal": "让下界传送门不再生成僵尸猪人",
+  "easyportal.GENERATE_ZOMBIE_PIGMAN": "生成僵尸猪人",
+  "easyportal.GENERATE_ZOMBIE_PIGMAN.tooltip": "允许下界传送门在随机时刻生成僵尸猪人",
+  "easyportal.CAN_ANIMAL_ENTRY_PORTAL": "动物穿过传送门",
+  "easyportal.CAN_ANIMAL_ENTRY_PORTAL.tooltip": "",
+  "easyportal.CAN_MONSTER_ENTRY_PORTAL": "怪物穿过传送门",
+  "easyportal.CAN_MONSTER_ENTRY_PORTAL.tooltip": "",
+  "easyportal.CAN_VILLAGER_ENTRY_PORTAL": "村民穿过传送门",
+  "easyportal.CAN_VILLAGER_ENTRY_PORTAL.tooltip": "",
+  "easyportal.CAN_GOLEM_ENTRY_PORTAL": "傀儡生物穿过传送门",
+  "easyportal.CAN_GOLEM_ENTRY_PORTAL.tooltip": "",
+  "easyportal.WHITE_LIST": "白名单",
+  "easyportal.WHITE_LIST.tooltip": "",
+  "easyportal.BLACK_LIST": "黑名单",
+  "easyportal.BLACK_LIST.tooltip": ""
 }

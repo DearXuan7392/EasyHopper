@@ -15,9 +15,7 @@ public class ModConfig{
 
     public boolean CLASSIFICATION_HOPPER = false;
 
-    public boolean PERFORMANCE_ENHANCEMENT = false;
-
-    public ModConfig() {
+    public ModConfig(){
 
     }
 }

@@ -30,23 +30,45 @@ Each hopper will attempt to output items first and then input items (you can rai
 
 ### Classification
 
-When the classification function is enabled in the settings, the last slot of hopper will be used as the classification item slot. Only the same items(including non-stackable items or tools with different wear) can be input or output, whether they are dropped items or hopper minecarts.
+When the classification function is enabled in the settings, the last slot of hopper will be used as the classification
+item slot. Only the same items(including non-stackable items or tools with different wear) can be input or output,
+whether they are dropped items or hopper minecarts.
 
-If a player forcibly puts in different items, they will **never** flow out of the hopper until the player manually takes them.
+If a player forcibly puts in different items, they will **never** flow out of the hopper until the player manually takes
+them.
 
-When the last slot of the hopper is empty, the classification function of it will be disabled. Even if it is empty, items cannot flow into the last slot, and can only be placed manually by players.
+When the last slot of the hopper is empty, the classification function of it will be disabled. Even if it is empty,
+items cannot flow into the last slot, and can only be placed manually by players.
 
-For example, if you put redstone in the last slot, only redstone can enter or leave the hopper. The hopper's classification function will be disabled when you take out the redstone.
+For example, if you put redstone in the last slot, only redstone can enter or leave the hopper. The hopper's
+classification function will be disabled when you take out the redstone.
+
+### Performance Enhancement
+
+When hopper is not in cooldown, it will try to search items from above each server tick, which will cause a large amount
+of stagnation. The Performance Enhancement operate through the following methods:
+
+1. Hopper detection of items will cause itself to enter cooldown to avoid frequent detection.
+
+2. When a container on the hopper, items detection will be disabled and only input from the container.
+
+3. When a full-cube block(not container) on the hopper, due to the impossibility of items in the input area, the hopper
+   will stop the active input function, but it can still be input by other hopper.
+
+4. Optimize transportation code to reduce container update.
 
 ## Tips
 
 ### Hopper Chain Classification
 
-Use hopper chains instead of water flow classification. It still works in The Nether. You can increase the cooldown and input/output count to improve performance when using multiple hoppers.(In fact, around a dozen hoppers will not cause visible performance degradation)
+Use hopper chains instead of water flow classification. It still works in The Nether. You can increase the cooldown and
+input/output count to improve performance when using multiple hoppers.(In fact, around a dozen hoppers will not cause
+visible performance degradation)
 
-The following is the recommended configuration when using hopper classification. You can modify it according to your needs. 
+The following is the recommended configuration when using hopper classification. You can modify it according to your
+needs.
 
->The input and output count are best equal, and the input count can be greater than the output.
+> The input and output count are best equal, and the input count can be greater than the output.
 
 | Cooldown | Input/Output Count	 | Long-Distance Transfer Speed |
 |:--------:|:-------------------:|:----------------------------:|

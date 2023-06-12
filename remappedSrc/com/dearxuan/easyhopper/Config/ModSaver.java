@@ -32,15 +32,15 @@ public class ModSaver {
     private static String ConfigPath = null;
 
 
-    public static void InitModConfig(Class modConfigClass) {
+    public static void InitModConfig(Class modConfigClass){
         ModConfigClass = modConfigClass;
-        ModId = ((ModConfigAnnotation) ModConfigClass.getAnnotation(ModConfigAnnotation.class)).ModId();
+        ModId = ((ModConfigAnnotation)ModConfigClass.getAnnotation(ModConfigAnnotation.class)).ModId();
         ConfigPath = FabricLoader.getInstance().getGameDir() + "/config/" + ModId + ".json";
 
         Field[] fields = ModConfig.class.getDeclaredFields();
         ModConfig defaultConfig = new ModConfig();
-        for (Field field : fields) {
-            if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+        for (Field field : fields){
+            if(!java.lang.reflect.Modifier.isStatic(field.getModifiers())){
                 try {
                     DefaultValue.put(field.getName(), field.get(defaultConfig));
                 } catch (IllegalAccessException e) {
@@ -49,7 +49,7 @@ public class ModSaver {
             }
         }
 
-        if (!ReadConfig()) {
+        if(!ReadConfig()){
             ModConfig.INSTANCE = new ModConfig();
             WriteConfig();
         }

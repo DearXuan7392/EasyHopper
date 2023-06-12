@@ -48,11 +48,10 @@ public class ModMenu implements ModMenuApi {
                         .addEntry(BuildConfig(entryBuilder, "TRANSFER_COOLDOWN", null, null, 1, Integer.MAX_VALUE))
                         .addEntry(BuildConfig(entryBuilder, "TRANSFER_INPUT_COUNT", null, null, 1, Integer.MAX_VALUE))
                         .addEntry(BuildConfig(entryBuilder, "TRANSFER_OUTPUT_COUNT", null, null, 1, Integer.MAX_VALUE))
-                        .addEntry(BuildConfig(entryBuilder, "CLASSIFICATION_HOPPER", null, null, null, null))
-                        .addEntry(BuildConfig(entryBuilder, "PERFORMANCE_ENHANCEMENT", null, null, null, null));
+                        .addEntry(BuildConfig(entryBuilder, "CLASSIFICATION_HOPPER", null, null, null, null));
                 Screen screen = builder.build();
                 return screen;
-            } catch (Exception e) {
+            }catch (Exception e){
                 Main.LOGGER.error(e.getMessage());
                 return null;
             }
@@ -116,7 +115,7 @@ public class ModMenu implements ModMenuApi {
                 default:
                     throw new Exception("Unknown Type: " + type);
             }
-            if (consumer == null) {
+            if(consumer == null){
                 builder.setSaveConsumer(value -> {
                     try {
                         field.set(ModConfig.INSTANCE, value);
@@ -124,10 +123,10 @@ public class ModMenu implements ModMenuApi {
                         Main.LOGGER.error(e.getMessage());
                     }
                 });
-            } else {
+            }else{
                 builder.setSaveConsumer(consumer);
             }
-            if (errorSupplier != null) {
+            if(errorSupplier != null){
                 builder.setErrorSupplier(errorSupplier);
             }
             return builder.build();

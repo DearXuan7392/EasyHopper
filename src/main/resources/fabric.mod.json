@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.dearxuan.easyhopper.EntryPoint.EasyHopper"
+      "com.dearxuan.easyhopper.EntryPoint.Main"
     ],
     "server": [
 
@@ -39,10 +39,6 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "fabric-api": "*",
-    "minecraft": "${minecraft_version}"
-  },
-  "recommends": {
-    "modmenu": ">=7.0.0"
+    "minecraft": "*"
   }
 }

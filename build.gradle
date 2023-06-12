@@ -31,15 +31,13 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    // modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     /**
      * Cloth Config 配置项，用于生成mod配置文件
      */
-    modApi("me.shedaniel.cloth:cloth-config-fabric:11.0.99") {
-        exclude(group: "net.fabricmc.fabric-api")
-    }
-    modApi "com.terraformersmc:modmenu:7.0.0"
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}")
+    modApi("com.terraformersmc:modmenu:${project.mod_menu_version}")
     /**
      * Cloth Config 结束
      */
@@ -103,4 +101,8 @@ publishing {
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
     }
+}
+
+configurations {
+    modRuntimeOnly.exclude group: 'net.fabricmc', module: 'fabric-loader'
 }

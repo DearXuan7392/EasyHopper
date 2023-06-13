@@ -6,8 +6,10 @@
   "easyhopper.title": "轻松漏斗",
   "modmenu.nameTranslation.easyhopper": "轻松漏斗",
   "modmenu.descriptionTranslation.easyhopper": "修改漏斗冷却时间,或启用分类功能,而无需引入新的方块",
+
   "easyhopper.TRANSFER_COOLDOWN": "漏斗冷却时间(刻)",
   "easyhopper.TRANSFER_COOLDOWN.tooltip": "控制漏斗输送物品冷却时间",
+
   "easyhopper.TRANSFER_INPUT_COUNT": "每次输入物品数量(个)",
   "easyhopper.TRANSFER_INPUT_COUNT.tooltip": "漏斗每次输入多少个物品",
   "easyhopper.TRANSFER_OUTPUT_COUNT": "每次输出物品数量(个)",

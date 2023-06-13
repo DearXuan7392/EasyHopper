@@ -12,6 +12,8 @@ public class Main implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        LOGGER.info("-------------Easy Hopper Start-------------");
         ModSaver.InitModConfig(ModConfig.class);
+        LOGGER.info("-------------Easy Hopper  End -------------");
     }
 }

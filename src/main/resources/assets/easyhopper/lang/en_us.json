@@ -6,8 +6,10 @@
   "easyhopper.title": "Easy Hopper",
   "modmenu.nameTranslation.easyhopper": "Easy Hopper",
   "modmenu.descriptionTranslation.easyhopper": "Speed up hoppers, or enable classification without using new block",
+
   "easyhopper.TRANSFER_COOLDOWN": "Transfer Cooldown (ticks)",
   "easyhopper.TRANSFER_COOLDOWN.tooltip": "Controls the cooldown for item transfer by the hopper",
+
   "easyhopper.TRANSFER_INPUT_COUNT": "Input Count each time",
   "easyhopper.TRANSFER_INPUT_COUNT.tooltip": "Controls the number of items transferred by the hopper at a time",
   "easyhopper.TRANSFER_OUTPUT_COUNT": "Output Count each time",

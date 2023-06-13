@@ -4,8 +4,8 @@ import com.dearxuan.easyhopper.EntryPoint.Main;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import org.slf4j.Logger;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -35,10 +35,16 @@ public class ModSaver {
     public static void InitModConfig(Class modConfigClass) {
         ModConfigClass = modConfigClass;
         ModId = ((ModConfigAnnotation) ModConfigClass.getAnnotation(ModConfigAnnotation.class)).ModId();
-        ConfigPath = FabricLoader.getInstance().getGameDir() + "/config/" + ModId + ".json";
+        ConfigPath = FabricLoader.getInstance().getConfigDir().resolve(ModId + ".json").toString();
 
-        Field[] fields = ModConfig.class.getDeclaredFields();
-        ModConfig defaultConfig = new ModConfig();
+        Field[] fields = ModConfigClass.getDeclaredFields();
+        Object defaultConfig = null;
+        try {
+            defaultConfig = modConfigClass.newInstance();
+        } catch (Exception e) {
+            Main.LOGGER.error(e.getMessage());
+            return;
+        }
         for (Field field : fields) {
             if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
                 try {
@@ -52,6 +58,16 @@ public class ModSaver {
         if (!ReadConfig()) {
             ModConfig.INSTANCE = new ModConfig();
             WriteConfig();
+        }
+
+        for (Field field : fields) {
+            if (!java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                try {
+                    Main.LOGGER.info(field.getName() + ": " + field.get(ModConfig.INSTANCE));
+                } catch (IllegalAccessException e) {
+                    Main.LOGGER.error(e.getMessage());
+                }
+            }
         }
     }
 

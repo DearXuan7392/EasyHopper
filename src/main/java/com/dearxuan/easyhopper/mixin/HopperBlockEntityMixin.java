@@ -1,7 +1,6 @@
 package com.dearxuan.easyhopper.mixin;
 
 import com.dearxuan.easyhopper.Config.ModConfig;
-import com.dearxuan.easyhopper.EntryPoint.Main;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.*;
 import net.minecraft.entity.ItemEntity;

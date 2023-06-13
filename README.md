@@ -57,6 +57,15 @@ of stagnation. The Performance Enhancement operate through the following methods
 
 4. Optimize transportation code to reduce container update.
 
+The following images will show you the performance under a large number of hopper.
+
+CPU: 12th Gen Intel(R) Core(TM) i7-12700H
+
+|            In Game            |     Without Easy Hopper     | Performance Enhancement |
+|:-----------------------------:|:---------------------------:|:-----------------------:|
+| ![](/res/test_screenshot.jpg) | ![](/res/test_original.jpg) | ![](/res/test_mod.jpg)  |
+|       100 × 100 Hoppers       |           ≈ 13 ms           |         ≈ 5 ms          |
+
 ## Tips
 
 ### Hopper Chain Classification

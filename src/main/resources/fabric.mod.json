@@ -25,7 +25,7 @@
 
     ],
     "modmenu": [
-      "com.dearxuan.easyhopper.Config.ModMenu"
+      "com.dearxuan.easyhopper.Config.ModMenu.ModMenu"
     ]
   },
   "mixins": [

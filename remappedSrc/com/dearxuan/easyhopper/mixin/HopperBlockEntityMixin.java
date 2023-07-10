@@ -86,7 +86,7 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
     )
     private void Easy_setTransferCooldown(int cooldown, CallbackInfo info) {
         if (cooldown > 0) {
-            this.transferCooldown = cooldown - 8 + ModConfig.INSTANCE.HOPPER_TRANSFER_COOLDOWN;
+            this.transferCooldown = cooldown - 8 + ModConfig.INSTANCE.TRANSFER_COOLDOWN;
             info.cancel();
         }
     }
@@ -114,11 +114,11 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
         if (!iBlockEntity.Invoke_needsCooldown() && state.get(HopperBlock.ENABLED).booleanValue()) {
             boolean bl = false;
             // 输出若干个物品
-            for (int i = 0; i < ModConfig.INSTANCE.HOPPER_OUTPUT_COUNT; ++i) {
+            for (int i = 0; i < ModConfig.INSTANCE.TRANSFER_OUTPUT_COUNT; ++i) {
                 if (blockEntity.isEmpty()) {
                     break;
                 } else {
-                    if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION && !iBlockEntity.getInventory().get(4).isEmpty()) {
+                    if (ModConfig.INSTANCE.CLASSIFICATION_HOPPER && !iBlockEntity.getInventory().get(4).isEmpty()) {
                         bl |= EasyClassificationInsert(world, pos, state, blockEntity);
                     } else {
                         bl |= insert(world, pos, state, blockEntity);
@@ -126,14 +126,14 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
                 }
             }
             // 输入若干个物品
-            for (int i = 0; i < ModConfig.INSTANCE.HOPPER_INPUT_COUNT; ++i) {
+            for (int i = 0; i < ModConfig.INSTANCE.TRANSFER_INPUT_COUNT; ++i) {
                 if (iBlockEntity.Invoke_isFull()) {
                     break;
                 } else {
                     bl |= booleanSupplier.getAsBoolean();
                 }
             }
-            if (ModConfig.INSTANCE.HOPPER_EXTRACT_COOLDOWN && !bl) {
+            if (ModConfig.INSTANCE.EXTRACT_COOLDOWN && !bl){
                 iBlockEntity.Invoke_setTransferCooldown(8);
             }
             if (bl) {
@@ -201,7 +201,7 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
             ItemStack stack,
             Direction side,
             CallbackInfoReturnable<ItemStack> info) {
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
+        if (ModConfig.INSTANCE.CLASSIFICATION_HOPPER) {
             if (from instanceof HopperBlockEntity && !CanHopperTransfer((HopperBlockEntity) from, stack)) {
                 info.setReturnValue(stack);
                 return;
@@ -230,7 +230,7 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
         }
         int j = to.size();
         // 如果启用分类漏斗,则排除最后一格
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION && to instanceof HopperBlockEntity) {
+        if (ModConfig.INSTANCE.CLASSIFICATION_HOPPER && to instanceof HopperBlockEntity) {
             --j;
         }
         int i = 0;
@@ -257,15 +257,15 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
             int slot,
             Direction side,
             CallbackInfoReturnable<ItemStack> info) {
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
-            if (from instanceof HopperBlockEntity) {
-                if (!CanHopperTransfer((HopperBlockEntity) from, stack)) {
+        if (ModConfig.INSTANCE.CLASSIFICATION_HOPPER) {
+            if(from instanceof HopperBlockEntity){
+                if(!CanHopperTransfer((HopperBlockEntity) from, stack) || slot == 4){
                     info.setReturnValue(stack);
                     return;
                 }
             }
-            if (to instanceof HopperBlockEntity) {
-                if (!CanHopperTransfer((HopperBlockEntity) to, stack) || slot == 4) {
+            if(to instanceof HopperBlockEntity){
+                if(!CanHopperTransfer((HopperBlockEntity) to, stack) || slot == 4){
                     info.setReturnValue(stack);
                     return;
                 }
@@ -291,7 +291,7 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
             World world,
             Hopper hopper,
             CallbackInfoReturnable<Boolean> info) {
-        if (!(ModConfig.INSTANCE.HOPPER_BETTER_EXTRACT && hopper instanceof HopperBlockEntity)) {
+        if(!ModConfig.INSTANCE.BETTER_EXTRACT){
             return;
         }
         Inventory inventory = null;
@@ -301,21 +301,21 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
         BlockState blockState = world.getBlockState(blockPos);
         Block block = blockState.getBlock();
         if (block instanceof InventoryProvider) {
-            inventory = ((InventoryProvider) block).getInventory(blockState, world, blockPos);
+            inventory = ((InventoryProvider)block).getInventory(blockState, world, blockPos);
         } else if (blockState.hasBlockEntity()) {
             BlockEntity blockEntity = world.getBlockEntity(blockPos);
             if (blockEntity instanceof Inventory) {
-                inventory = (Inventory) blockEntity;
+                inventory = (Inventory)blockEntity;
                 if (inventory instanceof ChestBlockEntity && block instanceof ChestBlock) {
-                    inventory = ChestBlock.getInventory((ChestBlock) block, blockState, world, blockPos, true);
+                    inventory = ChestBlock.getInventory((ChestBlock)block, blockState, world, blockPos, true);
                 }
             }
         }
         // 检测其他实体,例如矿车
         if (inventory == null) {
-            List<Entity> list = world.getOtherEntities((Entity) null, new Box(x - 0.5, y - 0.5, z - 0.5, x + 0.5, y + 0.5, z + 0.5), EntityPredicates.VALID_INVENTORIES);
+            List<Entity> list = world.getOtherEntities((Entity)null, new Box(x - 0.5, y - 0.5, z - 0.5, x + 0.5, y + 0.5, z + 0.5), EntityPredicates.VALID_INVENTORIES);
             if (!list.isEmpty()) {
-                inventory = (Inventory) list.get(world.random.nextInt(list.size()));
+                inventory = (Inventory)list.get(world.random.nextInt(list.size()));
             }
         }
         // 如果是容器,则不再吸取掉落物
@@ -360,7 +360,7 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
         ItemStack itemStack = inventory.getStack(slot);
         if (!itemStack.isEmpty() && canExtract(hopper, inventory, itemStack, slot, side)) {
 
-            if (ModConfig.INSTANCE.HOPPER_BETTER_EXTRACT) {
+            if (ModConfig.INSTANCE.BETTER_EXTRACT) {
                 // 取出对应物品
                 ItemStack tryToTransfer = itemStack.copy();
                 // 将数量设置为 1

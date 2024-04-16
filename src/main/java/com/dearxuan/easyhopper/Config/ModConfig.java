@@ -54,6 +54,11 @@ public class ModConfig {
     public int HOPPER_MINECART_TRANSFER_COOLDOWN = 1;
 
     /**
+     * 漏斗矿车分类
+     */
+    public boolean HOPPER_MINECART_CLASSIFICATION = false;
+
+    /**
      * 漏斗矿车性能增强
      */
     public boolean HOPPER_MINECART_BETTER_EXTRACT = false;

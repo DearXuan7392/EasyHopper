@@ -19,9 +19,6 @@ import java.util.function.BooleanSupplier;
 interface IEasyHopperBlockEntity {
 
     @Accessor("inventory")
-    void setInventory(DefaultedList<ItemStack> inventory);
-
-    @Accessor("inventory")
     DefaultedList<ItemStack> getInventory();
 
     @Invoker("needsCooldown")

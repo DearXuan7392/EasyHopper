@@ -6,8 +6,10 @@
   "easyhopper.title": "轻松漏斗",
   "modmenu.nameTranslation.easyhopper": "轻松漏斗",
   "modmenu.descriptionTranslation.easyhopper": "修改漏斗冷却时间,或启用分类功能,而无需引入新的方块",
+
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "漏斗冷却时间",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "控制漏斗输送物品冷却时间",
+
   "easyhopper.HOPPER_INPUT_COUNT": "漏斗单次输入量",
   "easyhopper.HOPPER_INPUT_COUNT.tooltip": "漏斗每次输入多少个物品",
   "easyhopper.HOPPER_OUTPUT_COUNT": "漏斗单次输出量",
@@ -20,6 +22,9 @@
   "easyhopper.HOPPER_EXTRACT_COOLDOWN.tooltip": "每次尝试吸收掉落物都会使漏斗进入冷却",
   "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN": "漏斗矿车冷却时间",
   "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN.tooltip": "控制漏斗矿车输送物品冷却时间",
+  "easyhopper.HOPPER_MINECART_CLASSIFICATION": "漏斗矿车分类",
+  "easyhopper.HOPPER_MINECART_CLASSIFICATION.tooltip": "若启用,会占用漏斗矿车的最后一格作为分类格,这个漏斗矿车只会允许与最后一格相同的物品通过",
+
   "easyhopper.HOPPER_MINECART_BETTER_EXTRACT": "漏斗矿车性能增强",
   "easyhopper.HOPPER_MINECART_BETTER_EXTRACT.tooltip": "为漏斗矿车检测掉落物加入冷却",
   "easydropper.title": "轻松投掷",

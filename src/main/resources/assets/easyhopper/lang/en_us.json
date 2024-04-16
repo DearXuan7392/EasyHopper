@@ -6,6 +6,7 @@
   "easyhopper.title": "Easy Hopper",
   "modmenu.nameTranslation.easyhopper": "Easy Hopper",
   "modmenu.descriptionTranslation.easyhopper": "Speed up hoppers, or enable classification without using new block",
+
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "Hopper Transfer Cooldown",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "Controls the cooldown for item transfer by the hopper",
   "easyhopper.HOPPER_INPUT_COUNT": "Hopper Input Count",
@@ -18,10 +19,15 @@
   "easyhopper.HOPPER_BETTER_EXTRACT.tooltip": "1. If a container or full-cube block on the hopper, it will stop searching for entities\n2. Reduce the number of chest updates caused by hoppers",
   "easyhopper.HOPPER_EXTRACT_COOLDOWN": "Hopper Extract Cooldown",
   "easyhopper.HOPPER_EXTRACT_COOLDOWN.tooltip": "Limit the frequency of hopper searching for entities",
-  "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN": "Hopper Minecart Transfer Cooldown",
-  "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN.tooltip": "Controls the cooldown for item transfer by the hopper minecart",
-  "easyhopper.HOPPER_MINECART_BETTER_EXTRACT": "Hopper Minecart Performance Enhancement",
-  "easyhopper.HOPPER_MINECART_BETTER_EXTRACT.tooltip": "Limit the frequency of hopper minecart searching for items",
+  "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN": "Minecart with Hopper Transfer Cooldown",
+  "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN.tooltip": "Controls the cooldown for item transfer by the minecart with hopper",
+  "easyhopper.HOPPER_MINECART_CLASSIFICATION": "Minecart with Hopper Classification",
+  "easyhopper.HOPPER_MINECART_CLASSIFICATION.tooltip": "If enabled, the last slot of the minecart with hopper will act as a classification slot, and only the same type as the classification slot can transfer",
+  "easyhopper.HOPPER_MINECART_BETTER_EXTRACT": "Minecart with Hopper Performance Enhancement",
+  "easyhopper.HOPPER_MINECART_BETTER_EXTRACT.tooltip": "Limit the frequency of minecart with hopper searching for items",
+
+
+
   "easydropper.title": "Easy Dropper",
   "modmenu.nameTranslation.easydropper": "Easy Dropper",
   "modmenu.descriptionTranslation.easydropper": "The dropper will automatically dispense",

@@ -2,6 +2,7 @@
 
 This mod is used to optimize the performance of hoppers and provides a classification function without using new blocks.
 
+*this screenshot is outdated*
 ![Screenshot](res/screenshot_EN.jpg)
 
 ## Dependencies
@@ -10,9 +11,12 @@ This mod is used to optimize the performance of hoppers and provides a classific
 
 **<font color=red>Important</font>**:
 
-If this mod is installed on a client, not a server, it is recommended to install ``modmenu``, or you will not see the configuration screen.
+If this mod is installed on a client, it is recommended to install ``modmenu``, or you will not see the configuration
+screen. The configuration file is located in the "config" directory.
 
 ## Download
+
+[Get It From Modrinth](https://modrinth.com/mod/easy-hopper/versions)
 
 [Get It From CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper)
 
@@ -20,7 +24,9 @@ If this mod is installed on a client, not a server, it is recommended to install
 
 ### Cooldown
 
-After each input or output, the hopper will enter a cooldown period. The original cooldown is 8 ticks (20 ticks per second). This mod provides the ability to modify the cooldown. If you have many hoppers (such as 500), you can increase the cooldown to improve performance.
+After each input or output, the hopper(or minecart with hopper) will enter a cooldown period. The original cooldown is 8
+ticks (20 ticks per second). This mod provides the ability to modify the cooldown. If you have many hoppers (such as
+500), you can increase the cooldown to improve performance.
 
 ### Input/Output Count
 
@@ -52,10 +58,11 @@ of stagnation. The Performance Enhancement operate through the following methods
 
 2. When a container on the hopper, items detection will be disabled and only input from the container.
 
-3. When a full-cube block(not container) on the hopper, due to the impossibility of items in the input area, the hopper
+3. **\(exclude minecart with hopper\)** When a full-cube block(not container) on the hopper, due to the impossibility of
+   items in the input area, the hopper
    will stop the active input function, but it can still be input by other hopper.
 
-4. Optimize transportation code to reduce container update.
+4. **\(exclude minecart with hopper\)** Optimize transportation code to reduce container update.
 
 The following images will show you the performance under a large number of hopper.
 

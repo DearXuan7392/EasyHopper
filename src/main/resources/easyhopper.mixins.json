@@ -6,7 +6,7 @@
   "mixins": [
     "HopperBlockEntityMixin",
     "HopperMinecartEntityMixin",
-    "IEasyHopperBlockEntity"
+    "IHopperBlockEntityMixin"
   ],
   "client": [
   ],

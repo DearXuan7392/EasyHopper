@@ -106,3 +106,7 @@ publishing {
 configurations {
     modRuntimeOnly.exclude group: 'net.fabricmc', module: 'fabric-loader'
 }
+
+//loom {
+//    accessWidenerPath = file("src/main/resources/easyhopper.accesswidener")
+//}

@@ -33,13 +33,13 @@
   ],
   "jars": [
     {
-      "file": "META-INF/jars/cloth-config-11.0.99-fabric.jar"
+      "file": "META-INF/jars/cloth-config-13.0.138-fabric.jar"
     }
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "fabric-api": "*",
-    "minecraft": "*"
+    "minecraft": ">=1.20"
   }
 }

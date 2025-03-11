@@ -1,6 +1,8 @@
 package com.dearxuan.easyhopper.Config.ModMenu;
 
 
+import com.dearxuan.easyhopper.Config.Retention.EasyConfig;
+import com.dearxuan.easyhopper.Config.Retention.Value;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
@@ -44,27 +46,18 @@ public class ModMenu implements ModMenuApi {
                         continue;
                     }
 
-                    Function errorSupplier = null;
-                    Consumer consumer = null;
-                    Number min = 0;
-                    Number max = 256;
+                    Function<?, Optional<Text>> errorSupplier = null;
+                    Consumer<?> consumer = null;
 
                     EasyConfig easyConfig = field.getAnnotation(EasyConfig.class);
-                    if (easyConfig != null) {
-                        if (!easyConfig.min().isBlank()) {
-                            min = Double.parseDouble(easyConfig.min());
-                        }
-                        if (!easyConfig.max().isBlank()) {
-                            max = Double.parseDouble(easyConfig.max());
-                        }
-                    }
+                    assert easyConfig.env() != ModEnv.Null;
+
                     general.addEntry(BuildConfig(
                             entryBuilder,
                             field.getName(),
                             errorSupplier,
                             consumer,
-                            min,
-                            max
+                            easyConfig
 
                     ));
                 }
@@ -77,10 +70,15 @@ public class ModMenu implements ModMenuApi {
         };
     }
 
-    private static <T> AbstractConfigListEntry BuildConfig(ConfigEntryBuilder configEntryBuilder, String name, Function<T, Optional<Text>> errorSupplier, Consumer<T> consumer, Number min, Number max) {
+    private static <T> AbstractConfigListEntry<?> BuildConfig(
+            ConfigEntryBuilder configEntryBuilder,
+            String name,
+            Function errorSupplier,
+            Consumer consumer,
+            EasyConfig easyConfig) {
         try {
             Field field = ConfigClass.getField(name);
-            AbstractFieldBuilder builder;
+            AbstractFieldBuilder<T, AbstractConfigListEntry<?>, ?> builder;
             String type = field.getType().getSimpleName();
             Object defaultValue = ModSaver.DefaultValue.get(name);
             switch (type) {
@@ -88,29 +86,22 @@ public class ModMenu implements ModMenuApi {
                     builder = configEntryBuilder
                             .startIntField(ModText.GetTranslatable(name), field.getInt(ModInfo.getInstance()))
                             .setDefaultValue((Integer) defaultValue)
-                            .setMin(min.intValue())
-                            .setMax(max.intValue())
-                            .setTooltip(ModText.GetTooltip(name));
-                    break;
-                case "double":
-                    builder = configEntryBuilder
-                            .startDoubleField(ModText.GetTranslatable(name), field.getDouble(ModInfo.getInstance()))
-                            .setDefaultValue((Double) defaultValue)
-                            .setMin(min.doubleValue())
-                            .setMax(max.doubleValue())
-                            .setTooltip(ModText.GetTooltip(name));
+                            .setMin((int)easyConfig.value().min())
+                            .setMax((int)easyConfig.value().max())
+                            .setTooltip(ModText.GetTooltip(name, promptKey));
+
                     break;
                 case "boolean":
                     builder = configEntryBuilder
                             .startBooleanToggle(ModText.GetTranslatable(name), field.getBoolean(ModInfo.getInstance()))
                             .setDefaultValue((Boolean) defaultValue)
-                            .setTooltip(ModText.GetTooltip(name));
+                            .setTooltip(ModText.GetTooltip(name, promptKey));
                     break;
                 case "String":
                     builder = configEntryBuilder
                             .startStrField(ModText.GetTranslatable(name), (String) field.get(ModInfo.getInstance()))
                             .setDefaultValue((String) defaultValue)
-                            .setTooltip(ModText.GetTooltip(name));
+                            .setTooltip(ModText.GetTooltip(name, promptKey));
                     break;
                 default:
                     throw new Exception("Unknown Type: " + type);

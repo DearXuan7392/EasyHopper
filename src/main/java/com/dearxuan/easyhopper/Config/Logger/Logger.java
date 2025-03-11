@@ -1,4 +1,4 @@
-package com.dearxuan.easyhopper.Config.ModMenu;
+package com.dearxuan.easyhopper.Config.Logger;
 
 import org.slf4j.LoggerFactory;
 
@@ -19,12 +19,12 @@ public class Logger {
     }
 
     public void error(Exception e) {
-        LOGGER.error("---------------错误开始---------------");
+        LOGGER.error("---------------Error Start---------------");
         LOGGER.error(e.toString());
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         for (StackTraceElement element : stackTrace) {
             LOGGER.error(String.valueOf(element));
         }
-        LOGGER.error("---------------错误结束---------------");
+        LOGGER.error("---------------Error  End ---------------");
     }
 }

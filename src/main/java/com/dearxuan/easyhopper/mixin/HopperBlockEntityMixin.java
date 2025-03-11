@@ -1,7 +1,6 @@
 package com.dearxuan.easyhopper.mixin;
 
 import com.dearxuan.easyhopper.Config.ModConfig;
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.*;
 import net.minecraft.inventory.Inventory;
@@ -11,7 +10,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -29,6 +30,9 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
         return false;
     }
 
+    /**
+     * 修改漏斗冷却时间
+     */
     @ModifyVariable(
             method = "setTransferCooldown",
             at = @At(value = "HEAD", ordinal = 0),
@@ -41,48 +45,46 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
         }
     }
 
-    @Redirect(
+    @Inject(
             method = "insertAndExtract",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/HopperBlockEntity;isEmpty()Z")
+            at = @At(value = "HEAD"),
+            cancellable = true
     )
-    private static boolean redirectBlockEntityIsEmpty(HopperBlockEntity instance) {
-        return false;
-    }
+    private static void injectInsertAndExtract(World world, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, BooleanSupplier booleanSupplier, CallbackInfoReturnable<Boolean> info){
+        if (world.isClient) {
+            info.setReturnValue(false);
+        } else {
+            IHopperBlockEntityMixin iHopperBlockEntity = (IHopperBlockEntityMixin) blockEntity;
+            if (!iHopperBlockEntity.invokeNeedsCooldown() && state.get(HopperBlock.ENABLED)) {
+                boolean bl = false;
+                for(int i=0;i<ModConfig.INSTANCE.HOPPER_OUTPUT_COUNT;++i){
+                    if(blockEntity.isEmpty()){
+                        break;
+                    }else{
+                        bl = insert(world, pos, blockEntity);
+                    }
+                }
+                for(int i=0;i<ModConfig.INSTANCE.HOPPER_INPUT_COUNT;++i){
+                    if(iHopperBlockEntity.invokeIsFull()){
+                        break;
+                    }else {
+                        bl |= booleanSupplier.getAsBoolean();
+                    }
+                }
 
-    @Redirect(
-            method = "insertAndExtract",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/HopperBlockEntity;isFull()Z")
-    )
-    private static boolean redierctIsFull(HopperBlockEntity instance) {
-        return false;
-    }
-
-    @Redirect(
-            method = "insertAndExtract",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/HopperBlockEntity;insert(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/entity/HopperBlockEntity;)Z")
-    )
-    private static boolean redirectInsert(World world, BlockPos pos, HopperBlockEntity blockEntity) {
-        boolean bl = false;
-        for (int i = 0; i < ModConfig.INSTANCE.HOPPER_OUTPUT_COUNT; ++i) {
-            if (!isHopperEmpty(blockEntity)) {
-                bl |= insert(world, pos, blockEntity);
+                if (bl) {
+                    iHopperBlockEntity.invokeSetTransferCooldown(8);
+                    markDirty(world, pos, state);
+                    info.setReturnValue(true);
+                    return;
+                } else {
+                    if(ModConfig.INSTANCE.HOPPER_EXTRACT_COOLDOWN){
+                        iHopperBlockEntity.invokeSetTransferCooldown(8);
+                    }
+                }
             }
+            info.setReturnValue(true);
         }
-        return bl;
-    }
-
-    @Redirect(
-            method = "insertAndExtract",
-            at = @At(value = "INVOKE", target = "Ljava/util/function/BooleanSupplier;getAsBoolean()Z")
-    )
-    private static boolean redirectGetAsBoolean(BooleanSupplier instance, @Local(argsOnly = true) HopperBlockEntity hopperBlockEntity) {
-        boolean bl = false;
-        for (int i = 0; i < ModConfig.INSTANCE.HOPPER_INPUT_COUNT; ++i) {
-            if (!isHopperFull(hopperBlockEntity)) {
-                bl |= instance.getAsBoolean();
-            }
-        }
-        return bl;
     }
 
     @Redirect(
@@ -157,9 +159,27 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
         }
     }
 
-    private static boolean isHopperFull(HopperBlockEntity hopperBlockEntity) {
-        IHopperBlockEntityMixin iHopperBlockEntity = (IHopperBlockEntityMixin) hopperBlockEntity;
-        DefaultedList<ItemStack> defaultedList = iHopperBlockEntity.invokeGetHeldStacks();
+    public boolean isEmpty(){
+        DefaultedList<ItemStack> defaultedList = this.invokeGetHeldStacks();
+        int maxSlot = defaultedList.size();
+        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
+            --maxSlot;
+        }
+        for (int i = 0; i < maxSlot; ++i) {
+            if (!defaultedList.get(i).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @author DearXuan
+     * @reason 修改漏斗已满的判定, 忽略分类格
+     */
+    @Overwrite
+    private boolean isFull(){
+        DefaultedList<ItemStack> defaultedList = this.invokeGetHeldStacks();
         int maxSlot = defaultedList.size();
         if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
             --maxSlot;
@@ -173,23 +193,9 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
         return true;
     }
 
-    private static boolean isHopperEmpty(HopperBlockEntity hopperBlockEntity) {
-        IHopperBlockEntityMixin iHopperBlockEntity = (IHopperBlockEntityMixin) hopperBlockEntity;
-        DefaultedList<ItemStack> defaultedList = iHopperBlockEntity.invokeGetHeldStacks();
-        int maxSlot = defaultedList.size();
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
-            --maxSlot;
-        }
-        for (int i = 0; i < maxSlot; ++i) {
-            if (!defaultedList.get(i).isEmpty()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
+    @Unique
     private static boolean canHopperTransfer(HopperBlockEntity hopper, ItemStack itemStack) {
-        ItemStack classificationItemStack = ((IHopperBlockEntityMixin) hopper).getInventory().get(hopper.size() - 1);
+        ItemStack classificationItemStack = ((IHopperBlockEntityMixin) hopper).accessGetInventory().get(hopper.size() - 1);
         if (classificationItemStack.isEmpty()) {
             return true;
         } else {

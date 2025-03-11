@@ -9,40 +9,33 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(HopperMinecartEntity.class)
 public abstract class HopperMinecartEntityMixin extends StorageMinecartEntity implements Hopper {
 
-    @Shadow
-    public abstract boolean isEnabled();
-
-    @Shadow
-    public abstract boolean canOperate();
-
+    @Unique
     private int cooldown = 0;
 
     protected HopperMinecartEntityMixin(EntityType<?> entityType, World world) {
         super(entityType, world);
     }
 
-    /**
-     * @author
-     * @reason
-     */
-    @Overwrite
-    public void tick() {
-        super.tick();
-        this.cooldown--;
-        if (this.cooldown <= 0) {
-            if (!this.getWorld().isClient && this.isAlive() && this.isEnabled() && this.canOperate()) {
-                this.cooldown = ModConfig.INSTANCE.HOPPER_MINECART_TRANSFER_COOLDOWN;
-                this.markDirty();
-                return;
-            }
-            if (ModConfig.INSTANCE.HOPPER_MINECART_BETTER_EXTRACT) {
-                this.cooldown = ModConfig.INSTANCE.HOPPER_MINECART_TRANSFER_COOLDOWN;
-            }
+    @Redirect(
+            method = "tick",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/HopperMinecartEntity;isAlive()Z")
+    )
+    private boolean redirectIsAlive(HopperMinecartEntity instance){
+        --this.cooldown;
+        if(this.cooldown <= 0){
+            this.cooldown = ModConfig.INSTANCE.HOPPER_MINECART_TRANSFER_COOLDOWN;
+            return instance.isAlive();
+        }else{
+            return false;
         }
-
     }
 }

@@ -1,5 +1,6 @@
 package com.dearxuan.easyhopper.Config.ModMenu;
 
+import com.dearxuan.easyhopper.Config.Logger.Logger;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;

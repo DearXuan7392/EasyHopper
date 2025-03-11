@@ -3,9 +3,13 @@
   "error.KeyDuplication": "重复的实体类型: ",
   "error.WHITE_LIST_CONTAIN_ILLEGAL_CHARACTERS": "白名单中含有非法字符,只能包含英文字母或逗号",
   "error.BLACK_LIST_CONTAIN_ILLEGAL_CHARACTERS": "黑名单中含有非法字符,只能包含英文字母或逗号",
+
+
   "easyhopper.title": "轻松漏斗",
+
   "modmenu.nameTranslation.easyhopper": "轻松漏斗",
   "modmenu.descriptionTranslation.easyhopper": "修改漏斗冷却时间,或启用分类功能,而无需引入新的方块",
+
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "漏斗冷却时间",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "控制漏斗输送物品冷却时间",
   "easyhopper.HOPPER_INPUT_COUNT": "漏斗单次输入量",
@@ -22,9 +26,13 @@
   "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN.tooltip": "控制漏斗矿车输送物品冷却时间",
   "easyhopper.HOPPER_MINECART_BETTER_EXTRACT": "漏斗矿车性能增强",
   "easyhopper.HOPPER_MINECART_BETTER_EXTRACT.tooltip": "为漏斗矿车检测掉落物加入冷却",
+
+
   "easydropper.title": "轻松投掷",
+
   "modmenu.nameTranslation.easydropper": "轻松投掷",
   "modmenu.descriptionTranslation.easydropper": "投掷器将会自动投掷,并支持修改投掷力度,移除其中的随机因素",
+
   "easydropper.DROPPER_AUTO_DISPENSE": "投掷器自动投掷",
   "easydropper.DROPPER_AUTO_DISPENSE.tooltip": "当投掷器中含有物品时,会立即自动投掷",
   "easydropper.DISPENSER_AUTO_DISPENSE": "发射器自动投掷",

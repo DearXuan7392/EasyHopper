@@ -12,7 +12,9 @@ public @interface EasyConfig {
 
     ModEnv env() default ModEnv.Null;
 
-    String tooltip() default "<name>.tooltip";
+    String tooltip() default "<modid>.<name>.tooltip";
 
     String promptKey() default "";
+
+    Editable editable() default @Editable;
 }

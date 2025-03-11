@@ -4,8 +4,10 @@
   "error.WHITE_LIST_CONTAIN_ILLEGAL_CHARACTERS": "Illegal characters exist in the whitelist, only letters or commas are allowed",
   "error.BLACK_LIST_CONTAIN_ILLEGAL_CHARACTERS": "Illegal characters exist in the blacklist, only letters or commas are allowed",
   "easyhopper.title": "Easy Hopper",
+
   "modmenu.nameTranslation.easyhopper": "Easy Hopper",
   "modmenu.descriptionTranslation.easyhopper": "Speed up hoppers, or enable classification without using new block",
+
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "Hopper Transfer Cooldown",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "Controls the cooldown for item transfer by the hopper",
   "easyhopper.HOPPER_INPUT_COUNT": "Hopper Input Count",
@@ -16,6 +18,7 @@
   "easyhopper.HOPPER_CLASSIFICATION.tooltip": "If enabled, the last slot of the hopper will act as a classification slot, and only the same type as the classification slot can transfer",
   "easyhopper.HOPPER_BETTER_EXTRACT": "Hopper Better Extract",
   "easyhopper.HOPPER_BETTER_EXTRACT.tooltip": "1. If a container or full-cube block on the hopper, it will stop searching for entities\n2. Reduce the number of chest updates caused by hoppers",
+  "easyhopper.HOPPER_BETTER_EXTRACT.disabled": "Starting with version 1.20.5, Mojang has improved the hopper code, which means this feature is no longer needed",
   "easyhopper.HOPPER_EXTRACT_COOLDOWN": "Hopper Extract Cooldown",
   "easyhopper.HOPPER_EXTRACT_COOLDOWN.tooltip": "Limit the frequency of hopper searching for entities",
   "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN": "Hopper Minecart Transfer Cooldown",
@@ -29,10 +32,8 @@
   "easydropper.DROPPER_AUTO_DISPENSE.tooltip": "If enabled, the dropper will automatically dispense items when it has items inside",
   "easydropper.DISPENSER_AUTO_DISPENSE": "Auto Dispense for Dispenser",
   "easydropper.DISPENSER_AUTO_DISPENSE.tooltip": "If enabled, the dispenser will automatically dispense items when it has items inside",
-
   "easydropper.BETTER_ITEM_POSITION": "Fix Item Position",
   "easydropper.BETTER_ITEM_POSITION.tooltip": "If enabled, the items dispensed by the dropper will not be offset to the left or right, you can control the landing position",
-
   "easydropper.DROPPER_COOLDOWN": "Dropper Cooldown (ticks)",
   "easydropper.DROPPER_COOLDOWN.tooltip": "Cooldown for droppers to automatically dispense items",
   "easydropper.DISPENSER_COOLDOWN": "Dispenser Cooldown (ticks)",

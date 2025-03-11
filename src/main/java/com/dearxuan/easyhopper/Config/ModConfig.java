@@ -2,6 +2,7 @@ package com.dearxuan.easyhopper.Config;
 
 import com.dearxuan.easyhopper.Config.ModMenu.ModEnv;
 import com.dearxuan.easyhopper.Config.Retention.EasyConfig;
+import com.dearxuan.easyhopper.Config.Retention.Editable;
 import com.dearxuan.easyhopper.Config.Retention.Value;
 
 public class ModConfig {
@@ -44,10 +45,12 @@ public class ModConfig {
     public boolean HOPPER_CLASSIFICATION = false;
 
     /**
-     * 漏斗传输优化, 已在 1.20.6 被官方优化
+     * 漏斗传输优化, 已在 1.20.5 被官方优化
      */
     @EasyConfig(
-            env = ModEnv.ServerOnly
+            env = ModEnv.ServerOnly,
+            promptKey = "easyhopper.HOPPER_BETTER_EXTRACT.disabled",
+            editable = @Editable(editable = false, setToDefault = true)
     )
     public boolean HOPPER_BETTER_EXTRACT = false;
 

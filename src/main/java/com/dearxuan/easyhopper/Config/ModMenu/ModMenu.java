@@ -78,7 +78,7 @@ public class ModMenu implements ModMenuApi {
             EasyConfig easyConfig) {
         try {
             Field field = ConfigClass.getField(name);
-            AbstractFieldBuilder<T, AbstractConfigListEntry<?>, ?> builder;
+            AbstractFieldBuilder builder;
             String type = field.getType().getSimpleName();
             Object defaultValue = ModSaver.DefaultValue.get(name);
             switch (type) {
@@ -88,20 +88,19 @@ public class ModMenu implements ModMenuApi {
                             .setDefaultValue((Integer) defaultValue)
                             .setMin((int)easyConfig.value().min())
                             .setMax((int)easyConfig.value().max())
-                            .setTooltip(ModText.GetTooltip(name, promptKey));
-
+                            .setTooltip(ModText.GetTooltip(name, easyConfig));
                     break;
                 case "boolean":
                     builder = configEntryBuilder
                             .startBooleanToggle(ModText.GetTranslatable(name), field.getBoolean(ModInfo.getInstance()))
                             .setDefaultValue((Boolean) defaultValue)
-                            .setTooltip(ModText.GetTooltip(name, promptKey));
+                            .setTooltip(ModText.GetTooltip(name, easyConfig));
                     break;
                 case "String":
                     builder = configEntryBuilder
                             .startStrField(ModText.GetTranslatable(name), (String) field.get(ModInfo.getInstance()))
                             .setDefaultValue((String) defaultValue)
-                            .setTooltip(ModText.GetTooltip(name, promptKey));
+                            .setTooltip(ModText.GetTooltip(name, easyConfig));
                     break;
                 default:
                     throw new Exception("Unknown Type: " + type);
@@ -120,7 +119,11 @@ public class ModMenu implements ModMenuApi {
             if (errorSupplier != null) {
                 builder.setErrorSupplier(errorSupplier);
             }
-            return builder.build();
+            AbstractConfigListEntry<?> build = builder.build();
+            if (!easyConfig.editable().editable()) {
+                build.setEditable(false);
+            }
+            return build;
         } catch (Exception e) {
             LOGGER.error(e);
             return null;

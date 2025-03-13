@@ -25,17 +25,17 @@ public abstract class HopperMinecartEntityMixin extends StorageMinecartEntity im
         super(entityType, world);
     }
 
-    @Redirect(
+    @Inject(
             method = "tick",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/HopperMinecartEntity;isAlive()Z")
+            at = @At(value = "HEAD"),
+            cancellable = true
     )
-    private boolean redirectIsAlive(HopperMinecartEntity instance){
+    private void injectTick(CallbackInfo info) {
         --this.cooldown;
         if(this.cooldown <= 0){
             this.cooldown = ModConfig.INSTANCE.HOPPER_MINECART_TRANSFER_COOLDOWN;
-            return instance.isAlive();
         }else{
-            return false;
+            info.cancel();
         }
     }
 }

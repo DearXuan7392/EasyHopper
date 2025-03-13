@@ -33,7 +33,7 @@
   ],
   "jars": [
     {
-      "file": "META-INF/jars/cloth-config-14.0.139-fabric.jar"
+      "file": "META-INF/jars/cloth-config-17.0.144-fabric.jar"
     }
   ],
   "depends": {

@@ -152,7 +152,7 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
             cancellable = true
     )
     private static void injectCanExtract(Inventory hopperInventory, Inventory fromInventory, ItemStack stack, int slot, Direction facing, CallbackInfoReturnable<Boolean> info) {
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION && fromInventory instanceof HopperBlockEntity hopperBlockEntity) {
+        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION && fromInventory instanceof HopperBlockEntity) {
             if (slot == hopperInventory.size() - 1) {
                 info.setReturnValue(false);
             }

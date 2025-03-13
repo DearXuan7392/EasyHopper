@@ -45,16 +45,6 @@ public class ModConfig {
     public boolean HOPPER_CLASSIFICATION = false;
 
     /**
-     * 漏斗传输优化, 已在 1.20.5 被官方优化
-     */
-    @EasyConfig(
-            env = ModEnv.ServerOnly,
-            promptKey = "easyhopper.HOPPER_BETTER_EXTRACT.disabled",
-            editable = @Editable(editable = false, setToDefault = true)
-    )
-    public boolean HOPPER_BETTER_EXTRACT = false;
-
-    /**
      * 漏斗检测传输冷却
      */
     @EasyConfig(

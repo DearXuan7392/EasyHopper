@@ -25,13 +25,28 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
         super(blockEntityType, blockPos, blockState);
     }
 
+    /**
+     * 在漏斗中插入物品
+     *
+     * @param world       世界
+     * @param pos         漏斗位置
+     * @param blockEntity 漏斗实体
+     * @return 是否插入成功
+     * @apiNote 仅供本代码调用
+     */
     @Shadow
-    private static boolean insert(World world, BlockPos pos, HopperBlockEntity blockEntity) {
+    private static boolean insert(
+            World world,
+            BlockPos pos,
+            HopperBlockEntity blockEntity) {
         return false;
     }
 
     /**
      * 修改漏斗冷却时间
+     * @param cooldown 冷却时间
+     * @return 修改后的冷却时间
+     * @apiNote 修改原函数中 transferCooldown 的接受值, 修改冷却时间
      */
     @ModifyVariable(
             method = "setTransferCooldown",
@@ -50,8 +65,8 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
             at = @At(value = "HEAD"),
             cancellable = true
     )
-    private static void injectInsertAndExtract(World world, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, BooleanSupplier booleanSupplier, CallbackInfoReturnable<Boolean> info){
-        if (world.isClient) {
+    private static void injectInsertAndExtract(World world, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, BooleanSupplier booleanSupplier, CallbackInfoReturnable<Boolean> info) {
+        if (world.isClient()) {
             info.setReturnValue(false);
         } else {
             IHopperBlockEntityMixin iHopperBlockEntity = (IHopperBlockEntityMixin) blockEntity;

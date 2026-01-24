@@ -1,96 +1,65 @@
-## Easy Hopper
+# EasyHopper
 
-This mod is used to optimize the performance of hoppers and provides a classification function without using new blocks.
-
-![Screenshot](res/screenshot_EN.jpg)
+EasyHopper provides classification functionality based on the vanilla version, without introducing any additional
+blocks.
 
 ## Dependencies
 
-``modmenu``(Only Client)
+`modmenu` (client-side only)
 
-**<font color=red>Important</font>**:
-
-If this mod is installed on a client, not a server, it is recommended to install ``modmenu``, or you will not see the configuration screen.
+**<font color=red> Warning </font>**:
+The configuration UI will only be displayed after installing `modmenu`. If EasyHopper is running on a server or
+`modmenu` is not installed, you can only manually modify the configuration file in the `config` folder.
 
 ## Download
 
-[Get It From CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper)
+[Download from Modrinth](https://modrinth.com/mod/easy-hopper) (recommended)
+
+[Download from CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper)
 
 ## Features
 
 ### Cooldown
 
-After each input or output, the hopper will enter a cooldown period. The original cooldown is 8 ticks (20 ticks per second). This mod provides the ability to modify the cooldown. If you have many hoppers (such as 500), you can increase the cooldown to improve performance.
+After an input or output operation, hoppers enter a cooldown period, and the original cooldown time is 8 ticks (20 ticks
+per second). This MOD provides the ability to modify the cooldown, you can adjust the cooldown as needed to increase
+transfer speed.
 
-### Input/Output Count
+### Input/Output Quantity
 
-Each hopper will attempt to output items first and then input items (you can raise an issue to modify the order if needed). By modifying the number of items input or output by each hopper, each hopper can output or retrieve more items at a time. 
-
->Drop items are only affected by the cooldown, not input count.
+Modifying the number of items a hopper can input or output at once allows it to transfer more items in a single
+operation. Note that dropped items are only affected by cooldown.
 
 ### Classification
 
-When the classification function is enabled in the settings, the last slot of hopper will be used as the classification
-item slot. Only the same items(including non-stackable items or tools with different wear) can be input or output,
-whether they are dropped items or hopper minecarts.
+After enabling the classification feature in settings, the last slot of hoppers will be used as the classification slot.
+Only identical items (including non-stackable items, or tools with different damage) can be input or output.
 
-If a player forcibly puts in different items, they will **never** flow out of the hopper until the player manually takes
-them.
+If a player forcibly places different items, they will remain stuck in the hopper and cannot flow out until manually
+removed by the player.
 
-When the last slot of the hopper is empty, the classification function of it will be disabled. Even if it is empty,
-items cannot flow into the last slot, and can only be placed manually by players.
+When the last slot of the hopper is empty, the hopper no longer classifies items. Even when empty, items cannot flow
+into the last slot; it can only be filled manually by the player.
 
-For example, if you put redstone in the last slot, only redstone can enter or leave the hopper. The hopper's
-classification function will be disabled when you take out the redstone.
+For example, if you place redstone in the last slot, only redstone can enter or leave this hopper. The moment you remove
+the redstone, the hopper's classification function becomes inactive.
 
-### Performance Enhancement
+### Item Extract Cooldown
 
-When hopper is not in cooldown, it will try to search items from above each server tick, which will cause a large amount
-of stagnation. The Performance Enhancement operate through the following methods:
+In vanilla Minecraft, hoppers check for dropped items every tick. This MOD adds a cooldown period to this process,
+preventing frequent checks. It can significantly improve performance when many hoppers are present.
 
-1. Hopper detection of items will cause itself to enter cooldown to avoid frequent detection.
+## Others
 
-2. When a container on the hopper, items detection will be disabled and only input from the container.
+### Performance Enhancement (`<= 1.20.4`)
 
-3. When a full-cube block(not container) on the hopper, due to the impossibility of items in the input area, the hopper
-   will stop the active input function, but it can still be input by other hopper.
+> In versions up to `1.20.4`, when a full block is above a hopper, there is almost no chance for dropped items to be
+> input, yet hoppers still check items every tick. This MOD optimizes the code so that when a full block is above the
+> hopper, it will not check for dropped items. This feature may cause extremely rare cases where dropped items embedded in
+> full blocks cannot be sucked up by hoppers, such as honey dropping from beehives.
 
-4. Optimize transportation code to reduce container update.
+The official version has optimized the code in `1.20.5`, and the related functionality has been removed from this MOD.
 
-The following images will show you the performance under a large number of hopper.
+### Conflicts with Other MODs
 
-CPU: 12th Gen Intel(R) Core(TM) i7-12700H
-
-|            In Game            |     Without Easy Hopper     | Performance Enhancement |
-|:-----------------------------:|:---------------------------:|:-----------------------:|
-| ![](/res/test_screenshot.jpg) | ![](/res/test_original.jpg) | ![](/res/test_mod.jpg)  |
-|       100 × 100 Hoppers       |           ≈ 13 ms           |         ≈ 5 ms          |
-
-## Tips
-
-### Hopper Chain Classification
-
-Use hopper chains instead of water flow classification. It still works in The Nether. You can increase the cooldown and
-input/output count to improve performance when using multiple hoppers.(In fact, around a dozen hoppers will not cause
-visible performance degradation)
-
-The following is the recommended configuration when using hopper classification. You can modify it according to your
-needs.
-
-> The input and output count are best equal, and the input count can be greater than the output.
-
-| Cooldown | Input/Output Count	 | Long-Distance Transfer Speed |
-|:--------:|:-------------------:|:----------------------------:|
-|    16    |         32          |             Slow             |
-|    8     |         16          |            Medium            |
-|    4     |          8          |             Fast             |
-
-Unless you're using hoppers to transmit items remotely, it's not recommended to set cooldown to 4 or lower. The cooldown has a greater impact on performance than the input/output count.
-
-### Redstone Related
-
-You may not be able to use redstone circuits to precisely control the number of items in the hopper (most people don't need it), because the update frequency of redstone is 2, and the input or output each time is greater than 1.
-
-### Timer
-
-If you are timing with hoppers, then you need to recalculate the number of items in the hopper based on your specific configuration. Alternatively, you can modify the relevant configuration to time more accurately according to your timing requirements. (1 tick = 0.05 s)
+Since this MOD modifies hopper behavior, it may conflict with other MODs that also modify hopper behavior.

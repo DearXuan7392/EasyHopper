@@ -72,6 +72,7 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
             IHopperBlockEntityMixin iHopperBlockEntity = (IHopperBlockEntityMixin) blockEntity;
             if (!iHopperBlockEntity.invokeNeedsCooldown() && state.get(HopperBlock.ENABLED)) {
                 boolean bl = false;
+                // 漏斗尝试输出物品
                 for(int i=0;i<ModConfig.INSTANCE.HOPPER_OUTPUT_COUNT;++i){
                     if(blockEntity.isEmpty()){
                         break;
@@ -79,6 +80,8 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
                         bl = insert(world, pos, blockEntity);
                     }
                 }
+
+                // 漏斗尝试吸取物品
                 for(int i=0;i<ModConfig.INSTANCE.HOPPER_INPUT_COUNT;++i){
                     if(iHopperBlockEntity.invokeIsFull()){
                         break;
@@ -126,6 +129,8 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
             Direction side,
             CallbackInfoReturnable<ItemStack> info) {
         if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
+            // 其中 stack 是 from 容器中的物品
+            System.out.println("1, " + from.getClass() + "; " + to.getClass());
             if (from instanceof HopperBlockEntity hopperBlockEntity && !canHopperTransfer(hopperBlockEntity, stack)) {
                 info.setReturnValue(stack);
             } else if (to instanceof HopperBlockEntity hopperBlockEntity && !canHopperTransfer(hopperBlockEntity, stack)) {
@@ -139,9 +144,16 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void injectTransfer2(Inventory from, Inventory to, ItemStack stack, int slot, Direction side, CallbackInfoReturnable<ItemStack> info) {
+    private static void injectTransfer2(
+            Inventory from,
+            Inventory to,
+            ItemStack stack,
+            int slot,
+            Direction side,
+            CallbackInfoReturnable<ItemStack> info) {
         if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
-            if (from instanceof HopperBlockEntity hopperBlockEntity && (!canHopperTransfer(hopperBlockEntity, stack) || slot == from.size() - 1)) {
+            // 其中 slot 是 to 容器中的物品格序号
+            if (from instanceof HopperBlockEntity hopperBlockEntity && (!canHopperTransfer(hopperBlockEntity, stack))) {
                 info.setReturnValue(stack);
             } else if (to instanceof HopperBlockEntity hopperBlockEntity && (!canHopperTransfer(hopperBlockEntity, stack) || slot == to.size() - 1)) {
                 info.setReturnValue(stack);

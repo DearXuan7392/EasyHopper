@@ -3,6 +3,8 @@
 EasyHopper provides classification functionality based on the vanilla version, without introducing any additional
 blocks.
 
+![screenshot](res/screenshot_EN.png)
+
 ## Dependencies
 
 `modmenu` (client-side only)

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(HopperMinecartEntity.class)
+@Mixin(value = HopperMinecartEntity.class, priority = 500)
 public abstract class HopperMinecartEntityMixin extends StorageMinecartEntity implements Hopper {
 
     @Unique

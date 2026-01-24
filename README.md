@@ -65,3 +65,43 @@ The official version has optimized the code in `1.20.5`, and the related functio
 ### Conflicts with Other MODs
 
 Since this MOD modifies hopper behavior, it may conflict with other MODs that also modify hopper behavior.
+
+### For Developers
+
+Due to my busy schedule with studies and work, I may pay little attention to issues or not update for a long time.
+Fortunately, this project requires only minimal modifications to adapt to new Minecraft versions. If you wish to
+continue maintaining this MOD, you can fork this project and follow these steps:
+
+1. Edit the game version numbers in [gradle.properties](gradle.properties), get it
+   from [https://fabricmc.net/develop](https://fabricmc.net/develop), for example:
+
+```properties
+minecraft_version=1.21.11
+yarn_mappings=1.21.11+build.4
+loader_version=0.18.4
+loom_version=1.15-SNAPSHOT
+# Fabric API
+fabric_api_version=0.141.2+1.21.11
+```
+
+2. Edit the `cloth config` and `modmenu` dependencies in [build.gradle](build.gradle), get it
+   from [https://linkie.shedaniel.dev/dependencies?loader=fabric&version=1.21.11](https://linkie.shedaniel.dev/dependencies?loader=fabric&version=1.21.11),
+   for example:
+
+```properties
+cloth_config_version=21.11.150
+mod_menu_version=17.0.0-beta.1
+```
+
+3. Update the MOD version number in [build.gradle](build.gradle). The first number represents feature updates, the
+   second number represents mod version updates, and the third number represents patch/minor updates. For bug fixes
+   only, increment the third number.
+
+```properties
+mod_version=2.15.1
+```
+
+4. Replace the `resources/META-INF/jars/cloth-config-<cloth_config_version>-fabric.jar` file with the version
+   corresponding to your updated `cloth_config_version`.
+
+5. Build and test.

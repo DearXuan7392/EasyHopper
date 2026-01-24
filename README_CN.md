@@ -59,3 +59,41 @@ EasyHopper 在原版基础上提供分类功能, 而无需引入任何额外方�
 ### 与其他 MOD 冲突
 
 由于本 MOD 修改了漏斗的行为, 与其他同样修改了漏斗行为的 MOD 可能会冲突. 
+
+### 对开发者
+
+由于我忙于我的学业与工作, 我可能会很少关注 issues, 或长时间未更新. 幸运的是, 本代码仅需少量修改就可以适应新版本.
+如果你想要继续维护该 MOD, 你可以从本项目 fork, 然后参照以下步骤进行修改:
+
+1. 编辑 [gradle.properties](gradle.properties) 中的游戏版本号,
+   从 [https://fabricmc.net/develop/](https://fabricmc.net/develop) 获取, 例如
+
+```properties
+minecraft_version=1.21.11
+yarn_mappings=1.21.11+build.4
+loader_version=0.18.4
+loom_version=1.15-SNAPSHOT
+# Fabric API
+fabric_api_version=0.141.2+1.21.11
+```
+
+2. 编辑 [build.gradle](build.gradle) 中的`cloth config` 与 `modmenu` 依赖,
+   从 [https://linkie.shedaniel.dev/dependencies?loader=fabric&version=1.21.11](https://linkie.shedaniel.dev/dependencies?loader=fabric&version=1.21.11)
+   获取, 例如
+
+```properties
+cloth_config_version=21.11.150
+mod_menu_version=17.0.0-beta.1
+```
+
+3. 修改 [build.gradle](build.gradle) 中的 MOD 版本号. 其中第一个数字表示功能更新, 第二个数字表示版本更新, 第三个数字表示小更新.
+   如果仅仅是修复 bug, 请增加第三个数字.
+
+```properties
+mod_version=2.15.1
+```
+
+4. 替换 [cloth-config-21.11.150-fabric.jar](src/main/resources/META-INF/jars/cloth-config-21.11.150-fabric.jar) 文件,
+   将其替换为 `cloth_config_version` 对应的版本.
+
+5. 构建并测试.

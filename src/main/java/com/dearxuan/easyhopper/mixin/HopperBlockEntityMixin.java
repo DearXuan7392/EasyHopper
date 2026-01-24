@@ -126,7 +126,7 @@ public abstract class HopperBlockEntityMixin extends LootableContainerBlockEntit
     )
     private static void injectTransfer2(Inventory from, Inventory to, ItemStack stack, int slot, Direction side, CallbackInfoReturnable<ItemStack> info) {
         if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
-            if (from instanceof HopperBlockEntity hopperBlockEntity && (!canHopperTransfer(hopperBlockEntity, stack) || slot == from.size() - 1)) {
+            if (from instanceof HopperBlockEntity hopperBlockEntity && (!canHopperTransfer(hopperBlockEntity, stack))) {
                 info.setReturnValue(stack);
             } else if (to instanceof HopperBlockEntity hopperBlockEntity && (!canHopperTransfer(hopperBlockEntity, stack) || slot == to.size() - 1)) {
                 info.setReturnValue(stack);

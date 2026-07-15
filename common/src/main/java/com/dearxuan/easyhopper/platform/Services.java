@@ -6,7 +6,7 @@ import com.dearxuan.easyhopper.platform.services.IPlatformHelper;
 import java.util.ServiceLoader;
 
 // 服务加载器是 Java 的内置功能, 允许我们定位在不同环境之间有所不同的接口实现.
-// 在 MultiLoader 的上下文中, 我们使用此功能来访问 common 代码中的模拟 API ,
+// 在 MultiLoader 的上下文中, 我们使用此功能来访问 common 代码中的模拟 API,
 // 该 API 在运行时会被替换为平台特定的实现.
 public class Services {
 

@@ -1,32 +1,32 @@
-# MultiLoader Template
+# MultiLoader 模板
 
-This project provides a Gradle project template that can compile Minecraft mods for multiple modloaders using a common project for the sources. This project does not require any third party libraries or dependencies. If you have any questions or want to discuss the project, please join our [Discord](https://discord.myceliummod.network).
+该项目提供了一个 Gradle 项目模板, 可使用通用项目作为源码来源, 为多个模组加载器编译 Minecraft 模组. 该项目不需要任何第三方库或依赖. 如果您有任何问题或想讨论该项目, 请加入我们的 [Discord](https://discord.myceliummod.network).
 
-## Getting Started
+## 入门指南
 
 ### IntelliJ IDEA
-This guide will show how to import the MultiLoader Template into IntelliJ IDEA. The setup process is roughly equivalent to setting up the modloaders independently and should be very familiar to anyone who has worked with their MDKs.
+本指南将展示如何将 MultiLoader 模板导入 IntelliJ IDEA. 设置过程大致相当于独立设置各个模组加载器, 对于任何使用过其 MDK 的人来说应该非常熟悉.
 
-1. Clone or download this repository to your computer.
-2. Configure the project by setting the properties in the `gradle.properties` file. You will also need to change the `rootProject.name`  property in `settings.gradle`, this should match the folder name of your project, or else IDEA may complain.
-3. Open the template's root folder as a new project in IDEA. This is the folder that contains this README.md file and the gradlew executable.
-4. If your default JVM/JDK is not Java 25 you will encounter an error when opening the project. This error is fixed by going to `File > Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JVM` and changing the value to a valid Java 25 JVM. You will also need to set the Project SDK to Java 25. This can be done by going to `File > Project Structure > Project SDK`. Once both have been set open the Gradle tab in IDEA and click the refresh button to reload the project.
-5. Open your Run/Debug Configurations. Under the `Application` category there should now be options to run Fabric and NeoForge projects. Select one of the client options and try to run it.
-6. Assuming you were able to run the game in step 5 your workspace should now be set up.
+1. 将此仓库克隆或下载到您的计算机.
+2. 通过在 `gradle.properties` 文件中设置属性来配置项目. 您还需要更改 `settings.gradle` 中的 `rootProject.name` 属性, 该属性应与项目的文件夹名称一致, 否则 IDEA 可能会报错.
+3. 在 IDEA 中将模板的根文件夹作为新项目打开. 该文件夹包含此 README.md 文件和 gradlew 可执行文件.
+4. 如果您的默认 JVM/JDK 不是 Java 25, 打开项目时会遇到错误. 通过进入 `File > Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JVM` 并将值更改为有效的 Java 25 JVM 即可修复此错误. 您还需要将项目 SDK 设置为 Java 25, 可通过 `File > Project Structure > Project SDK` 完成. 两者都设置好后, 打开 IDEA 中的 Gradle 选项卡并点击刷新按钮以重新加载项目.
+5. 打开您的运行/调试配置. 在 `Application` 类别下, 现在应该会出现运行 Fabric 和 NeoForge 项目的选项. 选择其中一个客户端选项并尝试运行.
+6. 假设您能在第 5 步中成功运行游戏, 那么您的工作区就已设置完成.
 
 ### Eclipse
-While it is possible to use this template in Eclipse it is not recommended. During the development of this template multiple critical bugs and quirks related to Eclipse were found at nearly every level of the required build tools. While we continue to work with these tools to report and resolve issues support for projects like these are not there yet. For now Eclipse is considered unsupported by this project. The development cycle for build tools is notoriously slow so there are no ETAs available.
+虽然可以在 Eclipse 中使用此模板, 但不建议这样做. 在开发此模板期间, 在所需构建工具的几乎每个层面都发现了与 Eclipse 相关的多个严重错误和问题. 虽然我们继续与这些工具合作以报告和解决问题, 但对这类项目的支持尚未就绪. 目前, Eclipse 被视为该项目不支持的平台. 构建工具的开发周期众所周知地缓慢, 因此没有可用的预计完成时间.
 
-## Development Guide
-When using this template the majority of your mod should be developed in the `common` project. The `common` project is compiled against the vanilla game and is used to hold code that is shared between the different loader-specific versions of your mod. The `common` project has no knowledge or access to ModLoader specific code, apis, or concepts. Code that requires something from a specific loader must be done through the project that is specific to that loader, such as the `fabric` or `neoforge` projects.
+## 开发指南
+使用此模板时, 您的模组大部分代码应在 `common` 项目中开发. `common` 项目是针对原版游戏编译的, 用于存放您的模组在不同加载器特定版本之间共享的代码. `common` 项目不了解也无法访问特定模组加载器的代码、API 或概念. 需要特定加载器功能的代码必须通过该加载器特定的项目来完成, 例如 `fabric` 或 `neoforge` 项目.
 
-Loader specific projects such as the `fabric` and `neoforge` project are used to load the `common` project into the game. These projects also define code that is specific to that loader. Loader specific projects can access all the code in the `common` project. It is important to remember that the `common` project can not access code from loader specific projects.
+加载器特定的项目 (如 `fabric` 和 `neoforge` 项目) 用于将 `common` 项目加载到游戏中. 这些项目还定义了特定于该加载器的代码. 加载器特定的项目可以访问 `common` 项目中的所有代码. 请务必记住, `common` 项目不能访问加载器特定项目中的代码.
 
-## Removing Platforms and Loaders
-While this template has support for many modloaders, new loaders may appear in the future, and existing loaders may become less relevant.
+## 移除平台和加载器
+虽然此模板支持多个模组加载器, 但未来可能会出现新的加载器, 而现有加载器可能会变得不那么重要.
 
-Removing loader specific projects is as easy as deleting the folder, and removing the `include("projectname")` line from the `settings.gradle` file.
-For example if you wanted to remove support for `forge` you would follow the following steps:
+移除加载器特定的项目只需删除文件夹, 并从 `settings.gradle` 文件中移除 `include("projectname")` 行即可.
+例如, 如果您想移除对 `forge` 的支持, 请按照以下步骤操作:
 
-1. Delete the subproject folder. For example, delete `MultiLoader-Template/forge`.
-2. Remove the project from `settings.gradle`. For example, remove `include("forge")`. 
+1. 删除子项目文件夹. 例如, 删除 `MultiLoader-Template/forge`.
+2. 从 `settings.gradle` 中移除该项目. 例如, 移除 `include("forge")`.

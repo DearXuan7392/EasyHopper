@@ -1,11 +1,11 @@
 plugins {
-    id 'multiloader-loader'
+    id 'easyhopper-loader'
     id 'net.neoforged.moddev'
 }
 
 neoForge {
     version = neoforge_version
-    // Automatically enable neoforge AccessTransformers if the file exists
+    // 如果文件存在, 则自动启用 neoforge AccessTransformer
     def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
@@ -13,7 +13,7 @@ neoForge {
     runs {
         configureEach {
             systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
-            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // 统一运行配置名称与 fabric 一致
         }
         client {
             client()
@@ -22,8 +22,8 @@ neoForge {
         data {
             clientData()
             gameDirectory = this.mkdir(this.file("runs/data"))
-            // DataGen can be run by - "./gradlew :neoforge:runData" in Terminal.
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            // DataGen 可以在终端中通过 "./gradlew :neoforge:runData" 运行.
+            // 指定用于数据生成的 modid, 输出生成的资源的路径, 以及查找现有资源的路径.
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
         server {
@@ -41,7 +41,7 @@ neoForge {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-// Implement mcgradleconventions loader attribute
+// 实现 mcgradleconventions 加载器属性
 def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
 ['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
     configurations.named("$variant") {

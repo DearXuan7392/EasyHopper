@@ -58,7 +58,7 @@ jar {
 processResources {
     var expandProps = [
             'version'                      : version,
-            'group'                        : project.group, //Else we target the task's group.
+            'group'                        : project.group, // 否则会指向任务的 group.
             'minecraft_version'            : minecraft_version,
             'minecraft_version_range'      : minecraft_version_range,
             'fabric_version'               : fabric_version,
@@ -101,4 +101,8 @@ publishing {
             url System.getenv('local_maven_url')
         }
     }
+}
+
+tasks.withType(Javadoc).configureEach {
+    enabled = false
 }

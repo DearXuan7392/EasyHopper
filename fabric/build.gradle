@@ -1,5 +1,5 @@
 plugins {
-    id 'multiloader-loader'
+    id 'easyhopper-loader'
     id 'net.fabricmc.fabric-loom'
 }
 dependencies {
@@ -29,7 +29,7 @@ loom {
     }
 }
 
-// Implement mcgradleconventions loader attribute
+// 实现 mcgradleconventions 加载器属性
 def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
 ['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements', 'includeInternal', 'modCompileClasspath'].each { variant ->
     configurations.named("$variant") {

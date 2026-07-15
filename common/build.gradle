@@ -1,11 +1,11 @@
 plugins {
-    id 'multiloader-common'
+    id 'easyhopper-common'
     id 'net.neoforged.moddev'
 }
 
 neoForge {
     neoFormVersion = neo_form_version
-    // Automatically enable AccessTransformers if the file exists
+    // 如果文件存在, 则自动启用 AccessTransformer
     def at = file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
@@ -14,7 +14,7 @@ neoForge {
 
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
-    // fabric and neoforge both bundle mixinextras, so it is safe to use it in common
+    // fabric 和 neoforge 都捆绑了 mixinextras, 因此在 common 中使用是安全的
     compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
 }
@@ -35,7 +35,7 @@ artifacts {
     commonResources sourceSets.main.resources.sourceDirectories.singleFile
 }
 
-// Implement mcgradleconventions loader attribute
+// 实现 mcgradleconventions 加载器属性
 def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
 ['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
     configurations.named("$variant") {

@@ -1,0 +1,12 @@
+package com.dearxuan.easyhopper.impl;
+
+import net.minecraft.world.item.ItemStack;
+
+public interface IHopperBlockEntityImpl {
+
+    ItemStack getClassifiedItemStack();
+
+    boolean canTransferItem(ItemStack itemStack);
+
+    int getContainerSizeAfterClassification();
+}

@@ -4,10 +4,12 @@
   "package": "com.dearxuan.easyhopper.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
-  "mixins": [],
-  "client": [
-    "MixinMinecraft"
+  "mixins": [
+    "HopperBlockEntityMixin",
+    "IHopperBlockEntityMixin",
+    "MinecartHopperMixin"
   ],
+  "client": [],
   "server": [],
   "injectors": {
     "defaultRequire": 1

@@ -3,10 +3,10 @@
   "minVersion": "0.8",
   "package": "com.dearxuan.easyhopper.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [],
-  "client": [
-    "MixinTitleScreen"
+  "mixins": [
+
   ],
+  "client": [],
   "server": [],
   "injectors": {
     "defaultRequire": 1

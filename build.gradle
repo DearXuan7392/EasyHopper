@@ -4,3 +4,23 @@ plugins {
     // 查看 https://projects.neoforged.net/neoforged/moddevgradle 获取新版本
     id 'net.neoforged.moddev' version '2.0.141' apply false
 }
+
+subprojects { subproject ->
+    subproject.plugins.withType(JavaPlugin) {
+        subproject.dependencies {
+            implementation "org.yaml:snakeyaml:2.2"
+        }
+    }
+
+    if (subproject.name == 'fabric' || subproject.name == 'neoforge') {
+        // 配置所有打包任务的输出文件名
+        subproject.tasks.matching {
+            it.name in ['jar', 'remapJar', 'sourcesJar', 'remapSourcesJar', 'javadocJar']
+        }.configureEach { task ->
+            def suffix = ''
+            if (task.name in ['sourcesJar', 'remapSourcesJar']) suffix = '-sources'
+            else if (task.name == 'javadocJar') suffix = '-javadoc'
+            archiveFileName = "${project.mod_id}-mc${project.minecraft_version}-${project.version}-${subproject.name}${suffix}.jar"
+        }
+    }
+}

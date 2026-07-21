@@ -17,6 +17,9 @@
     "entrypoints": {
         "main": [
             "com.dearxuan.easyhopper.EntryPointFabric"
+        ],
+        "modmenu": [
+            "com.dearxuan.easyhopper.ModMenuIntegration"
         ]
     },
     "mixins": [

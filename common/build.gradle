@@ -3,6 +3,19 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
+repositories {
+    maven {
+        name = "isXander Maven"
+        url = "https://maven.isxander.dev/releases"
+    }
+}
+
+dependencies {
+    implementation("dev.isxander:yet-another-config-lib:${yacl_version}-fabric") {
+        transitive = false
+    }
+}
+
 neoForge {
     neoFormVersion = neo_form_version
     // 如果文件存在, 则自动启用 AccessTransformer

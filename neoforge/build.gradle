@@ -3,6 +3,14 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
+repositories {
+    maven { url = "https://maven.isxander.dev/releases" }
+}
+
+dependencies {
+    implementation "dev.isxander:yet-another-config-lib:${yacl_version}-neoforge"
+}
+
 neoForge {
     version = neoforge_version
     // 如果文件存在, 则自动启用 neoforge AccessTransformer

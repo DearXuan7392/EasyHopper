@@ -1,0 +1,13 @@
+package com.dearxuan.easyhopper;
+
+import com.dearxuan.easyhopper.gui.CommonConfigGUI;
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
+
+public class ModMenuIntegration implements ModMenuApi {
+    @Override
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+        // 将 parentScreen 传递给 CommonConfigGUI 创建 Screen
+        return CommonConfigGUI::createScreen;
+    }
+}

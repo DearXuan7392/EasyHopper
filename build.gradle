@@ -3,12 +3,23 @@ plugins {
     id 'net.fabricmc.fabric-loom' version '1.15.5' apply false
     // 查看 https://projects.neoforged.net/neoforged/moddevgradle 获取新版本
     id 'net.neoforged.moddev' version '2.0.141' apply false
+
+    id 'com.gradleup.shadow' version '8.3.6' apply false
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        // 添加 Cloth Config 的 Maven 仓库
+        maven { url "https://maven.shedaniel.me/" }
+        maven { url "https://maven.terraformersmc.com/releases/" }
+    }
 }
 
 subprojects { subproject ->
     subproject.plugins.withType(JavaPlugin) {
         subproject.dependencies {
-            implementation "org.yaml:snakeyaml:2.2"
+            implementation "org.yaml:snakeyaml:${project.snakeyaml_version}"
         }
     }
 
@@ -20,7 +31,7 @@ subprojects { subproject ->
             def suffix = ''
             if (task.name in ['sourcesJar', 'remapSourcesJar']) suffix = '-sources'
             else if (task.name == 'javadocJar') suffix = '-javadoc'
-            archiveFileName = "${project.mod_id}-mc${project.minecraft_version}-${project.version}-${subproject.name}${suffix}.jar"
+            archiveFileName = "${project.mod_id}-${project.version}-mc${project.minecraft_version}-${subproject.name}${suffix}.jar"
         }
     }
 }

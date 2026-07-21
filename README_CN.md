@@ -17,11 +17,24 @@ Mod 版本和游戏版本, 并解释你进行了哪些操作, 出现了什么问
 
 ## 配置文件
 
-在任何情况下, 你都可以在游戏目录下 ``./config/easyhopper.yaml`` 里编辑内容, 并在重启游戏后更新.
+### 任何情况
 
-对于 ``Fabric``, 你必须下载 [Mod Menu](https://modrinth.com/mod/modmenu) 才能打开配置界面, 修改立即生效.
+在任何情况下, 你都可以在游戏目录下 ``./config/easyhopper.yaml`` 里直接编辑内容, 并在重启游戏后更新.
 
-对于 ``NeoForge``, 无需安装任何额外的组件, 即可在 NeoForge 设置中修改配置, 并立即生效.
+在服务器上运行时, 你只能通过修改文件的方式来修改配置, 并在服务器重启后更新. 客户端设置对服务器不生效.
+
+### 对于 Fabric
+
+想要显示图形界面, 你必须首先下载下列模组:
+
+- [Mod Menu](https://modrinth.com/mod/modmenu), 用于管理模组, 并添加配置按钮.
+- 从 [Cloth Config API](https://modrinth.com/mod/cloth-config) (推荐) 或 [YACL](https://modrinth.com/mod/yacl) 中任选一个下载,
+  用于提供图形界面. 如果同时存在两个模组, 则优先使用 Cloth Config API.
+
+### 对于 NeoForge
+
+- 从 [Cloth Config API](https://modrinth.com/mod/cloth-config) (推荐) 或 [YACL](https://modrinth.com/mod/yacl) 中任选一个下载,
+  用于提供图形界面. 如果同时存在两个模组, 则优先使用 Cloth Config API.
 
 ## 新的功能
 

@@ -1,12 +1,10 @@
 {
-  "error.DONT_WORK_IN_SERVER": "You can NOT modify the server configuration!",
-  "error.KeyDuplication": "Duplicate entity type: ",
-  "error.WHITE_LIST_CONTAIN_ILLEGAL_CHARACTERS": "Illegal characters exist in the whitelist, only letters or commas are allowed",
-  "error.BLACK_LIST_CONTAIN_ILLEGAL_CHARACTERS": "Illegal characters exist in the blacklist, only letters or commas are allowed",
   "easyhopper.title": "Easy Hopper",
 
   "modmenu.nameTranslation.easyhopper": "Easy Hopper",
   "modmenu.descriptionTranslation.easyhopper": "Speed up hoppers, or enable classification without using new block",
+  "easyhopper.toast.title": "Cannot Open Config",
+  "easyhopper.toast.description": "Requires Cloth Config or YACL mod to be installed!",
 
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "Hopper Transfer Cooldown",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "Controls the cooldown for item transfer by the hopper",

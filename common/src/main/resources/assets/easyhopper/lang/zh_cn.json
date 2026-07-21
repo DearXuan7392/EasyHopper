@@ -1,14 +1,10 @@
 {
-  "error.DONT_WORK_IN_SERVER": "你无法修改服务器配置!",
-  "error.KeyDuplication": "重复的实体类型: ",
-  "error.WHITE_LIST_CONTAIN_ILLEGAL_CHARACTERS": "白名单中含有非法字符,只能包含英文字母或逗号",
-  "error.BLACK_LIST_CONTAIN_ILLEGAL_CHARACTERS": "黑名单中含有非法字符,只能包含英文字母或逗号",
-
-
   "easyhopper.title": "轻松漏斗",
 
   "modmenu.nameTranslation.easyhopper": "轻松漏斗",
   "modmenu.descriptionTranslation.easyhopper": "修改漏斗冷却时间,或启用分类功能,而无需引入新的方块",
+  "easyhopper.toast.title": "无法打开配置界面",
+  "easyhopper.toast.description": "需要安装 Cloth Config 或 YACL 模组!",
 
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "漏斗冷却时间",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "控制漏斗输送物品冷却时间",

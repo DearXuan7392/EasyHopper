@@ -9,6 +9,9 @@ repositories {
 
 dependencies {
     implementation "dev.isxander:yet-another-config-lib:${yacl_version}-neoforge"
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+
+    jarJar("org.yaml:snakeyaml:${project.snakeyaml_version}")
 }
 
 neoForge {

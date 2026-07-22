@@ -1,5 +1,6 @@
 package com.dearxuan.easyhopper.gui;
 
+import com.dearxuan.easyhopper.platform.Services;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.screens.Screen;
@@ -12,7 +13,7 @@ public class CommonConfigGUI {
      */
     public static Screen createScreen(Screen parentScreen) {
         // 优先检查 Cloth Config
-        if (isModLoaded("cloth-config") || isModLoaded("cloth_config")) {
+        if (Services.PLATFORM.isModLoaded("cloth-config") || Services.PLATFORM.isModLoaded("cloth_config")) {
             try {
                 return ClothConfigGUI.createScreen(parentScreen);
             } catch (Throwable e) {
@@ -21,7 +22,7 @@ public class CommonConfigGUI {
         }
 
         // 备选检查 YetAnotherConfigLib (YACL)
-        if (isModLoaded("yet_another_config_lib_v3") || isModLoaded("yacl")) {
+        if (Services.PLATFORM.isModLoaded("yet_another_config_lib_v3") || Services.PLATFORM.isModLoaded("yacl")) {
             try {
                 return YaclConfigGUI.createScreen(parentScreen);
             } catch (Throwable e) {
@@ -57,28 +58,5 @@ public class CommonConfigGUI {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 兼容 Fabric Loader 与 NeoForge/Forge 的模组加载检查
-     */
-    private static boolean isModLoaded(String modId) {
-        // 1. 尝试 Fabric Loader 检测
-        try {
-            Class<?> loaderClass = Class.forName("net.fabricmc.loader.api.FabricLoader");
-            Object loader = loaderClass.getMethod("getInstance").invoke(null);
-            return (boolean) loaderClass.getMethod("isModLoaded", String.class).invoke(loader, modId);
-        } catch (Throwable ignored) {
-        }
-
-        // 2. 尝试 NeoForge / Forge LoadingContext 检测
-        try {
-            Class<?> modListClass = Class.forName("net.neoforged.fml.ModList");
-            Object modList = modListClass.getMethod("get").invoke(null);
-            return (boolean) modListClass.getMethod("isLoaded", String.class).invoke(modList, modId);
-        } catch (Throwable ignored) {
-        }
-
-        return false;
     }
 }

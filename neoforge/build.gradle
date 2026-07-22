@@ -3,10 +3,6 @@ plugins {
     id 'net.neoforged.moddev'
 }
 
-repositories {
-    maven { url = "https://maven.isxander.dev/releases" }
-}
-
 dependencies {
     implementation "dev.isxander:yet-another-config-lib:${yacl_version}-neoforge"
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"

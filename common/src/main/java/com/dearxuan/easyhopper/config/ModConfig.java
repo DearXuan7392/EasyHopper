@@ -31,7 +31,4 @@ public class ModConfig {
         ConfigManager.load();
     }
 
-    public void save() {
-        ConfigManager.save();
-    }
 }

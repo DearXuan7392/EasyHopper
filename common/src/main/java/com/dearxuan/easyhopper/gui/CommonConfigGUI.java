@@ -45,15 +45,12 @@ public class CommonConfigGUI {
             Minecraft client = Minecraft.getInstance();
             if (client != null) {
                 // 创建原生系统通知 toast
-                SystemToast toast = SystemToast.multiline(
-                        client,
+                SystemToast.addOrUpdate(
+                        client.gui.toastManager(), // 优先使用源码中的 client.gui.toastManager()，若报错可改为 client.getToastManager()
                         SystemToast.SystemToastId.PACK_LOAD_FAILURE,
                         Component.translatable("easyhopper.toast.title"),
                         Component.translatable("easyhopper.toast.description")
                 );
-
-                // 发送到右上角 Toast 管理器
-                client.getToastManager().addToast(toast);
             }
         } catch (Throwable e) {
             e.printStackTrace();

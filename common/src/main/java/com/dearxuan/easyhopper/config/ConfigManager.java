@@ -5,6 +5,7 @@ import com.dearxuan.easyhopper.config.retention.Value;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.locale.Language;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -43,7 +44,8 @@ public class ConfigManager {
 
     public static String getTranslationWithFallback(String key) {
         try {
-            if (I18n.exists(key)) {
+            Language language = Language.getInstance();
+            if (language.has(key)) {
                 return I18n.get(key);
             }
         } catch (Throwable ignored) {

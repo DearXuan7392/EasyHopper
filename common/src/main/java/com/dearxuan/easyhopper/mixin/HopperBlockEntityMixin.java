@@ -10,10 +10,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.HopperBlock;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.Hopper;
-import net.minecraft.world.level.block.entity.HopperBlockEntity;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.*;
@@ -37,7 +34,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
     private NonNullList<ItemStack> items;
 
     protected HopperBlockEntityMixin(BlockPos worldPosition, BlockState blockState) {
-        super(BlockEntityType.HOPPER, worldPosition, blockState);
+        super(BlockEntityTypes.HOPPER, worldPosition, blockState);
         this.items = NonNullList.withSize(5, ItemStack.EMPTY);
         this.cooldownTime = -1;
         this.facing = (Direction)blockState.getValue(HopperBlock.FACING);

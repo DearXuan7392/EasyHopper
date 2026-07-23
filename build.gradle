@@ -9,23 +9,11 @@ plugins {
 
 allprojects {
     repositories {
+        mavenCentral()
         maven {
             name = "Fabric"
             url = "https://maven.fabricmc.net/"
         }
-
-        mavenCentral()
-
-        maven {
-            name = "isXander Maven"
-            url = "https://maven.isxander.dev/releases"
-        }
-
-        maven {
-            name = "Shedaniel Maven"
-            url = "https://maven.shedaniel.me/"
-        }
-
         maven {
             name = "Modrinth"
             url = "https://api.modrinth.com/maven"

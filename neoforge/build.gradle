@@ -4,8 +4,8 @@ plugins {
 }
 
 dependencies {
-    implementation "dev.isxander:yet-another-config-lib:${yacl_version}-neoforge"
-    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+    implementation "maven.modrinth:yacl:${yacl_version}-neoforge"
+    implementation "maven.modrinth:cloth-config:${cloth_config_version}+neoforge"
 
     jarJar("org.yaml:snakeyaml:${project.snakeyaml_version}")
 }

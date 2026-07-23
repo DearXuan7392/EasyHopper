@@ -25,6 +25,9 @@ public class ModConfig {
     @EasyConfig(value = @Value(min = 1, max = 1200))
     public int HOPPER_MINECART_TRANSFER_COOLDOWN = 1;
 
+    @EasyConfig(allowInGame = false)
+    public boolean ALLOW_OP_MODIFY = true;
+
     public ModConfig() {}
 
     public static void load() {

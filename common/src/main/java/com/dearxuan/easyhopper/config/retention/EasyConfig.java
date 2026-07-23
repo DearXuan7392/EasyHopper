@@ -9,4 +9,6 @@ public @interface EasyConfig {
     Value value() default @Value;
 
     String tooltip() default "<modid>.<name>.tooltip";
+
+    boolean allowInGame() default true;
 }

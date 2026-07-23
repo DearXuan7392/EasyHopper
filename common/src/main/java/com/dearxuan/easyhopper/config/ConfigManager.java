@@ -125,7 +125,7 @@ public class ConfigManager {
     }
 
     /**
-     * 保存当前配置到磁盘（只有显式调用 save 时才会写入覆盖配置文件）
+     * 保存当前配置到磁盘
      */
     public static void save() {
         try {
@@ -143,33 +143,58 @@ public class ConfigManager {
     }
 
     /**
-     * 读取配置（若文件不存在则初始化并创建文件，存在则读取并进行数值矫正，绝不主动覆写磁盘文件）
+     * 读取配置（若文件不存在则创建；若文件存在则读取，若发现老文件缺失新配置项则自动补全写回）
      */
     public static void load() {
         if (!CONFIG_FILE.exists()) {
-            // 首次启动时不存在配置文件，才自动创建一次
             save();
             return;
         }
 
-        // 读取现有的配置
-        try (BufferedReader reader = Files.newBufferedReader(CONFIG_FILE.toPath(), StandardCharsets.UTF_8)) {
+        boolean hasMissingKeys = false;
+
+        try {
+            // 1. 先用默认无参 Yaml 读取为原生 Map，检查是否有缺失的配置 key
+            Yaml plainYaml = new Yaml();
+            try (InputStream input = Files.newInputStream(CONFIG_FILE.toPath())) {
+                Map<?, ?> rawMap = plainYaml.load(input);
+                if (rawMap != null) {
+                    for (Field field : ModConfig.class.getDeclaredFields()) {
+                        if (field.isAnnotationPresent(EasyConfig.class)) {
+                            if (!rawMap.containsKey(field.getName())) {
+                                hasMissingKeys = true;
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    hasMissingKeys = true;
+                }
+            }
+
+            // 2. 将数据真正反序列化为 ModConfig 实例
             Representer representer = new Representer(new DumperOptions());
             representer.getPropertyUtils().setSkipMissingProperties(true);
 
-            Yaml yaml = new Yaml(new Constructor(ModConfig.class, new LoaderOptions()), representer);
-            ModConfig loaded = yaml.load(reader);
-
-            if (loaded != null) {
-                ModConfig.INSTANCE = loaded;
+            Yaml typedYaml = new Yaml(new Constructor(ModConfig.class, new LoaderOptions()), representer);
+            try (BufferedReader reader = Files.newBufferedReader(CONFIG_FILE.toPath(), StandardCharsets.UTF_8)) {
+                ModConfig loaded = typedYaml.load(reader);
+                if (loaded != null) {
+                    ModConfig.INSTANCE = loaded;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
             ModConfig.INSTANCE = new ModConfig();
         }
 
-        // 仅在内存中规范超限数值，不写回磁盘
+        // 3. 规范超限数值
         validateAndSanitize(ModConfig.INSTANCE);
+
+        // 4. 如果检测到缺失了新的配置项，保存写回补全
+        if (hasMissingKeys) {
+            save();
+        }
     }
 
     private static void validateAndSanitize(ModConfig config) {

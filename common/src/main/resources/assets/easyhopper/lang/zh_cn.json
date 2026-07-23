@@ -23,6 +23,8 @@
   "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN.tooltip": "控制漏斗矿车输送物品冷却时间",
   "easyhopper.HOPPER_MINECART_BETTER_EXTRACT": "漏斗矿车性能增强",
   "easyhopper.HOPPER_MINECART_BETTER_EXTRACT.tooltip": "为漏斗矿车检测掉落物加入冷却",
+  "easyhopper.ALLOW_OP_MODIFY": "允许管理员修改配置",
+  "easyhopper.ALLOW_OP_MODIFY.tooltip": "是否允许管理员(OP)在游戏内修改配置, 否则只能通过配置文件修改.",
 
 
   "easydropper.title": "轻松投掷",

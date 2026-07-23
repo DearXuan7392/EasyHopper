@@ -38,6 +38,7 @@ public class YaclConfigGUI {
                     : easyConfig.tooltip();
 
             Class<?> type = field.getType();
+            boolean editable = easyConfig.allowInGame();
 
             if (type == int.class || type == Integer.class) {
                 int defVal = getFieldValueInt(field, defaultConfig, 0);
@@ -45,10 +46,15 @@ public class YaclConfigGUI {
                 Option<Integer> option = Option.<Integer>createBuilder()
                         .name(Component.translatable(nameKey))
                         .description(OptionDescription.of(Component.translatable(tooltipKey)))
+                        .available(editable) // 控制不可编辑/禁用
                         .binding(
                                 defVal,
                                 () -> getFieldValueInt(field, ModConfig.INSTANCE, defVal),
-                                val -> setFieldValue(field, ModConfig.INSTANCE, val)
+                                val -> {
+                                    if (editable) {
+                                        setFieldValue(field, ModConfig.INSTANCE, val);
+                                    }
+                                }
                         )
                         .controller(opt -> {
                             IntegerFieldControllerBuilder controller = IntegerFieldControllerBuilder.create(opt);
@@ -68,10 +74,15 @@ public class YaclConfigGUI {
                 Option<Boolean> option = Option.<Boolean>createBuilder()
                         .name(Component.translatable(nameKey))
                         .description(OptionDescription.of(Component.translatable(tooltipKey)))
+                        .available(editable) // 控制不可编辑/禁用
                         .binding(
                                 defVal,
                                 () -> getFieldValueBoolean(field, ModConfig.INSTANCE, defVal),
-                                val -> setFieldValue(field, ModConfig.INSTANCE, val)
+                                val -> {
+                                    if (editable) {
+                                        setFieldValue(field, ModConfig.INSTANCE, val);
+                                    }
+                                }
                         )
                         .controller(BooleanControllerBuilder::create)
                         .build();

@@ -4,6 +4,7 @@ import com.dearxuan.easyhopper.config.ConfigManager;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -31,6 +32,7 @@ public class ClothConfigGUI {
 
             field.setAccessible(true);
             EasyConfig easyConfig = field.getAnnotation(EasyConfig.class);
+
             String fieldName = field.getName();
 
             String nameKey = "easyhopper." + fieldName;
@@ -39,6 +41,7 @@ public class ClothConfigGUI {
                     : easyConfig.tooltip();
 
             Class<?> type = field.getType();
+            boolean editable = easyConfig.allowInGame();
 
             // 处理 Integer 类型
             if (type == int.class || type == Integer.class) {
@@ -54,8 +57,15 @@ public class ClothConfigGUI {
                         .setMin(min)
                         .setMax(max)
                         .setTooltip(Component.translatable(tooltipKey))
-                        .setSaveConsumer(newValue -> setFieldValue(field, ModConfig.INSTANCE, newValue))
+                        .setSaveConsumer(newValue -> {
+                            if (editable) {
+                                setFieldValue(field, ModConfig.INSTANCE, newValue);
+                            }
+                        })
                         .build();
+
+                // 在 build 出来的 Entry 实例上设置是否可编辑
+                entry.setEditable(editable);
 
                 category.addEntry(entry);
             }
@@ -67,8 +77,15 @@ public class ClothConfigGUI {
                 var entry = entryBuilder.startBooleanToggle(Component.translatable(nameKey), currentVal)
                         .setDefaultValue(defVal)
                         .setTooltip(Component.translatable(tooltipKey))
-                        .setSaveConsumer(newValue -> setFieldValue(field, ModConfig.INSTANCE, newValue))
+                        .setSaveConsumer(newValue -> {
+                            if (editable) {
+                                setFieldValue(field, ModConfig.INSTANCE, newValue);
+                            }
+                        })
                         .build();
+
+                // 在 build 出来的 Entry 实例上设置是否可编辑
+                entry.setEditable(editable);
 
                 category.addEntry(entry);
             }

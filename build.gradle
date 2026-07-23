@@ -49,7 +49,7 @@ subprojects { subproject ->
     }
 
     if (subproject.name == 'fabric' || subproject.name == 'neoforge') {
-        def targetOutputDir = rootProject.layout.projectDirectory.dir("target/${project.version}-mc${project.minecraft_version}")
+        def targetOutputDir = rootProject.layout.projectDirectory.dir("target/${project.version}+mc${project.minecraft_version}")
 
         // 配置所有打包任务的输出文件名
         subproject.tasks.matching {

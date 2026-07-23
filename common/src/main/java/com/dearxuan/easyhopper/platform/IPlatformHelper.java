@@ -1,4 +1,4 @@
-package com.dearxuan.easyhopper.platform.services;
+package com.dearxuan.easyhopper.platform;
 
 public interface IPlatformHelper {
 

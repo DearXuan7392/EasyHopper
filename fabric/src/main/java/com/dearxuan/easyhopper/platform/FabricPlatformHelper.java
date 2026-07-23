@@ -1,6 +1,5 @@
 package com.dearxuan.easyhopper.platform;
 
-import com.dearxuan.easyhopper.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 
 public class FabricPlatformHelper implements IPlatformHelper {

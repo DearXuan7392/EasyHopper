@@ -1,7 +1,6 @@
 package com.dearxuan.easyhopper.platform;
 
 import com.dearxuan.easyhopper.Constants;
-import com.dearxuan.easyhopper.platform.services.IPlatformHelper;
 
 import java.util.ServiceLoader;
 

@@ -5,6 +5,11 @@
   "modmenu.descriptionTranslation.easyhopper": "Speed up hoppers, or enable filtering without using new block",
   "easyhopper.toast.title": "Cannot Open Config",
   "easyhopper.toast.description": "Requires Cloth Config or YACL mod to be installed!",
+  "easyhopper.gui.server_config": "Server Config",
+  "easyhopper.gui.local_config": "Local Config",
+  "easyhopper.gui.notice.server_editable": "§a[Notice] Editing server configuration",
+  "easyhopper.gui.notice.server_readonly": "§c[Notice] Viewing server configuration (Read-only)",
+  "easyhopper.gui.notice.local": "§b[Notice] Editing local config file",
 
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "Hopper Transfer Cooldown",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "Controls the cooldown for item transfer by the hopper",

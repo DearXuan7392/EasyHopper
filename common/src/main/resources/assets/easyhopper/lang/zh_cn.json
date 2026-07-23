@@ -3,8 +3,14 @@
 
   "modmenu.nameTranslation.easyhopper": "轻松漏斗",
   "modmenu.descriptionTranslation.easyhopper": "修改漏斗冷却时间,或启用分类功能,而无需引入新的方块",
+
   "easyhopper.toast.title": "无法打开配置界面",
   "easyhopper.toast.description": "需要安装 Cloth Config 或 YACL 模组!",
+  "easyhopper.gui.server_config": "服务器配置",
+  "easyhopper.gui.local_config": "本地配置",
+  "easyhopper.gui.notice.server_editable": "§a[提示] 当前正在编辑服务器配置",
+  "easyhopper.gui.notice.server_readonly": "§c[提示] 当前正在查看服务器配置 (无权限修改)",
+  "easyhopper.gui.notice.local": "§b[提示] 当前正在编辑本地配置文件",
 
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "漏斗冷却时间",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "控制漏斗输送物品冷却时间",
@@ -24,26 +30,5 @@
   "easyhopper.HOPPER_MINECART_BETTER_EXTRACT": "漏斗矿车性能增强",
   "easyhopper.HOPPER_MINECART_BETTER_EXTRACT.tooltip": "为漏斗矿车检测掉落物加入冷却",
   "easyhopper.ALLOW_OP_MODIFY": "允许管理员修改配置",
-  "easyhopper.ALLOW_OP_MODIFY.tooltip": "是否允许管理员(OP)在游戏内修改配置, 否则只能通过配置文件修改.",
-
-
-  "easydropper.title": "轻松投掷",
-
-  "modmenu.nameTranslation.easydropper": "轻松投掷",
-  "modmenu.descriptionTranslation.easydropper": "投掷器将会自动投掷,并支持修改投掷力度,移除其中的随机因素",
-
-  "easydropper.DROPPER_AUTO_DISPENSE": "投掷器自动投掷",
-  "easydropper.DROPPER_AUTO_DISPENSE.tooltip": "当投掷器中含有物品时,会立即自动投掷",
-  "easydropper.DISPENSER_AUTO_DISPENSE": "发射器自动投掷",
-  "easydropper.DISPENSER_AUTO_DISPENSE.tooltip": "当发射器中含有物品时,会立即自动投掷",
-  "easydropper.BETTER_ITEM_POSITION": "修正抛射物落点",
-  "easydropper.BETTER_ITEM_POSITION.tooltip": "若启用,则投掷器抛出的物品不会左右偏移,且抛射曲线固定",
-  "easydropper.DROPPER_COOLDOWN": "投掷器冷却(刻)",
-  "easydropper.DROPPER_COOLDOWN.tooltip": "投掷器自动投掷的冷却时间",
-  "easydropper.DISPENSER_COOLDOWN": "发射器冷却时间(刻)",
-  "easydropper.DISPENSER_COOLDOWN.tooltip": "发射器自动投掷的冷却时间",
-  "easydropper.DISPENSE_SPEED": "投掷速度",
-  "easydropper.DISPENSE_SPEED.tooltip": "抛射速度,直接影响到抛射曲线高度;若为负,则会向下抛射",
-  "easydropper.DISPENSE_DISTANCE": "投掷距离",
-  "easydropper.DISPENSE_DISTANCE.tooltip": "抛射距离,与抛射速度一同作用;若为负,则会落于投掷器面前"
+  "easyhopper.ALLOW_OP_MODIFY.tooltip": "是否允许管理员(OP)在游戏内修改配置, 否则只能通过配置文件修改."
 }

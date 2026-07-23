@@ -4,6 +4,7 @@ import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.locale.Language;
 import org.yaml.snakeyaml.DumperOptions;
@@ -122,6 +123,11 @@ public class ConfigManager {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public static boolean isInMultiplayer() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.level != null && mc.getCurrentServer() != null;
     }
 
     /**

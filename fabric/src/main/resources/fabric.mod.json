@@ -18,6 +18,9 @@
         "main": [
             "com.dearxuan.easyhopper.EntryPointFabric"
         ],
+        "client": [
+            "com.dearxuan.easyhopper.FabricClientEntryPoint"
+        ],
         "modmenu": [
             "com.dearxuan.easyhopper.ModMenuIntegration"
         ]

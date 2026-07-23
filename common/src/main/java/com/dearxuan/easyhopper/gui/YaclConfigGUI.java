@@ -1,6 +1,5 @@
 package com.dearxuan.easyhopper.gui;
 
-import com.dearxuan.easyhopper.config.ConfigManager;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
@@ -15,11 +14,30 @@ import java.lang.reflect.Field;
 public class YaclConfigGUI {
 
     public static Screen createScreen(Screen parentScreen) {
+        boolean inMultiplayer = CommonConfigGUI.isInMultiplayer();
+
+        // 多人模式下读取服务器配置，单人/离线模式下读取本地配置
+        ModConfig targetConfig = CommonConfigGUI.getConfig();
+        boolean hasPermission = CommonConfigGUI.hasPermission();
+
         YetAnotherConfigLib.Builder builder = YetAnotherConfigLib.createBuilder()
                 .title(Component.translatable("easyhopper.title"));
 
+        Component categoryTitle = inMultiplayer
+                ? Component.translatable("easyhopper.gui.server_config")
+                : Component.translatable("easyhopper.gui.local_config");
+
         ConfigCategory.Builder categoryBuilder = ConfigCategory.createBuilder()
-                .name(Component.translatable("easyhopper.title"));
+                .name(categoryTitle);
+
+        // 顶部提示组件
+        Component noticeComponent = inMultiplayer
+                ? (hasPermission
+                ? Component.translatable("easyhopper.gui.notice.server_editable")
+                : Component.translatable("easyhopper.gui.notice.server_readonly"))
+                : Component.translatable("easyhopper.gui.notice.local");
+
+        categoryBuilder.option(LabelOption.create(noticeComponent));
 
         ModConfig defaultConfig = new ModConfig();
 
@@ -38,7 +56,7 @@ public class YaclConfigGUI {
                     : easyConfig.tooltip();
 
             Class<?> type = field.getType();
-            boolean editable = easyConfig.allowInGame();
+            boolean editable = easyConfig.allowInGame() && hasPermission;
 
             if (type == int.class || type == Integer.class) {
                 int defVal = getFieldValueInt(field, defaultConfig, 0);
@@ -46,13 +64,13 @@ public class YaclConfigGUI {
                 Option<Integer> option = Option.<Integer>createBuilder()
                         .name(Component.translatable(nameKey))
                         .description(OptionDescription.of(Component.translatable(tooltipKey)))
-                        .available(editable) // 控制不可编辑/禁用
+                        .available(editable)
                         .binding(
                                 defVal,
-                                () -> getFieldValueInt(field, ModConfig.INSTANCE, defVal),
+                                () -> getFieldValueInt(field, targetConfig, defVal),
                                 val -> {
                                     if (editable) {
-                                        setFieldValue(field, ModConfig.INSTANCE, val);
+                                        setFieldValue(field, targetConfig, val);
                                     }
                                 }
                         )
@@ -74,13 +92,13 @@ public class YaclConfigGUI {
                 Option<Boolean> option = Option.<Boolean>createBuilder()
                         .name(Component.translatable(nameKey))
                         .description(OptionDescription.of(Component.translatable(tooltipKey)))
-                        .available(editable) // 控制不可编辑/禁用
+                        .available(editable)
                         .binding(
                                 defVal,
-                                () -> getFieldValueBoolean(field, ModConfig.INSTANCE, defVal),
+                                () -> getFieldValueBoolean(field, targetConfig, defVal),
                                 val -> {
                                     if (editable) {
-                                        setFieldValue(field, ModConfig.INSTANCE, val);
+                                        setFieldValue(field, targetConfig, val);
                                     }
                                 }
                         )
@@ -93,7 +111,7 @@ public class YaclConfigGUI {
 
         return builder
                 .category(categoryBuilder.build())
-                .save(ConfigManager::save)
+                .save(() -> CommonConfigGUI.saveConfig(targetConfig))
                 .build()
                 .generateScreen(parentScreen);
     }

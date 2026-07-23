@@ -1,6 +1,17 @@
+---
+AIGC:
+  ContentProducer: '001191110102MAD55U9H0F10002'
+  ContentPropagator: '001191110102MAD55U9H0F10002'
+  Label: '1'
+  ProduceID: 'c0dc8194-b048-49f3-86c6-b5576fc4b962'
+  PropagateID: 'c0dc8194-b048-49f3-86c6-b5576fc4b962'
+  ReservedCode1: '9c6e0afc-ca6d-4ac4-a29f-9b460d6c97c2'
+  ReservedCode2: '9c6e0afc-ca6d-4ac4-a29f-9b460d6c97c2'
+---
+
 # EasyHopper 技术说明文档
 
-> 对应 EasyHopper `3.0` 版本（Minecraft `26.2`）。
+> 对应 EasyHopper `3.1` 版本（Minecraft `26.2`）。
 
 ---
 
@@ -14,10 +25,11 @@
 - [6. 核心功能说明](#6-核心功能说明)
 - [7. 配置系统](#7-配置系统)
 - [8. Mixin 模块](#8-mixin-模块)
-- [9. 配置 GUI 系统](#9-配置-gui-系统)
-- [10. 平台抽象层](#10-平台抽象层)
-- [11. 入口与初始化流程](#11-入口与初始化流程)
-- [12. 资源文件与国际化](#12-资源文件与国际化)
+- [9. 网络功能](#9-网络功能)
+- [10. 配置 GUI 系统](#10-配置-gui-系统)
+- [11. 平台抽象层](#11-平台抽象层)
+- [12. 入口与初始化流程](#12-入口与初始化流程)
+- [13. 资源文件与国际化](#13-资源文件与国际化)
 - [附录：配置项速查表](#附录配置项速查表)
 - [附录：类索引](#附录类索引)
 
@@ -46,14 +58,14 @@ EasyHopper（轻松漏斗）是一个 Minecraft 模组，旨在增强原版漏�
 
 ## 2. 技术栈与运行环境
 
-| 项目 | 值 |
-|------|------|
-| 模组版本 | `3.0` |
+| 项目              | 值                         |
+|-----------------|---------------------------|
+| 模组版本            | `3.1`                     |
 | 目标 Minecraft 版本 | `26.2`（范围 `[26.2, 26.3)`） |
-| Java 版本 | `25` |
-| 包路径 | `com.dearxuan.easyhopper` |
-| 许可证 | MIT License |
-| 作者 | DearXuan |
+| Java 版本         | `25`                      |
+| 包路径             | `com.dearxuan.easyhopper` |
+| 许可证             | MIT License               |
+| 作者              | DearXuan                  |
 
 ### 依赖组件
 
@@ -105,17 +117,22 @@ EasyHopper/
 │       │   ├── mixin/
 │       │   │   ├── HopperBlockEntityMixin.java   # 漏斗实体核心修改
 │       │   │   ├── MinecartHopperMixin.java       # 漏斗矿车修改
+│       │   │   ├── ServerPlayerMixin.java       # ServerPlayer Accessor（暴露 server 字段）
 │       │   │   └── IHopperBlockEntityMixin.java   # Accessor/Invoker 接口
 │       │   ├── impl/
 │       │   │   └── IHopperBlockEntityImpl.java    # 分类功能接口
+│       │   ├── net/
+│       │   │   ├── ConfigSyncPayload.java   # 配置同步网络包（C2S + S2C 双向）
+│       │   │   └── NetManager.java          # 客户端网络管理（权限检查、配置推送/缓存）
+│       │   ├── utils/
+│       │   │   └── PlayerUtil.java          # 玩家 OP 权限检查工具类
 │       │   ├── gui/
 │       │   │   ├── CommonConfigGUI.java    # 配置界面统一入口
 │       │   │   ├── ClothConfigGUI.java     # Cloth Config 实现
 │       │   │   └── YaclConfigGUI.java      # YACL 实现
 │       │   └── platform/
 │       │       ├── Services.java           # ServiceLoader 服务加载
-│       │       └── services/
-│       │           └── IPlatformHelper.java # 平台抽象接口
+│       │       └── IPlatformHelper.java    # 平台抽象接口
 │       └── resources/
 │           ├── easyhopper.mixins.json       # Mixin 配置
 │           ├── pack.mcmeta
@@ -127,7 +144,9 @@ EasyHopper/
 ├── fabric/                         # Fabric 加载器模块
 │   └── src/main/
 │       ├── java/com/dearxuan/easyhopper/
-│       │   ├── EntryPointFabric.java       # Fabric 入口点
+│       │   ├── EntryPointFabric.java       # Fabric 服务端入口点
+│       │   ├── FabricClientEntryPoint.java # Fabric 客户端入口点
+│       │   ├── FabricNetHelper.java       # Fabric 网络辅助（Payload 注册与收发）
 │       │   ├── ModMenuIntegration.java     # ModMenu 集成
 │       │   └── platform/
 │       │       └── FabricPlatformHelper.java   # Fabric 平台实现
@@ -140,6 +159,7 @@ EasyHopper/
     └── src/main/
         ├── java/com/dearxuan/easyhopper/
         │   ├── EntryPointNeoForge.java     # NeoForge 入口点
+        │   ├── NeoForgeNetHelper.java     # NeoForge 网络辅助（Payload 注册与收发）
         │   └── platform/
         │       └── NeoForgePlatformHelper.java  # NeoForge 平台实现
         └── resources/
@@ -201,7 +221,8 @@ public static <T> T load(Class<T> clazz) {
 ```
 
 各加载器通过 SPI 配置文件声明自己的实现：
-- Fabric: `META-INF/services/com.dearxuan.easyhopper.platform.services.IPlatformHelper` → `FabricPlatformHelper`
+
+- Fabric: `META-INF/services/com.dearxuan.easyhopper.platform.IPlatformHelper` → `FabricPlatformHelper`
 - NeoForge: 同名文件 → `NeoForgePlatformHelper`
 
 运行时，`ServiceLoader` 会自动找到当前加载器打包的实现类并实例化。
@@ -272,7 +293,7 @@ easyhopper-{version}+mc{minecraft_version}-{loader}.jar
 easyhopper-{version}+mc{minecraft_version}-{loader}-sources.jar
 ```
 
-例如：`easyhopper-3.0+mc26.2-fabric.jar`
+例如：`easyhopper-3.1+mc26.2-fabric.jar`
 
 ---
 
@@ -376,6 +397,18 @@ public class ModConfig {
 ```
 
 使用单例模式（`INSTANCE`），字段名即为 YAML 键名，字段的初始值即为默认值。`@EasyConfig` 注解为 GUI 和配置文件生成提供元数据。`ALLOW_OP_MODIFY` 标记为 `allowInGame = false`，在游戏内 GUI 中灰显不可编辑，只能通过配置文件修改。
+
+3.1 版本新增 `SERVER_CONFIG` 静态字段，作为服务器配置缓存：
+
+```java
+public static ModConfig SERVER_CONFIG = new ModConfig();
+```
+
+- 进入服务器时，服务端推送配置覆盖此实例
+- 服务端修改配置时，广播消息覆盖此实例
+- 断开连接时，重新初始化为本地配置
+
+`load()` 方法在加载完成后同步初始化 `SERVER_CONFIG` 为 `INSTANCE` 的深拷贝副本。
 
 ### 7.3 ConfigManager — 配置管理器
 
@@ -490,9 +523,25 @@ public abstract class HopperBlockEntityMixin
 public abstract class MinecartHopperMixin extends AbstractMinecartContainer implements Hopper
 ```
 
-注入 `MinecartHopper.tick()` 方法（`@Inject` HEAD + cancellable），使用 `@Unique` 标记的自定义冷却计数器控制漏斗矿车的传输频率。每次 tick 递减计数器，未归零时取消原版 tick 逻辑，归零后重置为 `HOPPER_MINECART_TRANSFER_COOLDOWN` 配置值。
+注入 `MinecartHopper.tick()` 方法（`@Inject` HEAD + cancellable），使用 `@Unique` 标记的自定义冷却计数器（字段名
+`easyHopperNeoForge$cooldown`）控制漏斗矿车的传输频率。每次 tick 递减计数器，未归零时取消原版 tick 逻辑，归零后重置为
+`HOPPER_MINECART_TRANSFER_COOLDOWN` 配置值。
 
-### 8.3 IHopperBlockEntityMixin — Accessor/Invoker
+### 8.3 ServerPlayerMixin — Accessor
+
+```java
+
+@Mixin(value = ServerPlayer.class, priority = 500)
+public interface ServerPlayerMixin {
+  @Accessor("server")
+  MinecraftServer getServer();
+}
+```
+
+通过 Mixin 的 `@Accessor` 注解，暴露原版 `ServerPlayer` 的 `server` 字段（`MinecraftServer` 实例）。NeoForge 端在处理 C2S
+配置修改请求时，需要通过此接口获取 `MinecraftServer` 实例来遍历在线玩家列表进行配置广播。
+
+### 8.4 IHopperBlockEntityMixin — Accessor/Invoker
 
 通过 Mixin 的 `@Accessor` 和 `@Invoker` 注解，暴露原版 `HopperBlockEntity` 的内部字段和不可外部调用的方法，供 `HopperBlockEntityMixin` 内部使用：
 
@@ -504,7 +553,7 @@ public abstract class MinecartHopperMixin extends AbstractMinecartContainer impl
 | `@Invoker` | `invokeIsOnCooldown()` | 调用 `isOnCooldown()` 方法 |
 | `@Invoker` | `invokeSetCooldown(int)` | 调用 `setCooldown()` 方法 |
 
-### 8.4 IHopperBlockEntityImpl — 接口定义
+### 8.5 IHopperBlockEntityImpl — 接口定义
 
 ```java
 public interface IHopperBlockEntityImpl {
@@ -516,41 +565,171 @@ public interface IHopperBlockEntityImpl {
 
 定义分类功能相关的三个方法，由 `HopperBlockEntityMixin` 通过 `@Interface` 机制实现。这使得其他 Mixin 代码可以通过接口类型安全地调用这些方法，而非依赖 Duck Typing。
 
+3.1 版本在 `ConfigManager` 中新增了 `isInMultiplayer()` 方法：
+
+```java
+public static boolean isInMultiplayer() {
+  Minecraft mc = Minecraft.getInstance();
+  return mc.level != null && mc.getCurrentServer() != null;
+}
+```
+
+用于判断当前客户端是否连接到远程服务器，供 GUI 和网络模块使用。
+
 ---
 
-## 9. 配置 GUI 系统
+## 9. 网络功能
 
-### 9.1 CommonConfigGUI — 统一入口
+3.1 版本新增了**多人服务器配置同步**功能，允许客户端连接服务器时查看和修改服务端的 EasyHopper
+配置，管理员的修改可实时同步到服务端并广播给所有在线玩家。
+
+### 9.1 设计概要
+
+- **单一 Payload**：使用 `ConfigSyncPayload` 一个包类型同时承载 C2S（客户端推送配置）和 S2C（服务端同步配置），通过 JSON
+  字符串序列化 `ModConfig`
+- **服务器配置缓存**：`ModConfig.SERVER_CONFIG` 在客户端缓存服务端配置，断开连接时自动恢复本地配置
+- **OP 权限校验**：服务端接收配置推送时通过 `PlayerUtil.hasOpPermission()` 校验玩家 OP 等级
+- **内存-only 更新**：服务端收到 C2S 配置推送后仅更新 `ModConfig.INSTANCE`（内存），不调用 `ConfigManager.save()`
+  写入磁盘，服务器重启后恢复为磁盘上的原始配置
+- **自动推送**：玩家进服时自动推送当前服务端配置；断开连接时自动清除缓存
+- **GUI 联动**：配置界面根据多人/单人模式切换显示，服务器模式下非管理员只读
+
+### 9.2 ConfigSyncPayload — 网络包定义
+
+```java
+public record ConfigSyncPayload(String jsonConfig) implements CustomPacketPayload {
+  public ConfigSyncPayload(ModConfig config)  // 从 ModConfig 序列化
+
+  public ModConfig toConfig()                  // 反序列化为 ModConfig
+}
+```
+
+使用 Gson 将 `ModConfig` 序列化为 JSON 字符串传输。包标识为 `easyhopper:config_sync`，同一 Payload 类型同时注册为 C2S 和
+S2C。
+
+### 9.3 NetManager — 客户端网络管理
+
+`NetManager` 是 common 模块中的静态工具类，负责客户端侧的网络操作：
+
+| 方法                              | 说明                                            |
+|---------------------------------|-----------------------------------------------|
+| `hasPermissionToPush()`         | 检查当前玩家是否有 OP 权限推送配置                           |
+| `loadConfigFromServer()`        | 获取 `SERVER_CONFIG` 的深拷贝副本（供 GUI 读取）           |
+| `pushConfigToServer(ModConfig)` | 通过 `ServerboundCustomPayloadPacket` 将配置推送到服务端 |
+| `updateServerConfig(ModConfig)` | 接收服务端推送的配置，更新 `SERVER_CONFIG` 和 `INSTANCE`    |
+| `clearCache()`                  | 断开连接时清除缓存，重新加载本地配置                            |
+| `deepCopy(ModConfig)`           | 使用 Gson 进行深拷贝                                 |
+
+### 9.4 PlayerUtil — 权限工具类
+
+```java
+public class PlayerUtil {
+  public static boolean hasOpPermission(Player player) {
+    return player.permissions().hasPermission(
+            new Permission.HasCommandLevel(PermissionLevel.GAMEMASTERS)
+    );
+  }
+}
+```
+
+使用 Minecraft 原版权限 API 检查玩家是否达到 GAMEMASTERS（OP 等级 2）及以上。服务端和客户端均使用此工具类，避免
+Fabric/NeoForge 各自实现。
+
+### 9.5 Fabric 网络实现
+
+**FabricNetHelper** 负责 Payload 注册与收发：
+
+- `registerPayloads()`：向 `PayloadTypeRegistry` 注册 C2S 和 S2C 的 `ConfigSyncPayload`
+- `registerServerReceivers()`：注册 `ServerPlayNetworking.registerGlobalReceiver`，接收客户端配置推送，校验 OP 权限后更新
+  `ModConfig.INSTANCE` 并广播给其他在线玩家
+- `syncConfigToPlayer(ServerPlayer)`：向指定玩家推送当前服务端配置
+
+**FabricClientEntryPoint**（`ClientModInitializer`）负责客户端事件：
+
+- 连接建立时注册 `ClientPlayNetworking` 接收器，接收服务端配置同步并调用 `NetManager.updateServerConfig()`
+- 断开连接时调用 `NetManager.clearCache()` 恢复本地配置
+
+**EntryPointFabric** 中注册玩家进服事件（`ServerPlayConnectionEvents.JOIN`），自动推送配置。
+
+### 9.6 NeoForge 网络实现
+
+**NeoForgeNetHelper** 负责 Payload 注册与收发：
+
+- `register(IEventBus)`：在 Mod 事件总线上监听 `RegisterPayloadHandlersEvent`，注册 C2S（`playToServer`）和 S2C（
+  `playToClient`）的 `ConfigSyncPayload` 处理器
+- `registerPlayerJoinEvent(IEventBus)`：在 NeoForge 事件总线上监听 `PlayerLoggedInEvent`，向新加入的玩家推送配置
+- C2S 处理器中通过 `ServerPlayerMixin` Accessor 获取 `MinecraftServer`，校验 OP 权限后更新配置并广播
+
+---
+
+## 10. 配置 GUI 系统
+
+### 10.1 CommonConfigGUI — 统一入口
 
 ```java
 public static Screen createScreen(Screen parentScreen) {
     // 优先级: Cloth Config > YACL > Toast 提示
     if (isModLoaded("cloth-config") || isModLoaded("cloth_config")) {
+      try {
         return ClothConfigGUI.createScreen(parentScreen);
+      } catch (Throwable e) {
+        e.printStackTrace();
+      }
     }
     if (isModLoaded("yet_another_config_lib_v3") || isModLoaded("yacl")) {
+      try {
         return YaclConfigGUI.createScreen(parentScreen);
+      } catch (Throwable e) {
+        e.printStackTrace();
+      }
     }
     showMissingConfigToast();  // 弹出原生 Toast 提示
     return null;
 }
 ```
 
-通过 `Services.PLATFORM.isModLoaded()` 检测当前安装了哪个配置库，按优先级返回对应的配置界面。若都未安装，弹出游戏内 Toast 通知用户。
+通过 `Services.PLATFORM.isModLoaded()` 检测当前安装了哪个配置库，按优先级返回对应的配置界面。每次 `createScreen` 调用均包裹
+`try-catch`，即使配置库存在但初始化异常时也不会导致崩溃，而是静默降级到下一个备选或弹出 Toast。若都未安装，弹出游戏内 Toast
+通知用户。
 
-### 9.2 ClothConfigGUI
+3.1 版本在 `CommonConfigGUI` 中新增了多人模式支持的辅助方法：
 
-基于 Cloth Config API 构建配置界面。通过反射遍历 `ModConfig` 的所有 `@EasyConfig` 字段，根据字段类型（int / boolean）创建对应的配置条目（`startIntField` / `startBooleanToggle`），设置范围约束和 tooltip，并通过 `setSaveConsumer` 将值写回 `ModConfig.INSTANCE`。保存时调用 `ConfigManager::save` 写入磁盘。
+| 方法                      | 说明                                                                          |
+|-------------------------|-----------------------------------------------------------------------------|
+| `getConfig()`           | 多人模式返回 `NetManager.loadConfigFromServer()`（深拷贝），单人模式返回 `ModConfig.INSTANCE` |
+| `saveConfig()`          | 多人模式调用 `NetManager.pushConfigToServer()`，单人模式调用 `ConfigManager.save()`      |
+| `saveConfig(ModConfig)` | 多人模式推送指定配置到服务器，单人模式调用 `ConfigManager.save()`                                |
+| `isInMultiplayer()`     | 委托 `ConfigManager.isInMultiplayer()` 判断是否在服务器中                              |
+| `hasPermission()`       | 单人模式始终允许；多人模式需要 OP 权限（`NetManager.hasPermissionToPush()`）                   |
 
-读取 `@EasyConfig.allowInGame()` 属性控制配置项的可编辑性：`allowInGame = false` 的字段在 GUI 中灰显（`entry.setEditable(false)`），且 `setSaveConsumer` 中会跳过不可编辑项的写入，防止客户端绕过限制。
+### 10.2 ClothConfigGUI
 
-### 9.3 YaclConfigGUI
+基于 Cloth Config API 构建配置界面。通过反射遍历 `ModConfig` 的所有 `@EasyConfig` 字段，根据字段类型（int /
+boolean）创建对应的配置条目（`startIntField` / `startBooleanToggle`），设置范围约束和 tooltip，并通过 `setSaveConsumer`
+将值写回目标配置对象。
 
-基于 YACL (Yet Another Config Lib) 构建配置界面，逻辑结构与 ClothConfigGUI 类似，但使用 YACL 的 API：通过 `Option.binding()` 绑定配置值的 getter/setter，使用 `IntegerFieldControllerBuilder` / `BooleanControllerBuilder` 创建控制器，保存时同样调用 `ConfigManager::save`。
+**多人服务器支持**（3.1 新增）：
 
-读取 `@EasyConfig.allowInGame()` 属性控制配置项的可编辑性：`allowInGame = false` 的字段通过 `.available(false)` 禁用，且 binding 的 setter 中会跳过不可编辑项的写入。
+- 分类标题根据模式切换：服务器模式显示 `easyhopper.gui.server_config`，本地模式显示 `easyhopper.gui.local_config`
+- 顶部添加提示栏：管理员显示可编辑提示（绿色），非管理员显示只读提示（红色），本地模式显示本地编辑提示（蓝色）
+- 读取目标配置使用 `CommonConfigGUI.getConfig()`（多人模式从服务器缓存读取，单人模式读取本地）
+- 编辑性判断：`easyConfig.allowInGame() && hasPermission`，无权限时所有选项置灰
+- 保存逻辑：通过 `CommonConfigGUI.saveConfig(targetConfig)` 统一处理，多人模式推送到服务器，单人模式写入本地磁盘
 
-### 9.4 GUI 集成入口
+### 10.3 YaclConfigGUI
+
+基于 YACL (Yet Another Config Lib) 构建配置界面，逻辑结构与 ClothConfigGUI 类似，但使用 YACL 的 API：通过
+`Option.binding()` 绑定配置值的 getter/setter，使用 `IntegerFieldControllerBuilder` / `BooleanControllerBuilder` 创建控制器。
+
+**多人服务器支持**（3.1 新增）：
+
+- 与 ClothConfigGUI 相同的模式检测、标题切换、权限提示逻辑
+- 分类标题根据模式切换，顶部添加 `LabelOption` 提示文字
+- `.available(editable)` 中 `editable = easyConfig.allowInGame() && hasPermission`
+- binding 的 getter/setter 操作目标配置（`targetConfig`）而非固定的 `ModConfig.INSTANCE`
+- 保存逻辑通过 `CommonConfigGUI.saveConfig(targetConfig)` 统一处理
+
+### 10.4 GUI 集成入口
 
 | 平台 | 集成方式 |
 |------|----------|
@@ -561,9 +740,11 @@ public static Screen createScreen(Screen parentScreen) {
 
 ---
 
-## 10. 平台抽象层
+## 11. 平台抽象层
 
-### 10.1 IPlatformHelper 接口
+### 11.1 IPlatformHelper 接口
+
+> **注意**：3.1 版本中 `IPlatformHelper` 从 `platform.services` 包移动到了 `platform` 包，SPI 配置文件路径同步更新。
 
 ```java
 public interface IPlatformHelper {
@@ -574,7 +755,7 @@ public interface IPlatformHelper {
 }
 ```
 
-### 10.2 FabricPlatformHelper
+### 11.2 FabricPlatformHelper
 
 ```java
 public class FabricPlatformHelper implements IPlatformHelper {
@@ -588,7 +769,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
 }
 ```
 
-### 10.3 NeoForgePlatformHelper
+### 11.3 NeoForgePlatformHelper
 
 ```java
 public class NeoForgePlatformHelper implements IPlatformHelper {
@@ -602,15 +783,18 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 }
 ```
 
-### 10.4 Services 加载器
+### 11.4 Services 加载器
 
 `Services` 类使用 Java `ServiceLoader` 在运行时动态加载当前平台的实现。这是多加载器架构的关键——common 代码不需要知道当前运行在哪个平台上，只需通过 `Services.PLATFORM` 即可获取平台信息。
 
+> 3.1 版本的网络功能**不使用** SPI 机制，而是通过各加载器独立的 NetHelper 类（`FabricNetHelper` / `NeoForgeNetHelper`）和
+> common 中的 `NetManager` 静态工具类实现。
+
 ---
 
-## 11. 入口与初始化流程
+## 12. 入口与初始化流程
 
-### 11.1 Fabric 初始化流程
+### 12.1 Fabric 初始化流程
 
 ```
 游戏启动
@@ -622,12 +806,22 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
           → 读取 config/easyhopper.yaml（不存在则创建默认）
           → 反序列化 + 数值校正
           → 加载完成，ModConfig.INSTANCE 就绪
+          → ModConfig.SERVER_CONFIG = deepCopy(INSTANCE)
+
+    → FabricNetHelper.registerPayloads()       # 注册 C2S/S2C Payload 管道
+    → FabricNetHelper.registerServerReceivers() # 注册服务端配置推送接收器
+    → ServerPlayConnectionEvents.JOIN            # 玩家进服自动推送配置
+
+  → Fabric Loader 发现 entrypoints.client
+  → 调用 FabricClientEntryPoint.onInitializeClient()
+    → ClientPlayConnectionEvents.INIT          # 注册 S2C 配置同步接收器
+    → ClientPlayConnectionEvents.DISCONNECT    # 断开连接时清除缓存
 
   → Fabric Loader 发现 entrypoints.modmenu
   → 注册 ModMenuIntegration（提供配置界面按钮）
 ```
 
-### 11.2 NeoForge 初始化流程
+### 12.2 NeoForge 初始化流程
 
 ```
 游戏启动
@@ -636,12 +830,14 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     → 注册 IConfigScreenFactory 扩展点（提供配置界面按钮）
     → CommonClass.init()
       → ModConfig.load()  （同 Fabric）
+    → NeoForgeNetHelper.register(modEventBus)        # 注册 C2S/S2C Payload
+    → NeoForgeNetHelper.registerPlayerJoinEvent()    # 玩家进服自动推送配置
 ```
 
-### 11.3 配置界面打开流程
+### 12.3 配置界面打开流程
 
 ```
-玩家点击"配置"按钮
+玩家点击“配置”按钮
   │
   ├─ [Fabric] ModMenuIntegration.getModConfigScreenFactory()
   └─ [NeoForge] IConfigScreenFactory 回调
@@ -652,13 +848,20 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     ├─ 或检测到 YACL → YaclConfigGUI.createScreen()
     └─ 都未安装 → 弹出 Toast 提示 → 返回 null
 
+  → GUI 判断多人/单人模式（CommonConfigGUI.isInMultiplayer()）
+  → 读取目标配置（CommonConfigGUI.getConfig()）
+  → 判断修改权限（CommonConfigGUI.hasPermission()）
+  → 分类标题切换 + 权限提示栏
+  → 无权限时所有选项置灰
+
   → 显示配置界面
   → 玩家修改值并点击保存
-    → setSaveConsumer 回调写入 ModConfig.INSTANCE
-    → ConfigManager.save() 写入磁盘
+    ├─ [本地模式] CommonConfigGUI.saveConfig() → ConfigManager.save() 写入磁盘
+    └─ [服务器模式] CommonConfigGUI.saveConfig(config) → NetManager.pushConfigToServer()
+        → 服务端校验 OP + 更新 ModConfig.INSTANCE + 广播给其他玩家（不写入磁盘）
 ```
 
-### 11.4 Mixin 加载流程
+### 12.4 Mixin 加载流程
 
 ```
 游戏启动
@@ -669,52 +872,62 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     - HopperBlockEntityMixin（核心漏斗逻辑）
     - IHopperBlockEntityMixin（Accessor/Invoker）
     - MinecartHopperMixin（漏斗矿车）
-  → 原版 HopperBlockEntity / MinecartHopper 字节码被修改
+    - ServerPlayerMixin（ServerPlayer Accessor，暴露 server 字段）
+  → 原版 HopperBlockEntity / MinecartHopper / ServerPlayer 字节码被修改
   → 游戏运行时使用修改后的类
 ```
 
 ---
 
-## 12. 资源文件与国际化
+## 13. 资源文件与国际化
 
-### 12.1 Mixin 配置文件
+### 13.1 Mixin 配置文件
 
-| 文件 | 位置 | 说明 |
-|------|------|------|
-| `easyhopper.mixins.json` | common | 核心 Mixin 配置，声明 3 个 Mixin 类 |
-| `easyhopper.fabric.mixins.json` | fabric | Fabric 专用 Mixin 配置（当前为空，预留扩展） |
+| 文件                                | 位置       | 说明                              |
+|-----------------------------------|----------|---------------------------------|
+| `easyhopper.mixins.json`          | common   | 核心 Mixin 配置，声明 4 个 Mixin 类      |
+| `easyhopper.fabric.mixins.json`   | fabric   | Fabric 专用 Mixin 配置（当前为空，预留扩展）   |
 | `easyhopper.neoforge.mixins.json` | neoforge | NeoForge 专用 Mixin 配置（当前为空，预留扩展） |
 
 核心 Mixin 配置声明了以下类：
 - `HopperBlockEntityMixin` — 漏斗方块实体
 - `IHopperBlockEntityMixin` — Accessor/Invoker 接口
 - `MinecartHopperMixin` — 漏斗矿车
+- `ServerPlayerMixin` — ServerPlayer Accessor（暴露 server 字段）
 
-### 12.2 模组元数据
+### 13.2 模组元数据
 
-| 平台 | 文件 | 关键信息 |
-|------|------|----------|
-| Fabric | `fabric.mod.json` | 声明入口点 `EntryPointFabric`（main）和 `ModMenuIntegration`（modmenu），Mixin 引用，依赖声明（fabricloader、fabric-api、minecraft、java） |
-| NeoForge | `neoforge.mods.toml` | 声明模组 ID、版本、许可证、作者等信息，Mixin 引用，NeoForge + Minecraft 依赖声明。入口点由 Java 源码中的 `@Mod("easyhopper")` 注解驱动，而非在此文件中声明 |
+| 平台       | 文件                   | 关键信息                                                                                                                                                 |
+|----------|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Fabric   | `fabric.mod.json`    | 声明入口点 `EntryPointFabric`（main）、`FabricClientEntryPoint`（client）和 `ModMenuIntegration`（modmenu），Mixin 引用，依赖声明（fabricloader、fabric-api、minecraft、java） |
+| NeoForge | `neoforge.mods.toml` | 声明模组 ID、版本、许可证、作者等信息，Mixin 引用，NeoForge + Minecraft 依赖声明。入口点由 Java 源码中的 `@Mod("easyhopper")` 注解驱动，而非在此文件中声明                                           |
 
-### 12.3 语言文件
+### 13.3 语言文件
 
 支持中文（`zh_cn.json`）和英文（`en_us.json`）两种语言，包含：
 
 - 配置项名称与 tooltip 翻译
 - ModMenu 模组名称与描述
 - Toast 提示文本
+- 服务器模式提示文本（3.1 新增）：
+  - `easyhopper.gui.server_config` / `easyhopper.gui.local_config`：分类标题
+  - `easyhopper.gui.notice.server_editable`：服务器模式可编辑提示（绿色）
+  - `easyhopper.gui.notice.server_readonly`：服务器模式只读提示（红色）
+  - `easyhopper.gui.notice.local`：本地模式提示（蓝色）
 
 语言键命名规则：
 - 配置项名称：`easyhopper.{FIELD_NAME}`
 - 配置项 tooltip：`easyhopper.{FIELD_NAME}.tooltip`
+- GUI 提示：`easyhopper.gui.{KEY}`
 
-### 12.4 SPI 服务声明
+### 13.4 SPI 服务声明
 
-| 平台 | 文件路径 | 内容 |
-|------|----------|------|
-| Fabric | `META-INF/services/com.dearxuan.easyhopper.platform.services.IPlatformHelper` | `com.dearxuan.easyhopper.platform.FabricPlatformHelper` |
-| NeoForge | 同名文件 | `com.dearxuan.easyhopper.platform.NeoForgePlatformHelper` |
+| 平台       | 文件路径                                                                 | 内容                                                        |
+|----------|----------------------------------------------------------------------|-----------------------------------------------------------|
+| Fabric   | `META-INF/services/com.dearxuan.easyhopper.platform.IPlatformHelper` | `com.dearxuan.easyhopper.platform.FabricPlatformHelper`   |
+| NeoForge | 同名文件                                                                 | `com.dearxuan.easyhopper.platform.NeoForgePlatformHelper` |
+
+> 3.1 版本的网络功能不使用 SPI 机制，Fabric 和 NeoForge 各自的 NetHelper 直接在入口点中调用注册。
 
 ---
 
@@ -734,25 +947,32 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
 ## 附录：类索引
 
-| 类名 | 模块 | 职责 |
-|------|------|------|
-| `Constants` | common | 定义 MOD_ID、MOD_NAME、Logger |
-| `CommonClass` | common | 共享初始化入口，加载配置 |
-| `ModConfig` | common | 配置数据类（单例），定义所有可配置项 |
-| `ConfigManager` | common | 配置文件读写、YAML 注释生成、数值校正、翻译回退 |
-| `EasyConfig` | common | 配置注解，标记可配置字段，声明数值范围、tooltip 键与游戏内可编辑性 |
-| `Value` | common | 数值范围注解（min/max） |
-| `HopperBlockEntityMixin` | common | 漏斗核心逻辑 Mixin：传输冷却、多次输入输出、分类过滤 |
-| `MinecartHopperMixin` | common | 漏斗矿车 Mixin：自定义冷却计数器控制传输频率 |
-| `IHopperBlockEntityMixin` | common | Accessor/Invoker Mixin：暴露原版内部字段和方法 |
-| `IHopperBlockEntityImpl` | common | 分类功能接口定义，由 HopperBlockEntityMixin 实现 |
-| `CommonConfigGUI` | common | 配置 GUI 统一入口，按优先级检测配置库 |
-| `ClothConfigGUI` | common | Cloth Config 配置界面构建 |
-| `YaclConfigGUI` | common | YACL 配置界面构建 |
-| `Services` | common | ServiceLoader 服务加载器，运行时加载平台实现 |
-| `IPlatformHelper` | common | 平台抽象接口 |
-| `EntryPointFabric` | fabric | Fabric 入口点，调用 CommonClass.init() |
-| `FabricPlatformHelper` | fabric | Fabric 平台实现 |
-| `ModMenuIntegration` | fabric | ModMenu 集成，提供配置界面入口 |
-| `EntryPointNeoForge` | neoforge | NeoForge 入口点，注册配置界面扩展点并调用 CommonClass.init() |
-| `NeoForgePlatformHelper` | neoforge | NeoForge 平台实现 |
+| 类名                        | 模块       | 职责                                                                         |
+|---------------------------|----------|----------------------------------------------------------------------------|
+| `Constants`               | common   | 定义 MOD_ID、MOD_NAME、Logger                                                  |
+| `CommonClass`             | common   | 共享初始化入口，加载配置                                                               |
+| `ModConfig`               | common   | 配置数据类（单例），定义所有可配置项 + 服务器配置缓存                                               |
+| `ConfigManager`           | common   | 配置文件读写、YAML 注释生成、数值校正、翻译回退、多人模式检测                                          |
+| `EasyConfig`              | common   | 配置注解，标记可配置字段，声明数值范围、tooltip 键与游戏内可编辑性                                      |
+| `Value`                   | common   | 数值范围注解（min/max）                                                            |
+| `HopperBlockEntityMixin`  | common   | 漏斗核心逻辑 Mixin：传输冷却、多次输入输出、分类过滤                                              |
+| `MinecartHopperMixin`     | common   | 漏斗矿车 Mixin：`@Unique` 字段 `easyHopperNeoForge$cooldown` 控制传输频率               |
+| `ServerPlayerMixin`       | common   | ServerPlayer Accessor Mixin：暴露 server 字段供网络广播使用                            |
+| `IHopperBlockEntityMixin` | common   | Accessor/Invoker Mixin：暴露原版内部字段和方法                                         |
+| `IHopperBlockEntityImpl`  | common   | 分类功能接口定义，由 HopperBlockEntityMixin 实现                                       |
+| `ConfigSyncPayload`       | common   | 配置同步网络包：JSON 序列化 ModConfig，C2S + S2C 双向                                    |
+| `NetManager`              | common   | 客户端网络管理：权限检查、配置推送/缓存/清除/深拷贝                                                |
+| `PlayerUtil`              | common   | 玩家 OP 权限检查工具类（使用原版权限 API）                                                  |
+| `CommonConfigGUI`         | common   | 配置 GUI 统一入口 + 多人模式辅助方法（getConfig/saveConfig/isInMultiplayer/hasPermission） |
+| `ClothConfigGUI`          | common   | Cloth Config 配置界面构建，支持服务器模式权限控制                                            |
+| `YaclConfigGUI`           | common   | YACL 配置界面构建，支持服务器模式权限控制                                                    |
+| `Services`                | common   | ServiceLoader 服务加载器，运行时加载平台实现                                              |
+| `IPlatformHelper`         | common   | 平台抽象接口（已从 platform.services 包移至 platform 包）                                |
+| `EntryPointFabric`        | fabric   | Fabric 服务端入口点，初始化配置 + 注册网络 Payload 及事件                                     |
+| `FabricClientEntryPoint`  | fabric   | Fabric 客户端入口点，注册 S2C 接收器与断连清理                                              |
+| `FabricNetHelper`         | fabric   | Fabric 网络辅助：Payload 注册、服务端接收器、配置同步推送                                       |
+| `FabricPlatformHelper`    | fabric   | Fabric 平台实现                                                                |
+| `ModMenuIntegration`      | fabric   | ModMenu 集成，提供配置界面入口                                                        |
+| `EntryPointNeoForge`      | neoforge | NeoForge 入口点，注册配置界面扩展点 + 注册网络 Payload                                      |
+| `NeoForgeNetHelper`       | neoforge | NeoForge 网络辅助：Payload 注册、C2S/S2C 处理器、玩家进服事件                                |
+| `NeoForgePlatformHelper`  | neoforge | NeoForge 平台实现                                                              |

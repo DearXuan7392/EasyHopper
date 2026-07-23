@@ -3,6 +3,8 @@
 EasyHopper adds item filtering functionality to vanilla hoppers without introducing any new blocks. As a result, you can
 safely uninstall this mod at any time without affecting your save world.
 
+![screenshot](https://cdn.dearxuan.com/project/easyhopper/screen_us.png)
+
 # Reporting Issues
 
 Due to work commitments, I am unable to spend a lot of time on extensive testing. If you encounter any issues, please

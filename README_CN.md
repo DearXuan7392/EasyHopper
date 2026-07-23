@@ -2,6 +2,8 @@
 
 EasyHopper 在原版漏斗的基础上提供分类功能, 而无需引入任何额外方块. 因此可以在任何时候卸载该 Mod, 而不会对存档造成任何影响.
 
+![截图](https://cdn.dearxuan.com/project/easyhopper/screen_zh.png)
+
 # 报告问题
 
 由于工作原因, 难以花费大量时间进行测试, 如果出现任何问题,

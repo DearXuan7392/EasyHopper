@@ -125,7 +125,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
             Container instance,
             int slot
     ) {
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION && instance instanceof HopperBlockEntity && slot == 4) {
+        if (ModConfig.INSTANCE.HOPPER_FILTERING && instance instanceof HopperBlockEntity && slot == 4) {
             return ItemStack.EMPTY;
         } else {
             return instance.getItem(slot);
@@ -200,7 +200,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
             int slot,
             @NotNull ItemStack stack
     ) {
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
+        if (ModConfig.INSTANCE.HOPPER_FILTERING) {
             int lastSlot = this.getContainerSize() - 1;
             if (slot == lastSlot) {
                 return false;
@@ -219,7 +219,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
     public boolean isEmpty() {
         this.unpackLootTable(null);
         int maxSlot = this.getContainerSize();
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
+        if (ModConfig.INSTANCE.HOPPER_FILTERING) {
             --maxSlot;
         }
 
@@ -244,7 +244,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
     )
     public void injectInventoryFull(CallbackInfoReturnable<Boolean> cir) {
         int maxSlot = this.getContainerSize();
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
+        if (ModConfig.INSTANCE.HOPPER_FILTERING) {
             --maxSlot;
         }
 
@@ -260,7 +260,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
 
     @NotNull
     public ItemStack impl$getClassifiedItemStack() {
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
+        if (ModConfig.INSTANCE.HOPPER_FILTERING) {
             return this.getItem(this.getContainerSize() - 1);
         }
         return ItemStack.EMPTY;
@@ -272,7 +272,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
     }
 
     public int impl$getContainerSizeAfterClassification() {
-        if (ModConfig.INSTANCE.HOPPER_CLASSIFICATION) {
+        if (ModConfig.INSTANCE.HOPPER_FILTERING) {
             return this.getContainerSize() - 1;
         }
         return this.getContainerSize();

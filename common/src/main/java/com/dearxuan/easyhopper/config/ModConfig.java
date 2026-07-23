@@ -17,7 +17,7 @@ public class ModConfig {
     public int HOPPER_OUTPUT_COUNT = 1;
 
     @EasyConfig
-    public boolean HOPPER_CLASSIFICATION = false;
+    public boolean HOPPER_FILTERING = false;
 
     @EasyConfig
     public boolean HOPPER_EXTRACT_COOLDOWN = false;

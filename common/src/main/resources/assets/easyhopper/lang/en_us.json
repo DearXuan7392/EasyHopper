@@ -2,7 +2,7 @@
   "easyhopper.title": "Easy Hopper",
 
   "modmenu.nameTranslation.easyhopper": "Easy Hopper",
-  "modmenu.descriptionTranslation.easyhopper": "Speed up hoppers, or enable classification without using new block",
+  "modmenu.descriptionTranslation.easyhopper": "Speed up hoppers, or enable filtering without using new block",
   "easyhopper.toast.title": "Cannot Open Config",
   "easyhopper.toast.description": "Requires Cloth Config or YACL mod to be installed!",
 
@@ -12,8 +12,8 @@
   "easyhopper.HOPPER_INPUT_COUNT.tooltip": "Controls the number of items transferred by the hopper at one time",
   "easyhopper.HOPPER_OUTPUT_COUNT": "Hopper Output Count",
   "easyhopper.HOPPER_OUTPUT_COUNT.tooltip": "Controls the number of items outputted by the hopper at one time",
-  "easyhopper.HOPPER_CLASSIFICATION": "Hopper Classification",
-  "easyhopper.HOPPER_CLASSIFICATION.tooltip": "If enabled, the last slot of the hopper will act as a classification slot, and only the same type as the classification slot can transfer",
+  "easyhopper.HOPPER_FILTERING": "Hopper Filtering",
+  "easyhopper.HOPPER_FILTERING.tooltip": "If enabled, the last slot of the hopper will act as a filtering slot, and only the same type as the filtering slot can transfer",
   "easyhopper.HOPPER_BETTER_EXTRACT": "Hopper Better Extract",
   "easyhopper.HOPPER_BETTER_EXTRACT.tooltip": "1. If a container or full-cube block on the hopper, it will stop searching for entities\n2. Reduce the number of chest updates caused by hoppers",
   "easyhopper.HOPPER_BETTER_EXTRACT.disabled": "Starting with version 1.20.5, Mojang has improved the hopper code, which means this feature is no longer needed",

@@ -4,7 +4,7 @@ license = "${license}" # 在 https://choosealicense.com/ 查看您的选项.
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" # 可选
 [[mods]] # 必填
 modId = "${mod_id}" # 必填
-version = "${version}" # 必填
+version = "${version}+mc${minecraft_version}-neoforge" # 必填
 displayName = "${mod_name}" # 必填
 #updateJSONURL="https://change.me.example.invalid/updates.json" # 可选 (参见 https://docs.neoforged.net/docs/misc/updatechecker/) 
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" # 可选 (在模组 UI 中显示) 

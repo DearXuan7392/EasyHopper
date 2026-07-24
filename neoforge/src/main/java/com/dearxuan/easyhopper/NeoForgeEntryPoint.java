@@ -43,10 +43,8 @@ public class NeoForgeEntryPoint {
             if (ServerConfigHandler.applyConfigFromPlayer(player, payload)) {
                 MinecraftServer server = ((ServerPlayerMixin) player).getServer();
                 for (ServerPlayer otherPlayer : server.getPlayerList().getPlayers()) {
-                    if (otherPlayer != player) {
-                        boolean hasPerm = PlayerUtil.hasPermissionToPushConfig(otherPlayer);
-                        PacketDistributor.sendToPlayer(otherPlayer, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPerm));
-                    }
+                    boolean hasPerm = PlayerUtil.hasPermissionToPushConfig(otherPlayer);
+                    PacketDistributor.sendToPlayer(otherPlayer, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPerm));
                 }
             }
         });

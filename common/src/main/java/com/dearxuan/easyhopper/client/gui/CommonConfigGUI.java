@@ -62,6 +62,10 @@ public class CommonConfigGUI {
         if (!isInWorld()) {
             return true;
         }
+        // 单人世界（集成服务器）始终有权限
+        if (!isInMultiplayer()) {
+            return true;
+        }
         return NetManager.hasPermissionToPush();
     }
 

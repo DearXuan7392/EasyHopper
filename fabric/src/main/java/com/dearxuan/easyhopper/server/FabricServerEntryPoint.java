@@ -24,12 +24,10 @@ public class FabricServerEntryPoint implements DedicatedServerModInitializer {
             context.server().execute(() -> {
                 ServerPlayer player = context.player();
                 if (ServerConfigHandler.applyConfigFromPlayer(player, payload)) {
-                    // 广播给其他在线玩家
+                    // 广播给所有在线玩家（含发起者，更新其权限状态）
                     for (ServerPlayer otherPlayer : context.server().getPlayerList().getPlayers()) {
-                        if (otherPlayer != player) {
-                            boolean hasPerm = PlayerUtil.hasPermissionToPushConfig(otherPlayer);
-                            ServerPlayNetworking.send(otherPlayer, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPerm));
-                        }
+                        boolean hasPerm = PlayerUtil.hasPermissionToPushConfig(otherPlayer);
+                        ServerPlayNetworking.send(otherPlayer, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPerm));
                     }
                 }
             });

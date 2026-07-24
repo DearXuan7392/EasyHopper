@@ -1,7 +1,5 @@
 package com.dearxuan.easyhopper.client.gui;
 
-import com.dearxuan.easyhopper.anno.Environment;
-import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
@@ -13,7 +11,6 @@ import net.minecraft.network.chat.Component;
 
 import java.lang.reflect.Field;
 
-@Environment(EnvType.CLIENT)
 public class ClothConfigGUI {
 
     public static Screen createScreen(Screen parentScreen) {

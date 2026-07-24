@@ -1,7 +1,5 @@
 package com.dearxuan.easyhopper;
 
-import com.dearxuan.easyhopper.anno.Environment;
-import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.server.mixin.ServerPlayerMixin;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
@@ -20,7 +18,6 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 /**
  * NeoForge 网络辅助类, 实现 NetHelper 接口
  */
-@Environment(EnvType.BOTH)
 public class NeoForgeNetHelper implements INetHelper {
 
     private final IEventBus modEventBus;

@@ -1,12 +1,9 @@
 package com.dearxuan.easyhopper.config;
 
-import com.dearxuan.easyhopper.anno.Environment;
-import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
 import com.google.gson.Gson;
 
-@Environment(EnvType.BOTH)
 public class ModConfig {
 
     public static ModConfig INSTANCE = new ModConfig();

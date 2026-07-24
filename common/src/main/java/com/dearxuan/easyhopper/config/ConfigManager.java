@@ -1,12 +1,9 @@
 package com.dearxuan.easyhopper.config;
 
-import com.dearxuan.easyhopper.anno.Environment;
-import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.locale.Language;
 import org.yaml.snakeyaml.DumperOptions;
@@ -28,7 +25,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-@Environment(EnvType.BOTH)
 public class ConfigManager {
 
     private static final File CONFIG_FILE = Path.of("config", "easyhopper.yaml").toFile();

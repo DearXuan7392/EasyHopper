@@ -1,15 +1,12 @@
 package com.dearxuan.easyhopper.config;
 
 import com.dearxuan.easyhopper.Constants;
-import com.dearxuan.easyhopper.anno.Environment;
-import com.dearxuan.easyhopper.anno.EnvType;
 import com.google.gson.Gson;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
-@Environment(EnvType.BOTH)
 public record ConfigSyncPayload(String jsonConfig) implements CustomPacketPayload {
 
     public static final Type<ConfigSyncPayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "config_sync"));

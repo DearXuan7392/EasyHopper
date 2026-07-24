@@ -1,7 +1,5 @@
 package com.dearxuan.easyhopper.net;
 
-import com.dearxuan.easyhopper.anno.Environment;
-import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -9,7 +7,6 @@ import net.minecraft.server.level.ServerPlayer;
  * 网络辅助接口, 定义与模组加载端无关的网络操作
  * 由 Fabric 和 NeoForge 分别实现
  */
-@Environment(EnvType.BOTH)
 public interface INetHelper {
 
     /**

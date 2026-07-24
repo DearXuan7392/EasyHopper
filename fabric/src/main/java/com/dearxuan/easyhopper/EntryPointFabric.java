@@ -1,10 +1,7 @@
 package com.dearxuan.easyhopper;
 
-import com.dearxuan.easyhopper.anno.Environment;
-import com.dearxuan.easyhopper.anno.EnvType;
 import net.fabricmc.api.ModInitializer;
 
-@Environment(EnvType.BOTH)
 public class EntryPointFabric implements ModInitializer {
 
     @Override

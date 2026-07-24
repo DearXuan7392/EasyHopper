@@ -1,7 +1,5 @@
 package com.dearxuan.easyhopper;
 
-import com.dearxuan.easyhopper.anno.Environment;
-import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.net.INetHelper;
@@ -14,7 +12,6 @@ import net.minecraft.server.level.ServerPlayer;
 /**
  * Fabric 网络辅助类, 实现 NetHelper 接口
  */
-@Environment(EnvType.BOTH)
 public class FabricNetHelper implements INetHelper {
 
     @Override

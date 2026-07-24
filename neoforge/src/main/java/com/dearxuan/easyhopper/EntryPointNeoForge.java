@@ -1,7 +1,5 @@
 package com.dearxuan.easyhopper;
 
-import com.dearxuan.easyhopper.anno.Environment;
-import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.net.INetHelper;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -11,7 +9,6 @@ import net.neoforged.neoforge.common.NeoForge;
 /**
  * NeoForge 通用主入口 (Both), 客户端与服务端都会执行.
  */
-@Environment(EnvType.BOTH)
 @Mod(Constants.MOD_ID)
 public class EntryPointNeoForge {
 

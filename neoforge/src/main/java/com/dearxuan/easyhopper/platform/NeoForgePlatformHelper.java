@@ -1,11 +1,8 @@
 package com.dearxuan.easyhopper.platform;
 
-import com.dearxuan.easyhopper.anno.Environment;
-import com.dearxuan.easyhopper.anno.EnvType;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 
-@Environment(EnvType.BOTH)
 public class NeoForgePlatformHelper implements IPlatformHelper {
 
     @Override

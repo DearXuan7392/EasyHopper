@@ -1,6 +1,7 @@
 package com.dearxuan.easyhopper;
 
 import com.dearxuan.easyhopper.client.net.NetManager;
+import com.dearxuan.easyhopper.config.ConfigRequestPayload;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.server.mixin.ServerPlayerMixin;
@@ -35,6 +36,11 @@ public class NeoForgeEntryPoint {
                 ConfigSyncPayload.CODEC,
                 NeoForgeEntryPoint::handleServerConfigPush
         );
+        registrar.playToServer(
+                ConfigRequestPayload.TYPE,
+                ConfigRequestPayload.CODEC,
+                NeoForgeEntryPoint::handleConfigRequest
+        );
     }
 
     private static void handleServerConfigPush(ConfigSyncPayload payload, IPayloadContext context) {
@@ -47,6 +53,14 @@ public class NeoForgeEntryPoint {
                     PacketDistributor.sendToPlayer(otherPlayer, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPerm));
                 }
             }
+        });
+    }
+
+    private static void handleConfigRequest(ConfigRequestPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            ServerPlayer player = (ServerPlayer) context.player();
+            boolean hasPermission = PlayerUtil.hasPermissionToPushConfig(player);
+            PacketDistributor.sendToPlayer(player, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPermission));
         });
     }
 }

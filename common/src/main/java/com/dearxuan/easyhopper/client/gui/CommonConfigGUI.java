@@ -28,26 +28,38 @@ public class CommonConfigGUI {
 
     /**
      * 获取当前环境下的配置
-     * - 在游戏中 (单人/多人): 从服务器获取配置副本
+     * - 多人游戏中: 从服务端缓存获取
+     * - 单人世界: 从本地配置文件加载
      * - 未进入世界: 从配置文件加载
      */
     public static ModConfig getConfig() {
         if (isInWorld()) {
-            return NetManager.loadConfigFromServer();
+            if (isInMultiplayer()) {
+                return NetManager.loadConfigFromServer();
+            }
+            // 单人世界: 直接从本地文件加载
+            return ConfigManager.load();
         }
         return ConfigManager.load();
     }
 
     /**
      * 保存指定的配置副本到当前环境
-     * - 在游戏中 (单人/多人): 将指定配置推送到服务器
+     * - 多人游戏中: 将指定配置推送到服务器
+     * - 单人世界: 将指定配置写入本地磁盘并更新缓存
      * - 未进入世界: 将指定配置写入本地磁盘
      *
      * @param config 要保存的配置对象
      */
     public static void saveConfig(ModConfig config) {
         if (isInWorld()) {
-            NetManager.pushConfigToServer(config);
+            if (isInMultiplayer()) {
+                NetManager.pushConfigToServer(config);
+            } else {
+                // 单人世界: 直接保存到本地磁盘并更新缓存
+                ConfigManager.save(config);
+                NetManager.updateServerConfig(config, true);
+            }
         } else {
             ConfigManager.save(config);
         }
@@ -73,6 +85,11 @@ public class CommonConfigGUI {
      * 自动检测平台加载的 Mod，按优先级 [Cloth Config -> YACL] 返回对应的界面 Screen
      */
     public static Screen createScreen(Screen parentScreen) {
+        // 多人模式下, 先向服务端请求最新配置和权限, 确保缓存实时有效
+        if (isInMultiplayer()) {
+            NetManager.requestConfigSync();
+        }
+
         // 优先检查 Cloth Config
         if (Services.PLATFORM.isModLoaded("cloth-config") || Services.PLATFORM.isModLoaded("cloth_config")) {
             try {

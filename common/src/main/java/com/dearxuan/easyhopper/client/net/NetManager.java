@@ -1,6 +1,7 @@
 package com.dearxuan.easyhopper.client.net;
 
 import com.dearxuan.easyhopper.config.ConfigManager;
+import com.dearxuan.easyhopper.config.ConfigRequestPayload;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.server.config.ServerConfig;
@@ -50,6 +51,21 @@ public class NetManager {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /**
+     * 向服务器请求当前配置和权限同步
+     * 服务端收到后以 ConfigSyncPayload 响应, 更新本地缓存
+     */
+    public static void requestConfigSync() {
+        try {
+            Minecraft client = Minecraft.getInstance();
+            if (client.getConnection() == null) return;
+
+            client.getConnection().send(new ServerboundCustomPayloadPacket(new ConfigRequestPayload()));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

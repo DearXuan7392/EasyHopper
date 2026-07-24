@@ -1,6 +1,7 @@
 package com.dearxuan.easyhopper.server.net;
 
 import com.dearxuan.easyhopper.Constants;
+import com.dearxuan.easyhopper.config.ConfigManager;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
@@ -31,6 +32,7 @@ public class ServerConfigHandler {
         }
         ModConfig config = payload.toConfig();
         ServerConfig.INSTANCE = config;
+        ConfigManager.save(config);
 
         Constants.LOG.info(
                 "Config modified by player {} ({}). New values: transferCooldown={}, inputCount={}, outputCount={}, filtering={}, extractCooldown={}, minecartCooldown={}, allowOpModify={}",

@@ -1,5 +1,6 @@
 package com.dearxuan.easyhopper.server;
 
+import com.dearxuan.easyhopper.config.ConfigRequestPayload;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.server.net.ServerConfigHandler;
@@ -30,6 +31,15 @@ public class FabricServerEntryPoint implements DedicatedServerModInitializer {
                         ServerPlayNetworking.send(otherPlayer, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPerm));
                     }
                 }
+            });
+        });
+
+        // 2. 注册 C2S 处理器: 接收客户端配置同步请求, 响应当前配置和权限
+        ServerPlayNetworking.registerGlobalReceiver(ConfigRequestPayload.TYPE, (payload, context) -> {
+            context.server().execute(() -> {
+                ServerPlayer player = context.player();
+                boolean hasPermission = PlayerUtil.hasPermissionToPushConfig(player);
+                ServerPlayNetworking.send(player, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPermission));
             });
         });
 

@@ -6,6 +6,7 @@ import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.net.INetHelper;
 import com.dearxuan.easyhopper.client.net.NetManager;
 import com.dearxuan.easyhopper.server.net.ServerConfigHandler;
+import com.dearxuan.easyhopper.utils.PlayerUtil;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
@@ -47,7 +48,8 @@ public class NeoForgeNetHelper implements INetHelper {
     public void registerPlayerJoinEvent() {
         neoForgeEventBus.addListener(PlayerEvent.PlayerLoggedInEvent.class, event -> {
             if (event.getEntity() instanceof ServerPlayer player) {
-                sendToPlayer(player, new ConfigSyncPayload(ModConfig.INSTANCE));
+                boolean hasPermission = PlayerUtil.hasPermissionToPushConfig(player);
+                sendToPlayer(player, new ConfigSyncPayload(ModConfig.INSTANCE, hasPermission));
             }
         });
     }
@@ -64,7 +66,8 @@ public class NeoForgeNetHelper implements INetHelper {
                 MinecraftServer server = ((ServerPlayerMixin) player).getServer();
                 for (ServerPlayer otherPlayer : server.getPlayerList().getPlayers()) {
                     if (otherPlayer != player) {
-                        sendToPlayer(otherPlayer, payload);
+                        boolean hasPerm = PlayerUtil.hasPermissionToPushConfig(otherPlayer);
+                        sendToPlayer(otherPlayer, new ConfigSyncPayload(ModConfig.INSTANCE, hasPerm));
                     }
                 }
             }
@@ -73,7 +76,7 @@ public class NeoForgeNetHelper implements INetHelper {
 
     private void handleClientConfigSync(ConfigSyncPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
-            NetManager.updateServerConfig(payload.toConfig());
+            NetManager.updateServerConfig(payload.toConfig(), payload.hasPermission());
         });
     }
 }

@@ -18,7 +18,7 @@ public class FabricClientEntryPoint implements ClientModInitializer {
             // 客户端接收服务端推送的配置
             ClientPlayNetworking.registerReceiver(ConfigSyncPayload.TYPE, (payload, context) -> {
                 context.client().execute(() -> {
-                    NetManager.updateServerConfig(payload.toConfig());
+                    NetManager.updateServerConfig(payload.toConfig(), payload.hasPermission());
                 });
             });
         });

@@ -1,5 +1,7 @@
 package com.dearxuan.easyhopper.mixin;
 
+import com.dearxuan.easyhopper.anno.Environment;
+import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.impl.IHopperBlockEntityImpl;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -22,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.BooleanSupplier;
 
+@Environment(EnvType.BOTH)
 @Mixin(value = HopperBlockEntity.class, priority = 500)
 @Implements(@Interface(iface = IHopperBlockEntityImpl.class, prefix = "impl$"))
 public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockEntity implements Hopper, IHopperBlockEntityImpl {

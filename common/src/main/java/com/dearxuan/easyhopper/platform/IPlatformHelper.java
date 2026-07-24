@@ -1,5 +1,9 @@
 package com.dearxuan.easyhopper.platform;
 
+import com.dearxuan.easyhopper.anno.Environment;
+import com.dearxuan.easyhopper.anno.EnvType;
+
+@Environment(EnvType.BOTH)
 public interface IPlatformHelper {
 
     /**

@@ -1,5 +1,7 @@
 package com.dearxuan.easyhopper.gui;
 
+import com.dearxuan.easyhopper.anno.Environment;
+import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ConfigManager;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.net.NetManager;
@@ -9,6 +11,7 @@ import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+@Environment(EnvType.CLIENT)
 public class CommonConfigGUI {
 
     /**
@@ -21,19 +24,6 @@ public class CommonConfigGUI {
             return NetManager.loadConfigFromServer();
         }
         return ModConfig.INSTANCE;
-    }
-
-    /**
-     * 保存配置到当前环境
-     * - 多人模式: 将指定配置推送到服务器
-     * - 单人模式: 将 ModConfig.INSTANCE 写入本地磁盘
-     */
-    public static void saveConfig() {
-        if (isInMultiplayer()) {
-            NetManager.pushConfigToServer(ModConfig.INSTANCE);
-        } else {
-            ConfigManager.save();
-        }
     }
 
     /**

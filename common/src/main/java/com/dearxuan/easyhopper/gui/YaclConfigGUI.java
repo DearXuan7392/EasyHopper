@@ -1,5 +1,7 @@
 package com.dearxuan.easyhopper.gui;
 
+import com.dearxuan.easyhopper.anno.Environment;
+import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
@@ -11,6 +13,7 @@ import net.minecraft.network.chat.Component;
 
 import java.lang.reflect.Field;
 
+@Environment(EnvType.CLIENT)
 public class YaclConfigGUI {
 
     public static Screen createScreen(Screen parentScreen) {

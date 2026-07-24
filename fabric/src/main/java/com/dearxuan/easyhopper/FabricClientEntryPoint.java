@@ -1,5 +1,7 @@
 package com.dearxuan.easyhopper;
 
+import com.dearxuan.easyhopper.anno.Environment;
+import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.net.ConfigSyncPayload;
 import com.dearxuan.easyhopper.net.NetManager;
 import net.fabricmc.api.ClientModInitializer;
@@ -9,6 +11,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 /**
  * Fabric 客户端专用入口点, 用于注册客户端网络接收器和事件监听
  */
+@Environment(EnvType.CLIENT)
 public class FabricClientEntryPoint implements ClientModInitializer {
 
     @Override

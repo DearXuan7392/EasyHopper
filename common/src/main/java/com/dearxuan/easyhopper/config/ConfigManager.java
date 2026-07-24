@@ -1,5 +1,7 @@
 package com.dearxuan.easyhopper.config;
 
+import com.dearxuan.easyhopper.anno.Environment;
+import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
 import com.google.gson.Gson;
@@ -26,6 +28,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+@Environment(EnvType.BOTH)
 public class ConfigManager {
 
     private static final File CONFIG_FILE = Path.of("config", "easyhopper.yaml").toFile();

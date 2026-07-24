@@ -20,6 +20,7 @@ dependencies {
     }
     commonJava project(path: ':common', configuration: 'commonJava')
     commonResources project(path: ':common', configuration: 'commonResources')
+    annotationProcessor project(path: ':common')
 }
 
 tasks.named('compileJava', JavaCompile) {

@@ -1,5 +1,7 @@
 package com.dearxuan.easyhopper.mixin;
 
+import com.dearxuan.easyhopper.anno.Environment;
+import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ModConfig;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
@@ -12,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@Environment(EnvType.BOTH)
 @Mixin(value = MinecartHopper.class, priority = 500)
 public abstract class MinecartHopperMixin extends AbstractMinecartContainer implements Hopper {
 

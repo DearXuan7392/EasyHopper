@@ -1,12 +1,15 @@
 package com.dearxuan.easyhopper.platform;
 
 import com.dearxuan.easyhopper.Constants;
+import com.dearxuan.easyhopper.anno.Environment;
+import com.dearxuan.easyhopper.anno.EnvType;
 
 import java.util.ServiceLoader;
 
 // 服务加载器是 Java 的内置功能, 允许我们定位在不同环境之间有所不同的接口实现.
 // 在 MultiLoader 的上下文中, 我们使用此功能来访问 common 代码中的模拟 API,
 // 该 API 在运行时会被替换为平台特定的实现.
+@Environment(EnvType.BOTH)
 public class Services {
 
     // 在此示例中, 我们提供了一个平台助手, 用于提供有关模组运行在哪个平台上的信息.

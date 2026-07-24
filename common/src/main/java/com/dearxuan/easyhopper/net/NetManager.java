@@ -1,5 +1,7 @@
 package com.dearxuan.easyhopper.net;
 
+import com.dearxuan.easyhopper.anno.Environment;
+import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ConfigManager;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.utils.PlayerUtil;
@@ -7,6 +9,7 @@ import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 
+@Environment(EnvType.CLIENT)
 public class NetManager {
 
     private static final Gson GSON = new Gson();
@@ -19,7 +22,7 @@ public class NetManager {
         try {
             Minecraft client = Minecraft.getInstance();
             if (client.player == null) return false;
-            return PlayerUtil.hasOpPermission(client.player);
+            return PlayerUtil.hasPermissionToPushConfig(client.player);
         } catch (Exception e) {
             return false;
         }

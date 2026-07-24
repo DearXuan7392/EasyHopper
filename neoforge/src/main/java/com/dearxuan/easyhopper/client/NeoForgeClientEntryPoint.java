@@ -12,12 +12,15 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 /**
  * NeoForge 客户端专属入口, 仅在物理客户端加载.
  * 使用 @EventBusSubscriber(value = Dist.CLIENT) 确保服务端不会加载此类.
+ * 注册客户端 GUI.
  */
 @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
 public class NeoForgeClientEntryPoint {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
+        CommonClientEntryPoint.init();
+
         ModList.get().getModContainerById(Constants.MOD_ID).ifPresent(container -> {
             container.registerExtensionPoint(
                     IConfigScreenFactory.class,

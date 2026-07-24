@@ -16,7 +16,7 @@
     "environment": "*",
     "entrypoints": {
         "main": [
-            "com.dearxuan.easyhopper.EntryPointFabric"
+            "com.dearxuan.easyhopper.FabricEntryPoint"
         ],
         "client": [
             "com.dearxuan.easyhopper.client.FabricClientEntryPoint"

@@ -2,6 +2,7 @@ package com.dearxuan.easyhopper.server.net;
 
 import com.dearxuan.easyhopper.Constants;
 import com.dearxuan.easyhopper.config.ModConfig;
+import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.utils.PlayerUtil;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,7 +30,7 @@ public class ServerConfigHandler {
             return false;
         }
         ModConfig config = payload.toConfig();
-        ModConfig.INSTANCE = config;
+        ServerConfig.INSTANCE = config;
 
         Constants.LOG.info(
                 "Config modified by player {} ({}). New values: transferCooldown={}, inputCount={}, outputCount={}, filtering={}, extractCooldown={}, minecartCooldown={}, allowOpModify={}",

@@ -1,4 +1,10 @@
 package com.dearxuan.easyhopper.server;
 
-public class FabricServerEntryPoint {
+import net.fabricmc.api.DedicatedServerModInitializer;
+
+public class FabricServerEntryPoint implements DedicatedServerModInitializer {
+    @Override
+    public void onInitializeServer() {
+
+    }
 }

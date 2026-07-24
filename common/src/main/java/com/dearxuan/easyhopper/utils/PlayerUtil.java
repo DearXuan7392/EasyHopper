@@ -1,6 +1,6 @@
 package com.dearxuan.easyhopper.utils;
 
-import com.dearxuan.easyhopper.config.ModConfig;
+import com.dearxuan.easyhopper.server.config.ServerConfig;
 import net.minecraft.server.permissions.Permission;
 import net.minecraft.server.permissions.PermissionLevel;
 import net.minecraft.world.entity.player.Player;
@@ -11,6 +11,6 @@ public class PlayerUtil {
     }
 
     public static boolean hasPermissionToPushConfig(Player player) {
-        return hasOpPermission(player) && ModConfig.INSTANCE.ALLOW_OP_MODIFY;
+        return hasOpPermission(player) && ServerConfig.INSTANCE.ALLOW_OP_MODIFY;
     }
 }

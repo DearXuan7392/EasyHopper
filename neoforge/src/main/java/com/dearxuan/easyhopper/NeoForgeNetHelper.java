@@ -1,10 +1,10 @@
 package com.dearxuan.easyhopper;
 
-import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.server.mixin.ServerPlayerMixin;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.net.INetHelper;
 import com.dearxuan.easyhopper.client.net.NetManager;
+import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.server.net.ServerConfigHandler;
 import com.dearxuan.easyhopper.utils.PlayerUtil;
 import net.minecraft.server.MinecraftServer;
@@ -49,7 +49,7 @@ public class NeoForgeNetHelper implements INetHelper {
         neoForgeEventBus.addListener(PlayerEvent.PlayerLoggedInEvent.class, event -> {
             if (event.getEntity() instanceof ServerPlayer player) {
                 boolean hasPermission = PlayerUtil.hasPermissionToPushConfig(player);
-                sendToPlayer(player, new ConfigSyncPayload(ModConfig.INSTANCE, hasPermission));
+                sendToPlayer(player, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPermission));
             }
         });
     }
@@ -67,7 +67,7 @@ public class NeoForgeNetHelper implements INetHelper {
                 for (ServerPlayer otherPlayer : server.getPlayerList().getPlayers()) {
                     if (otherPlayer != player) {
                         boolean hasPerm = PlayerUtil.hasPermissionToPushConfig(otherPlayer);
-                        sendToPlayer(otherPlayer, new ConfigSyncPayload(ModConfig.INSTANCE, hasPerm));
+                        sendToPlayer(otherPlayer, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPerm));
                     }
                 }
             }

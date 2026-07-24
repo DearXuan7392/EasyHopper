@@ -29,27 +29,27 @@ public class CommonConfigGUI {
     /**
      * 获取当前环境下的配置
      * - 在游戏中 (单人/多人): 从服务器获取配置副本
-     * - 未进入世界: 返回本地 ModConfig.INSTANCE
+     * - 未进入世界: 从配置文件加载
      */
     public static ModConfig getConfig() {
         if (isInWorld()) {
             return NetManager.loadConfigFromServer();
         }
-        return ModConfig.INSTANCE;
+        return ConfigManager.load();
     }
 
     /**
      * 保存指定的配置副本到当前环境
      * - 在游戏中 (单人/多人): 将指定配置推送到服务器
-     * - 未进入世界: 将 ModConfig.INSTANCE 写入本地磁盘
+     * - 未进入世界: 将指定配置写入本地磁盘
      *
-     * @param config 多人模式下要推送的配置对象
+     * @param config 要保存的配置对象
      */
     public static void saveConfig(ModConfig config) {
         if (isInWorld()) {
             NetManager.pushConfigToServer(config);
         } else {
-            ConfigManager.save();
+            ConfigManager.save(config);
         }
     }
 

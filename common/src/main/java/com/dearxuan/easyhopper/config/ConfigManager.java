@@ -125,15 +125,15 @@ public class ConfigManager {
     }
 
     /**
-     * 保存当前配置到磁盘
+     * 保存指定配置到磁盘
      */
-    public static void save() {
+    public static void save(ModConfig config) {
         try {
             if (!CONFIG_FILE.getParentFile().exists()) {
                 CONFIG_FILE.getParentFile().mkdirs();
             }
 
-            String content = generateYamlString(ModConfig.INSTANCE);
+            String content = generateYamlString(config);
             try (BufferedWriter writer = Files.newBufferedWriter(CONFIG_FILE.toPath(), StandardCharsets.UTF_8)) {
                 writer.write(content);
             }
@@ -143,15 +143,18 @@ public class ConfigManager {
     }
 
     /**
-     * 读取配置（若文件不存在则创建；若文件存在则读取，若发现老文件缺失新配置项则自动补全写回）
+     * 读取配置并返回 ModConfig 实例
+     * （若文件不存在则创建默认配置并返回）
      */
-    public static void load() {
+    public static ModConfig load() {
         if (!CONFIG_FILE.exists()) {
-            save();
-            return;
+            ModConfig defaultConfig = new ModConfig();
+            save(defaultConfig);
+            return defaultConfig;
         }
 
         boolean hasMissingKeys = false;
+        ModConfig result = new ModConfig();
 
         try {
             // 1. 先用默认无参 Yaml 读取为原生 Map，检查是否有缺失的配置 key
@@ -180,21 +183,23 @@ public class ConfigManager {
             try (BufferedReader reader = Files.newBufferedReader(CONFIG_FILE.toPath(), StandardCharsets.UTF_8)) {
                 ModConfig loaded = typedYaml.load(reader);
                 if (loaded != null) {
-                    ModConfig.INSTANCE = loaded;
+                    result = loaded;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            ModConfig.INSTANCE = new ModConfig();
+            result = new ModConfig();
         }
 
         // 3. 规范超限数值
-        validateAndSanitize(ModConfig.INSTANCE);
+        validateAndSanitize(result);
 
         // 4. 如果检测到缺失了新的配置项，保存写回补全
         if (hasMissingKeys) {
-            save();
+            save(result);
         }
+
+        return result;
     }
 
     private static void validateAndSanitize(ModConfig config) {

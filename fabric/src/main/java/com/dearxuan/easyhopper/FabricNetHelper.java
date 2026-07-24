@@ -1,8 +1,8 @@
 package com.dearxuan.easyhopper;
 
-import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.net.INetHelper;
+import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.server.net.ServerConfigHandler;
 import com.dearxuan.easyhopper.utils.PlayerUtil;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -31,7 +31,7 @@ public class FabricNetHelper implements INetHelper {
                     for (ServerPlayer otherPlayer : context.server().getPlayerList().getPlayers()) {
                         if (otherPlayer != player) {
                             boolean hasPerm = PlayerUtil.hasPermissionToPushConfig(otherPlayer);
-                            sendToPlayer(otherPlayer, new ConfigSyncPayload(ModConfig.INSTANCE, hasPerm));
+                            sendToPlayer(otherPlayer, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPerm));
                         }
                     }
                 }
@@ -44,7 +44,7 @@ public class FabricNetHelper implements INetHelper {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             ServerPlayer player = handler.getPlayer();
             boolean hasPermission = PlayerUtil.hasPermissionToPushConfig(player);
-            sendToPlayer(player, new ConfigSyncPayload(ModConfig.INSTANCE, hasPermission));
+            sendToPlayer(player, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPermission));
         });
     }
 

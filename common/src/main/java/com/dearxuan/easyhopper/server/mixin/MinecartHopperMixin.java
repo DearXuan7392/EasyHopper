@@ -1,6 +1,7 @@
 package com.dearxuan.easyhopper.server.mixin;
 
 import com.dearxuan.easyhopper.config.ModConfig;
+import com.dearxuan.easyhopper.server.config.ServerConfig;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
 import net.minecraft.world.entity.vehicle.minecart.MinecartHopper;
@@ -38,7 +39,7 @@ public abstract class MinecartHopperMixin extends AbstractMinecartContainer impl
     ) {
         --this.easyHopperNeoForge$cooldown;
         if (this.easyHopperNeoForge$cooldown <= 0) {
-            this.easyHopperNeoForge$cooldown = ModConfig.INSTANCE.HOPPER_MINECART_TRANSFER_COOLDOWN;
+            this.easyHopperNeoForge$cooldown = ServerConfig.INSTANCE.HOPPER_MINECART_TRANSFER_COOLDOWN;
         } else {
             ci.cancel();
         }

@@ -438,13 +438,13 @@ public class ModConfig {
 
 使用单例模式（`INSTANCE`），字段名即为 YAML 键名，字段的初始值即为默认值。`@EasyConfig` 注解为 GUI 和配置文件生成提供元数据。`ALLOW_OP_MODIFY` 标记为 `allowInGame = false`，在游戏内 GUI 中灰显不可编辑，只能通过配置文件修改。
 
-`SERVER_CONFIG` 静态字段作为服务器配置缓存：
+`INSTANCE` 静态字段作为服务器配置缓存：
 
 - 进入服务器时，服务端推送配置覆盖此实例
 - 服务端修改配置时，广播消息覆盖此实例
 - 断开连接时，重新初始化为本地配置
 
-`load()` 方法在加载完成后同步初始化 `SERVER_CONFIG` 为 `INSTANCE` 的深拷贝副本。
+`load()` 方法在加载完成后同步初始化 `INSTANCE` 为 `INSTANCE` 的深拷贝副本。
 
 ### 7.3 ConfigManager — 配置管理器
 
@@ -688,9 +688,9 @@ public class NetManager { ... }
 | 方法                              | 说明                                            |
 |---------------------------------|-----------------------------------------------|
 | `hasPermissionToPush()`         | 检查当前玩家是否有 OP 权限且 `ALLOW_OP_MODIFY` 为 true |
-| `loadConfigFromServer()`        | 获取 `SERVER_CONFIG` 的深拷贝副本（供 GUI 读取）           |
+| `loadConfigFromServer()`        | 获取 `INSTANCE` 的深拷贝副本（供 GUI 读取）           |
 | `pushConfigToServer(ModConfig)` | 通过 `ServerboundCustomPayloadPacket` 将配置推送到服务端 |
-| `updateServerConfig(ModConfig)` | 接收服务端推送的配置，更新 `SERVER_CONFIG` 和 `INSTANCE`    |
+| `updateServerConfig(ModConfig)` | 接收服务端推送的配置，更新 `INSTANCE` 和 `INSTANCE`    |
 | `clearCache()`                  | 断开连接时清除缓存，重新加载本地配置                            |
 | `deepCopy(ModConfig)`           | 使用 Gson 进行深拷贝                                 |
 

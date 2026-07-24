@@ -1,6 +1,7 @@
 package com.dearxuan.easyhopper.server.mixin;
 
 import com.dearxuan.easyhopper.config.ModConfig;
+import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.server.impl.IHopperBlockEntityImpl;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
@@ -59,7 +60,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
     )
     private int injectTryMoveItems(int value) {
         if (value > 0) {
-            return value - HopperBlockEntity.MOVE_ITEM_SPEED + ModConfig.INSTANCE.HOPPER_TRANSFER_COOLDOWN;
+            return value - HopperBlockEntity.MOVE_ITEM_SPEED + ServerConfig.INSTANCE.HOPPER_TRANSFER_COOLDOWN;
         } else {
             return 0;
         }
@@ -97,15 +98,15 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
             if (!iHopperBlockEntity.invokeIsOnCooldown() && (Boolean)state.getValue(HopperBlock.ENABLED)) {
                 boolean changed = false;
                 int inputTimes = 0, outputTimes = 0;
-                while (outputTimes++ < ModConfig.INSTANCE.HOPPER_OUTPUT_COUNT && !entity.isEmpty()) {
+                while (outputTimes++ < ServerConfig.INSTANCE.HOPPER_OUTPUT_COUNT && !entity.isEmpty()) {
                     changed |= ejectItems(level, pos, entity);
                 }
 
-                while (inputTimes++ < ModConfig.INSTANCE.HOPPER_INPUT_COUNT && !iHopperBlockEntity.invokeInventoryFull()) {
+                while (inputTimes++ < ServerConfig.INSTANCE.HOPPER_INPUT_COUNT && !iHopperBlockEntity.invokeInventoryFull()) {
                     changed |= action.getAsBoolean();
                 }
 
-                if (changed || ModConfig.INSTANCE.HOPPER_EXTRACT_COOLDOWN) {
+                if (changed || ServerConfig.INSTANCE.HOPPER_EXTRACT_COOLDOWN) {
                     iHopperBlockEntity.invokeSetCooldown(8);
                     setChanged(level, pos, state);
                     cir.setReturnValue(true);
@@ -125,7 +126,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
             Container instance,
             int slot
     ) {
-        if (ModConfig.INSTANCE.HOPPER_FILTERING && instance instanceof HopperBlockEntity && slot == 4) {
+        if (ServerConfig.INSTANCE.HOPPER_FILTERING && instance instanceof HopperBlockEntity && slot == 4) {
             return ItemStack.EMPTY;
         } else {
             return instance.getItem(slot);
@@ -200,7 +201,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
             int slot,
             @NotNull ItemStack stack
     ) {
-        if (ModConfig.INSTANCE.HOPPER_FILTERING) {
+        if (ServerConfig.INSTANCE.HOPPER_FILTERING) {
             int lastSlot = this.getContainerSize() - 1;
             if (slot == lastSlot) {
                 return false;
@@ -219,7 +220,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
     public boolean isEmpty() {
         this.unpackLootTable(null);
         int maxSlot = this.getContainerSize();
-        if (ModConfig.INSTANCE.HOPPER_FILTERING) {
+        if (ServerConfig.INSTANCE.HOPPER_FILTERING) {
             --maxSlot;
         }
 
@@ -244,7 +245,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
     )
     public void injectInventoryFull(CallbackInfoReturnable<Boolean> cir) {
         int maxSlot = this.getContainerSize();
-        if (ModConfig.INSTANCE.HOPPER_FILTERING) {
+        if (ServerConfig.INSTANCE.HOPPER_FILTERING) {
             --maxSlot;
         }
 
@@ -260,7 +261,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
 
     @NotNull
     public ItemStack impl$getClassifiedItemStack() {
-        if (ModConfig.INSTANCE.HOPPER_FILTERING) {
+        if (ServerConfig.INSTANCE.HOPPER_FILTERING) {
             return this.getItem(this.getContainerSize() - 1);
         }
         return ItemStack.EMPTY;
@@ -272,7 +273,7 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
     }
 
     public int impl$getContainerSizeAfterClassification() {
-        if (ModConfig.INSTANCE.HOPPER_FILTERING) {
+        if (ServerConfig.INSTANCE.HOPPER_FILTERING) {
             return this.getContainerSize() - 1;
         }
         return this.getContainerSize();

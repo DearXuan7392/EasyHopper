@@ -55,7 +55,8 @@ public class CommonConfigGUI {
      * 检查当前是否处于多人模式
      */
     public static boolean isInMultiplayer() {
-        return ConfigManager.isInMultiplayer();
+        Minecraft mc = Minecraft.getInstance();
+        return mc.level != null && mc.getCurrentServer() != null;
     }
 
     /**

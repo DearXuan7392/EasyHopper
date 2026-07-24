@@ -125,11 +125,6 @@ public class ConfigManager {
         }
     }
 
-    public static boolean isInMultiplayer() {
-        Minecraft mc = Minecraft.getInstance();
-        return mc.level != null && mc.getCurrentServer() != null;
-    }
-
     /**
      * 保存当前配置到磁盘
      */

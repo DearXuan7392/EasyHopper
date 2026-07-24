@@ -36,17 +36,11 @@ public class NeoForgeNetHelper implements INetHelper {
         modEventBus.addListener(RegisterPayloadHandlersEvent.class, event -> {
             final PayloadRegistrar registrar = event.registrar("1");
 
-            // C2S: 客户端推送配置到服务端
-            registrar.playToServer(
+            // 双向注册: C2S (客户端推送配置到服务端) + S2C (服务端同步配置到客户端)
+            registrar.playBidirectional(
                     ConfigSyncPayload.TYPE,
                     ConfigSyncPayload.CODEC,
-                    this::handleServerConfigPush
-            );
-
-            // S2C: 服务端同步配置到客户端
-            registrar.playToClient(
-                    ConfigSyncPayload.TYPE,
-                    ConfigSyncPayload.CODEC,
+                    this::handleServerConfigPush,
                     this::handleClientConfigSync
             );
         });

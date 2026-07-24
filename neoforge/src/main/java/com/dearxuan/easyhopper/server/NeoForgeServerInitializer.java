@@ -1,0 +1,23 @@
+package com.dearxuan.easyhopper.server;
+
+import com.dearxuan.easyhopper.Constants;
+import com.dearxuan.easyhopper.anno.Environment;
+import com.dearxuan.easyhopper.anno.EnvType;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
+
+/**
+ * NeoForge 服务端专属入口, 仅在专用服务端 (Dedicated Server) 加载.
+ * 使用 @EventBusSubscriber(value = Dist.DEDICATED_SERVER) 确保客户端不会加载此类.
+ */
+@Environment(EnvType.SERVER)
+@EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.DEDICATED_SERVER)
+public class NeoForgeServerInitializer {
+
+    @SubscribeEvent
+    public static void onServerSetup(FMLDedicatedServerSetupEvent event) {
+        // 服务端初始化逻辑 (如: 专用服务器命令注册等)
+    }
+}

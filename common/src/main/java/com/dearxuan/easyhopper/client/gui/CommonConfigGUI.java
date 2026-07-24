@@ -12,34 +12,14 @@ import net.minecraft.network.chat.Component;
 public class CommonConfigGUI {
 
     /**
-     * 获取当前环境下的配置
-     * - 多人模式: 从服务器获取配置副本
-     * - 单人模式: 返回本地 ModConfig.INSTANCE
+     * 检查当前是否处于任何世界中 (单人 / 多人)
      */
-    public static ModConfig getConfig() {
-        if (isInMultiplayer()) {
-            return NetManager.loadConfigFromServer();
-        }
-        return ModConfig.INSTANCE;
+    public static boolean isInWorld() {
+        return Minecraft.getInstance().level != null;
     }
 
     /**
-     * 保存指定的配置副本到当前环境
-     * - 多人模式: 将指定配置推送到服务器
-     * - 单人模式: 将 ModConfig.INSTANCE 写入本地磁盘
-     *
-     * @param config 多人模式下要推送的配置对象
-     */
-    public static void saveConfig(ModConfig config) {
-        if (isInMultiplayer()) {
-            NetManager.pushConfigToServer(config);
-        } else {
-            ConfigManager.save();
-        }
-    }
-
-    /**
-     * 检查当前是否处于多人模式
+     * 检查当前是否处于多人模式 (用于 UI 标题切换)
      */
     public static boolean isInMultiplayer() {
         Minecraft mc = Minecraft.getInstance();
@@ -47,12 +27,42 @@ public class CommonConfigGUI {
     }
 
     /**
+     * 获取当前环境下的配置
+     * - 在游戏中 (单人/多人): 从服务器获取配置副本
+     * - 未进入世界: 返回本地 ModConfig.INSTANCE
+     */
+    public static ModConfig getConfig() {
+        if (isInWorld()) {
+            return NetManager.loadConfigFromServer();
+        }
+        return ModConfig.INSTANCE;
+    }
+
+    /**
+     * 保存指定的配置副本到当前环境
+     * - 在游戏中 (单人/多人): 将指定配置推送到服务器
+     * - 未进入世界: 将 ModConfig.INSTANCE 写入本地磁盘
+     *
+     * @param config 多人模式下要推送的配置对象
+     */
+    public static void saveConfig(ModConfig config) {
+        if (isInWorld()) {
+            NetManager.pushConfigToServer(config);
+        } else {
+            ConfigManager.save();
+        }
+    }
+
+    /**
      * 检查当前玩家是否有权限修改配置
-     * - 单人模式: 始终有权限
-     * - 多人模式: 需要管理员权限
+     * - 未进入世界: 始终有权限 (本地编辑)
+     * - 游戏中: 使用服务端下发的权限值
      */
     public static boolean hasPermission() {
-        return !isInMultiplayer() || NetManager.hasPermissionToPush();
+        if (!isInWorld()) {
+            return true;
+        }
+        return NetManager.hasPermissionToPush();
     }
 
     /**

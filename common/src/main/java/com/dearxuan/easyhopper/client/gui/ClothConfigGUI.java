@@ -1,20 +1,20 @@
-package com.dearxuan.easyhopper.gui;
+package com.dearxuan.easyhopper.client.gui;
 
 import com.dearxuan.easyhopper.anno.Environment;
 import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
-import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
-import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
+import me.shedaniel.clothconfig2.api.ConfigBuilder;
+import me.shedaniel.clothconfig2.api.ConfigCategory;
+import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import java.lang.reflect.Field;
 
 @Environment(EnvType.CLIENT)
-public class YaclConfigGUI {
+public class ClothConfigGUI {
 
     public static Screen createScreen(Screen parentScreen) {
         boolean inMultiplayer = CommonConfigGUI.isInMultiplayer();
@@ -23,24 +23,26 @@ public class YaclConfigGUI {
         ModConfig targetConfig = CommonConfigGUI.getConfig();
         boolean hasPermission = CommonConfigGUI.hasPermission();
 
-        YetAnotherConfigLib.Builder builder = YetAnotherConfigLib.createBuilder()
-                .title(Component.translatable("easyhopper.title"));
+        ConfigBuilder builder = ConfigBuilder.create()
+                .setParentScreen(parentScreen)
+                .setTitle(Component.translatable("easyhopper.title"));
 
+        // 分类名称加上模式提示
         Component categoryTitle = inMultiplayer
                 ? Component.translatable("easyhopper.gui.server_config")
                 : Component.translatable("easyhopper.gui.local_config");
 
-        ConfigCategory.Builder categoryBuilder = ConfigCategory.createBuilder()
-                .name(categoryTitle);
+        ConfigCategory category = builder.getOrCreateCategory(categoryTitle);
+        ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-        // 顶部提示组件
+        // 顶部模式与权限提示栏
         Component noticeComponent = inMultiplayer
                 ? (hasPermission
                 ? Component.translatable("easyhopper.gui.notice.server_editable")
                 : Component.translatable("easyhopper.gui.notice.server_readonly"))
                 : Component.translatable("easyhopper.gui.notice.local");
 
-        categoryBuilder.option(LabelOption.create(noticeComponent));
+        category.addEntry(entryBuilder.startTextDescription(noticeComponent).build());
 
         ModConfig defaultConfig = new ModConfig();
 
@@ -51,72 +53,65 @@ public class YaclConfigGUI {
 
             field.setAccessible(true);
             EasyConfig easyConfig = field.getAnnotation(EasyConfig.class);
-            String fieldName = field.getName();
 
+            String fieldName = field.getName();
             String nameKey = "easyhopper." + fieldName;
             String tooltipKey = easyConfig.tooltip().equals("<modid>.<name>.tooltip")
                     ? nameKey + ".tooltip"
                     : easyConfig.tooltip();
 
             Class<?> type = field.getType();
+            // 在游戏内可修改性判断：注解允许 且 (单人模式 或 拥有服务器修改权限)
             boolean editable = easyConfig.allowInGame() && hasPermission;
 
+            // 处理 Integer 类型
             if (type == int.class || type == Integer.class) {
                 int defVal = getFieldValueInt(field, defaultConfig, 0);
+                int currentVal = getFieldValueInt(field, targetConfig, defVal);
 
-                Option<Integer> option = Option.<Integer>createBuilder()
-                        .name(Component.translatable(nameKey))
-                        .description(OptionDescription.of(Component.translatable(tooltipKey)))
-                        .available(editable)
-                        .binding(
-                                defVal,
-                                () -> getFieldValueInt(field, targetConfig, defVal),
-                                val -> {
-                                    if (editable) {
-                                        setFieldValue(field, targetConfig, val);
-                                    }
-                                }
-                        )
-                        .controller(opt -> {
-                            IntegerFieldControllerBuilder controller = IntegerFieldControllerBuilder.create(opt);
-                            Value valueAnno = easyConfig.value();
-                            if (valueAnno != null) {
-                                controller.min((int) valueAnno.min());
-                                controller.max((int) valueAnno.max());
+                Value valueAnno = easyConfig.value();
+                int min = valueAnno != null ? (int) valueAnno.min() : Integer.MIN_VALUE;
+                int max = valueAnno != null ? (int) valueAnno.max() : Integer.MAX_VALUE;
+
+                var entry = entryBuilder.startIntField(Component.translatable(nameKey), currentVal)
+                        .setDefaultValue(defVal)
+                        .setMin(min)
+                        .setMax(max)
+                        .setTooltip(Component.translatable(tooltipKey))
+                        .setSaveConsumer(newValue -> {
+                            if (editable) {
+                                setFieldValue(field, targetConfig, newValue);
                             }
-                            return controller;
                         })
                         .build();
 
-                categoryBuilder.option(option);
-            } else if (type == boolean.class || type == Boolean.class) {
+                entry.setEditable(editable);
+                category.addEntry(entry);
+            }
+            // 处理 Boolean 类型
+            else if (type == boolean.class || type == Boolean.class) {
                 boolean defVal = getFieldValueBoolean(field, defaultConfig, false);
+                boolean currentVal = getFieldValueBoolean(field, targetConfig, defVal);
 
-                Option<Boolean> option = Option.<Boolean>createBuilder()
-                        .name(Component.translatable(nameKey))
-                        .description(OptionDescription.of(Component.translatable(tooltipKey)))
-                        .available(editable)
-                        .binding(
-                                defVal,
-                                () -> getFieldValueBoolean(field, targetConfig, defVal),
-                                val -> {
-                                    if (editable) {
-                                        setFieldValue(field, targetConfig, val);
-                                    }
-                                }
-                        )
-                        .controller(BooleanControllerBuilder::create)
+                var entry = entryBuilder.startBooleanToggle(Component.translatable(nameKey), currentVal)
+                        .setDefaultValue(defVal)
+                        .setTooltip(Component.translatable(tooltipKey))
+                        .setSaveConsumer(newValue -> {
+                            if (editable) {
+                                setFieldValue(field, targetConfig, newValue);
+                            }
+                        })
                         .build();
 
-                categoryBuilder.option(option);
+                entry.setEditable(editable);
+                category.addEntry(entry);
             }
         }
 
-        return builder
-                .category(categoryBuilder.build())
-                .save(() -> CommonConfigGUI.saveConfig(targetConfig))
-                .build()
-                .generateScreen(parentScreen);
+        // 保存逻辑：多人模式推送至服务器，单人模式写回本地磁盘
+        builder.setSavingRunnable(() -> CommonConfigGUI.saveConfig(targetConfig));
+
+        return builder.build();
     }
 
     private static int getFieldValueInt(Field field, Object instance, int defaultValue) {

@@ -1,9 +1,8 @@
-package com.dearxuan.easyhopper.net;
+package com.dearxuan.easyhopper.config;
 
 import com.dearxuan.easyhopper.Constants;
 import com.dearxuan.easyhopper.anno.Environment;
 import com.dearxuan.easyhopper.anno.EnvType;
-import com.dearxuan.easyhopper.config.ModConfig;
 import com.google.gson.Gson;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

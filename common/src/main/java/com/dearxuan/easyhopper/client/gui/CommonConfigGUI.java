@@ -1,10 +1,10 @@
-package com.dearxuan.easyhopper.gui;
+package com.dearxuan.easyhopper.client.gui;
 
 import com.dearxuan.easyhopper.anno.Environment;
 import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ConfigManager;
 import com.dearxuan.easyhopper.config.ModConfig;
-import com.dearxuan.easyhopper.net.NetManager;
+import com.dearxuan.easyhopper.client.net.NetManager;
 import com.dearxuan.easyhopper.platform.Services;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.SystemToast;

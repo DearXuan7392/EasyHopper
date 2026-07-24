@@ -2,7 +2,7 @@ package com.dearxuan.easyhopper;
 
 import com.dearxuan.easyhopper.anno.Environment;
 import com.dearxuan.easyhopper.anno.EnvType;
-import com.dearxuan.easyhopper.gui.CommonConfigGUI;
+import com.dearxuan.easyhopper.client.gui.CommonConfigGUI;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 

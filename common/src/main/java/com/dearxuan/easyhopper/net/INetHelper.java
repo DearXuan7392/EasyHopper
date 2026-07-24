@@ -2,6 +2,7 @@ package com.dearxuan.easyhopper.net;
 
 import com.dearxuan.easyhopper.anno.Environment;
 import com.dearxuan.easyhopper.anno.EnvType;
+import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import net.minecraft.server.level.ServerPlayer;
 
 /**

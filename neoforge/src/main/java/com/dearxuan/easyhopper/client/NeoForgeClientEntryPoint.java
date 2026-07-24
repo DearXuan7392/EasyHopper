@@ -3,7 +3,7 @@ package com.dearxuan.easyhopper.client;
 import com.dearxuan.easyhopper.Constants;
 import com.dearxuan.easyhopper.anno.Environment;
 import com.dearxuan.easyhopper.anno.EnvType;
-import com.dearxuan.easyhopper.gui.CommonConfigGUI;
+import com.dearxuan.easyhopper.client.gui.CommonConfigGUI;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
@@ -17,7 +17,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
  */
 @Environment(EnvType.CLIENT)
 @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
-public class NeoForgeClientInitializer {
+public class NeoForgeClientEntryPoint {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {

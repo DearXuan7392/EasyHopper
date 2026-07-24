@@ -1,9 +1,9 @@
-package com.dearxuan.easyhopper;
+package com.dearxuan.easyhopper.client;
 
 import com.dearxuan.easyhopper.anno.Environment;
 import com.dearxuan.easyhopper.anno.EnvType;
-import com.dearxuan.easyhopper.net.ConfigSyncPayload;
-import com.dearxuan.easyhopper.net.NetManager;
+import com.dearxuan.easyhopper.config.ConfigSyncPayload;
+import com.dearxuan.easyhopper.client.net.NetManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

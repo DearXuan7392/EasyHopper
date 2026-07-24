@@ -14,7 +14,7 @@ import net.neoforged.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
  */
 @Environment(EnvType.SERVER)
 @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.DEDICATED_SERVER)
-public class NeoForgeServerInitializer {
+public class NeoForgeServerEntryPoint {
 
     @SubscribeEvent
     public static void onServerSetup(FMLDedicatedServerSetupEvent event) {

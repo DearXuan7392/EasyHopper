@@ -19,7 +19,10 @@
             "com.dearxuan.easyhopper.EntryPointFabric"
         ],
         "client": [
-            "com.dearxuan.easyhopper.FabricClientEntryPoint"
+            "com.dearxuan.easyhopper.client.FabricClientEntryPoint"
+        ],
+        "server": [
+            "com.dearxuan.easyhopper.server.FabricServerEntryPoint"
         ],
         "modmenu": [
             "com.dearxuan.easyhopper.ModMenuIntegration"

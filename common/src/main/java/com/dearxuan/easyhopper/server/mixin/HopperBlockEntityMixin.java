@@ -1,9 +1,9 @@
-package com.dearxuan.easyhopper.mixin;
+package com.dearxuan.easyhopper.server.mixin;
 
 import com.dearxuan.easyhopper.anno.Environment;
 import com.dearxuan.easyhopper.anno.EnvType;
 import com.dearxuan.easyhopper.config.ModConfig;
-import com.dearxuan.easyhopper.impl.IHopperBlockEntityImpl;
+import com.dearxuan.easyhopper.server.impl.IHopperBlockEntityImpl;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

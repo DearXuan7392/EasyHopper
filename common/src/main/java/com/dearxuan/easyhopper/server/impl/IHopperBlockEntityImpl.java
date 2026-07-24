@@ -1,4 +1,4 @@
-package com.dearxuan.easyhopper.impl;
+package com.dearxuan.easyhopper.server.impl;
 
 import com.dearxuan.easyhopper.anno.Environment;
 import com.dearxuan.easyhopper.anno.EnvType;

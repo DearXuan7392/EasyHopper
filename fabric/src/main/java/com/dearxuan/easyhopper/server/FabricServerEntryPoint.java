@@ -3,7 +3,7 @@ package com.dearxuan.easyhopper.server;
 import com.dearxuan.easyhopper.config.ConfigRequestPayload;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.server.config.ServerConfig;
-import com.dearxuan.easyhopper.server.net.ServerConfigHandler;
+import com.dearxuan.easyhopper.server.config.ServerConfigHandler;
 import com.dearxuan.easyhopper.utils.PlayerUtil;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;

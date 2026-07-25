@@ -5,7 +5,7 @@ import com.dearxuan.easyhopper.config.ConfigRequestPayload;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.server.mixin.ServerPlayerMixin;
-import com.dearxuan.easyhopper.server.net.ServerConfigHandler;
+import com.dearxuan.easyhopper.server.config.ServerConfigHandler;
 import com.dearxuan.easyhopper.utils.PlayerUtil;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;

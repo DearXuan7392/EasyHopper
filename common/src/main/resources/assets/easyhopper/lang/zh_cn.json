@@ -6,6 +6,7 @@
 
   "easyhopper.toast.title": "无法打开配置界面",
   "easyhopper.toast.description": "需要安装 Cloth Config 或 YACL 模组!",
+  "easyhopper.config.edit_in_config_only": "该项仅能在配置文件中修改",
   "easyhopper.gui.server_config": "服务器配置",
   "easyhopper.gui.local_config": "本地配置",
   "easyhopper.gui.notice.server_editable": "§a[提示] 当前正在编辑服务器配置",

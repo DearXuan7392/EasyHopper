@@ -10,5 +10,5 @@ public @interface EasyConfig {
 
     String tooltip() default "<modid>.<name>.tooltip";
 
-    boolean allowInGame() default true;
+    boolean canModifyInGame() default true;
 }

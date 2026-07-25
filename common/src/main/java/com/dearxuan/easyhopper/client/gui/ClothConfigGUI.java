@@ -59,7 +59,12 @@ public class ClothConfigGUI {
 
             Class<?> type = field.getType();
             // 在游戏内可修改性判断：注解允许 且 (单人模式 或 拥有服务器修改权限)
-            boolean editable = easyConfig.allowInGame() && hasPermission;
+            boolean editable = easyConfig.canModifyInGame() && hasPermission;
+
+            Component tooltipComponent = Component.translatable(tooltipKey);
+            if (!easyConfig.canModifyInGame()) {
+                tooltipComponent = tooltipComponent.copy().append("\n").append(Component.translatable("easyhopper.config.edit_in_config_only"));
+            }
 
             // 处理 Integer 类型
             if (type == int.class || type == Integer.class) {
@@ -67,14 +72,14 @@ public class ClothConfigGUI {
                 int currentVal = getFieldValueInt(field, targetConfig, defVal);
 
                 Value valueAnno = easyConfig.value();
-                int min = valueAnno != null ? (int) valueAnno.min() : Integer.MIN_VALUE;
-                int max = valueAnno != null ? (int) valueAnno.max() : Integer.MAX_VALUE;
+                int min = valueAnno.defined() ? (int) valueAnno.min() : Integer.MIN_VALUE;
+                int max = valueAnno.defined() ? (int) valueAnno.max() : Integer.MAX_VALUE;
 
                 var entry = entryBuilder.startIntField(Component.translatable(nameKey), currentVal)
                         .setDefaultValue(defVal)
                         .setMin(min)
                         .setMax(max)
-                        .setTooltip(Component.translatable(tooltipKey))
+                        .setTooltip(tooltipComponent)
                         .setSaveConsumer(newValue -> {
                             if (editable) {
                                 setFieldValue(field, targetConfig, newValue);
@@ -92,7 +97,7 @@ public class ClothConfigGUI {
 
                 var entry = entryBuilder.startBooleanToggle(Component.translatable(nameKey), currentVal)
                         .setDefaultValue(defVal)
-                        .setTooltip(Component.translatable(tooltipKey))
+                        .setTooltip(tooltipComponent)
                         .setSaveConsumer(newValue -> {
                             if (editable) {
                                 setFieldValue(field, targetConfig, newValue);

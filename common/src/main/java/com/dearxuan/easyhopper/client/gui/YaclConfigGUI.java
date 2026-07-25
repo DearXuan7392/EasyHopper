@@ -56,14 +56,19 @@ public class YaclConfigGUI {
                     : easyConfig.tooltip();
 
             Class<?> type = field.getType();
-            boolean editable = easyConfig.allowInGame() && hasPermission;
+            boolean editable = easyConfig.canModifyInGame() && hasPermission;
+
+            Component tooltipComponent = Component.translatable(tooltipKey);
+            if (!easyConfig.canModifyInGame()) {
+                tooltipComponent = tooltipComponent.copy().append("\n").append(Component.translatable("easyhopper.config.edit_in_config_only"));
+            }
 
             if (type == int.class || type == Integer.class) {
                 int defVal = getFieldValueInt(field, defaultConfig, 0);
 
                 Option<Integer> option = Option.<Integer>createBuilder()
                         .name(Component.translatable(nameKey))
-                        .description(OptionDescription.of(Component.translatable(tooltipKey)))
+                        .description(OptionDescription.of(tooltipComponent))
                         .available(editable)
                         .binding(
                                 defVal,
@@ -77,7 +82,7 @@ public class YaclConfigGUI {
                         .controller(opt -> {
                             IntegerFieldControllerBuilder controller = IntegerFieldControllerBuilder.create(opt);
                             Value valueAnno = easyConfig.value();
-                            if (valueAnno != null) {
+                            if (valueAnno.defined()) {
                                 controller.min((int) valueAnno.min());
                                 controller.max((int) valueAnno.max());
                             }
@@ -91,7 +96,7 @@ public class YaclConfigGUI {
 
                 Option<Boolean> option = Option.<Boolean>createBuilder()
                         .name(Component.translatable(nameKey))
-                        .description(OptionDescription.of(Component.translatable(tooltipKey)))
+                        .description(OptionDescription.of(tooltipComponent))
                         .available(editable)
                         .binding(
                                 defVal,

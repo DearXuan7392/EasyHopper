@@ -3,10 +3,10 @@ AIGC:
   ContentProducer: '001191110102MAD55U9H0F10002'
   ContentPropagator: '001191110102MAD55U9H0F10002'
   Label: '1'
-  ProduceID: '84c8cf9f-3a4d-46c9-9002-850fa4c140af'
-  PropagateID: '84c8cf9f-3a4d-46c9-9002-850fa4c140af'
-  ReservedCode1: '57326a0c-6b34-45b9-acf0-9a1763639be8'
-  ReservedCode2: '57326a0c-6b34-45b9-acf0-9a1763639be8'
+  ProduceID: '7dd5a02c-bc3b-4db8-a050-fe3ec970a214'
+  PropagateID: '7dd5a02c-bc3b-4db8-a050-fe3ec970a214'
+  ReservedCode1: '167ef555-fb48-47d6-9ace-262e94f80860'
+  ReservedCode2: '167ef555-fb48-47d6-9ace-262e94f80860'
 ---
 
 # EasyHopper 技术说明文档
@@ -111,9 +111,10 @@ EasyHopper/
 │       │   ├── CommonClientEntryPoint.java  # 客户端公共入口（根包，预留）
 │       │   ├── Constants.java              # 常量定义（MOD_ID、LOG）
 │       │   ├── config/
-│       │   │   ├── ModConfig.java          # 配置数据类（纯数据，无静态状态）
-│       │   │   ├── ConfigManager.java      # 配置读写管理器（load 返回 ModConfig，save 接收 ModConfig）
-│       │   │   ├── ConfigSyncPayload.java  # 配置同步网络包（含 jsonConfig + hasPermission）
+│       │   │   ├── ModConfig.java            # 配置数据类（纯数据，无静态状态）
+│       │   │   ├── ConfigManager.java        # 配置读写管理器（load 返回 ModConfig，save 接收 ModConfig）
+│       │   │   ├── ConfigSyncPayload.java    # 配置同步网络包（含 jsonConfig + hasPermission）
+│       │   │   ├── ConfigRequestPayload.java # 配置请求网络包（C2S 信号，空 record）
 │       │   │   └── retention/
 │       │   │       ├── EasyConfig.java     # 配置注解
 │       │   │       └── Value.java          # 数值范围注解
@@ -128,16 +129,15 @@ EasyHopper/
 │       │   ├── server/
 │       │   │   ├── CommonServerEntryPoint.java  # 服务端公共入口（初始化 ServerConfig）
 │       │   │   ├── config/
-│       │   │   │   └── ServerConfig.java        # 服务端运行时配置缓存（替代 ModConfig.INSTANCE）
+│       │   │   │   ├── ServerConfig.java          # 服务端运行时配置缓存（替代 ModConfig.INSTANCE）
+│       │   │   │   └── ServerConfigHandler.java    # 服务端配置处理器（校验权限、应用配置、持久化）
 │       │   │   ├── impl/
 │       │   │   │   └── IHopperBlockEntityImpl.java  # 分类功能接口
-│       │   │   ├── mixin/
-│       │   │   │   ├── HopperBlockEntityMixin.java   # 漏斗实体核心修改
-│       │   │   │   ├── MinecartHopperMixin.java       # 漏斗矿车修改
-│       │   │   │   ├── ServerPlayerMixin.java         # ServerPlayer Accessor（暴露 server 字段）
-│       │   │   │   └── IHopperBlockEntityMixin.java   # Accessor/Invoker 接口
-│       │   │   └── net/
-│       │   │       └── ServerConfigHandler.java  # 服务端配置处理器
+│       │   │   └── mixin/
+│       │   │       ├── HopperBlockEntityMixin.java   # 漏斗实体核心修改
+│       │   │       ├── MinecartHopperMixin.java       # 漏斗矿车修改
+│       │   │       ├── ServerPlayerMixin.java         # ServerPlayer Accessor（暴露 server 字段）
+│       │   │       └── IHopperBlockEntityMixin.java   # Accessor/Invoker 接口
 │       │   ├── utils/
 │       │   │   └── PlayerUtil.java          # 玩家权限检查工具类
 │       │   └── platform/
@@ -170,7 +170,7 @@ EasyHopper/
 └── neoforge/                       # NeoForge 加载器模块
     └── src/main/
         ├── java/com/dearxuan/easyhopper/
-        │   ├── NeoForgeCommonEntryPoint.java  # NeoForge Both 入口点（注册 Payload 处理器）
+        │   ├── NeoForgeEntryPoint.java      # NeoForge Both 入口点（注册 Payload 处理器）
         │   ├── client/
         │   │   └── NeoForgeClientEntryPoint.java  # NeoForge 客户端入口点（GUI 注册）
         │   ├── server/
@@ -215,8 +215,8 @@ EasyHopper 采用 **Multi-loader（多加载器）架构**，使同一套核心�
 │ FabricPlatform    │  │ NeoForgePlatform  │
 │    Helper         │  │     Helper        │
 │                   │  │                   │
-│ FabricEntryPoint  │  │ NeoForgeCommon    │
-│  (Both: 编解码器) │  │  EntryPoint      │
+│ FabricEntryPoint  │  │ NeoForge          │
+│  (Both: 编解码器) │  │  EntryPoint       │
 │ FabricClient      │  │  (Both: 处理器)   │
 │  EntryPoint       │  │ NeoForgeClient    │
 │ FabricServer      │  │  EntryPoint       │
@@ -227,7 +227,7 @@ EasyHopper 采用 **Multi-loader（多加载器）架构**，使同一套核心�
 
 - **common**：共享代码层，只能使用原版 Minecraft API 和通用第三方库，不依赖任何加载器特有 API。内部按客户端/服务端划分为 `client/` 和 `server/` 子包，客户端代码（GUI、NetManager）和服务端代码（Mixin、ServerConfig、ServerConfigHandler）物理隔离。`config/` 包中 `ModConfig` 为纯数据类，`ServerConfig`（位于 `server/config/`）为服务端运行时配置缓存。
 - **fabric**：Fabric 专用代码，提供入口点、平台实现和 ModMenu 集成。网络逻辑不再抽象为接口，而是由 `FabricEntryPoint`（Both 端注册编解码器）、`FabricServerEntryPoint`（C2S 处理器 + 进服推送）和 `FabricClientEntryPoint`（S2C 接收器 + 断连清理）直接实现。
-- **neoforge**：NeoForge 专用代码，提供入口点和平台实现。`NeoForgeCommonEntryPoint`（Both 端注册 Payload 处理器）、`NeoForgeServerEntryPoint`（进服推送）和 `NeoForgeClientEntryPoint`（GUI 注册）直接实现网络逻辑，无需额外抽象层。
+- **neoforge**：NeoForge 专用代码，提供入口点和平台实现。`NeoForgeEntryPoint`（Both 端注册 Payload 处理器）、`NeoForgeServerEntryPoint`（进服推送）和 `NeoForgeClientEntryPoint`（GUI 注册）直接实现网络逻辑，无需额外抽象层。
 
 ### 4.2 SPI 服务加载机制
 
@@ -391,7 +391,7 @@ public @interface EasyConfig {
 }
 ```
 
-标记在 `ModConfig` 的字段上，表示该字段是一个可配置项。运行时通过反射读取此注解，自动完成 GUI 构建、YAML 注释生成和数值校验。`allowInGame` 控制该配置项是否在游戏内 GUI 中可编辑（设为 `false` 时 GUI 中灰显且不可修改，只能通过配置文件修改）。
+标记在 `ModConfig` 的字段上，表示该字段是一个可配置项。运行时通过反射读取此注解，自动完成 GUI 构建、YAML 注释生成和数值校验。`canModifyInGame` 控制该配置项是否在游戏内 GUI 中可编辑（设为 `false` 时 GUI 中灰显且不可修改，只能通过配置文件修改）。
 
 #### `@Value`
 
@@ -507,9 +507,8 @@ common 模块内部按客户端/服务端划分为 `client/` 和 `server/` 子�
 | `client/net/` | 客户端网络管理（NetManager） | 仅客户端 |
 | `server/mixin/` | Mixin 类（HopperBlockEntityMixin 等） | Mixin 配置声明在 `server` 端，仅服务端加载 |
 | `server/impl/` | 服务端接口（IHopperBlockEntityImpl） | 与 Mixin 共享，仅服务端实际使用 |
-| `server/config/` | 服务端运行时配置缓存（ServerConfig） | 仅服务端 |
-| `server/net/` | 服务端配置处理（ServerConfigHandler） | 仅服务端 |
-| `config/` | ModConfig（纯数据类）、ConfigManager、ConfigSyncPayload | 双端共享 |
+| `server/config/` | 服务端运行时配置缓存（ServerConfig）+ 配置处理器（ServerConfigHandler） | 仅服务端 |
+| `config/` | ModConfig（纯数据类）、ConfigManager、ConfigSyncPayload、ConfigRequestPayload | 双端共享 |
 | `platform/` | IPlatformHelper、Services | 双端共享 |
 | `utils/` | PlayerUtil | 双端共享 |
 
@@ -525,7 +524,7 @@ common 模块内部按客户端/服务端划分为 `client/` 和 `server/` 子�
 
 ### 8.3 隔离设计总结
 
-客户端代码（`client/` 包）依赖 `net.minecraft.client.*`，服务端代码（`server/` 包）依赖 `net.minecraft.server.*`，通过包结构和加载器机制实现物理隔离。双端共享代码（`config/`、`platform/`、`utils/`）不依赖任何端特定 API，确保在两个环境中均可安全执行。`ServerConfig` 虽位于 `server/config/`，但客户端的 `NetManager` 也引用它来读取服务端下发的配置缓存。
+客户端代码（`client/` 包）依赖 `net.minecraft.client.*`，服务端代码（`server/` 包）依赖 `net.minecraft.server.*`，通过包结构和加载器机制实现物理隔离。双端共享代码（`config/`、`platform/`、`utils/`）不依赖任何端特定 API，确保在两个环境中均可安全执行。`ServerConfig` 和 `ServerConfigHandler` 虽位于 `server/config/`，但客户端的 `NetManager` 也引用 `ServerConfig.INSTANCE` 来读取服务端下发的配置缓存。
 
 ---
 
@@ -641,14 +640,15 @@ public interface IHopperBlockEntityImpl {
 
 ### 10.1 设计概要
 
-- **单一 Payload**：使用 `ConfigSyncPayload` 一个包类型同时承载 C2S（客户端推送配置）和 S2C（服务端同步配置），通过 JSON 字符串序列化 `ModConfig`，S2C 附带 `hasPermission` 权限信息
+- **双 Payload**：使用 `ConfigSyncPayload` 承载 C2S（客户端推送配置）和 S2C（服务端同步配置），通过 JSON 字符串序列化 `ModConfig`，S2C 附带 `hasPermission` 权限信息；使用 `ConfigRequestPayload`（空 record）作为 C2S 信号，客户端请求服务端同步最新配置和权限
 - **服务端配置缓存**：`ServerConfig.INSTANCE`（位于 `server/config/` 包）作为服务端运行时的唯一配置来源；客户端通过 `ServerConfig.INSTANCE` 读取服务端下发的配置缓存
 - **服务端下发权限**：S2C 数据包附带 `hasPermission` 字段，客户端无需本地计算权限，直接使用服务端下发的缓存权限值
 - **OP 权限校验**：服务端接收配置推送时通过 `PlayerUtil.hasPermissionToPushConfig()` 校验玩家 OP 等级及 `ALLOW_OP_MODIFY` 配置项
-- **内存-only 更新**：服务端收到 C2S 配置推送后仅更新 `ServerConfig.INSTANCE`（内存），不调用 `ConfigManager.save()` 写入磁盘，服务器重启后恢复为磁盘上的原始配置
-- **自动推送**：玩家进服时自动推送当前服务端配置（附带该玩家的权限信息）；断开连接时自动清除缓存
+- **配置修改持久化**：服务端收到 C2S 配置推送后更新 `ServerConfig.INSTANCE`（内存）**并调用 `ConfigManager.save()` 写入磁盘**，修改在服务器重启后仍然生效
+- **广播含发起者**：配置修改成功后广播给**所有**在线玩家（含修改者），确保发起者也能收到权限更新
+- **自动推送与清理**：玩家进服时自动推送当前服务端配置（附带该玩家的权限信息）；断开连接时自动清除缓存并恢复本地配置
 - **GUI 联动**：配置界面根据是否在游戏中（`isInWorld()`）切换显示，游戏中非管理员只读
-- **代码隔离**：客户端网络逻辑（`NetManager`，位于 `client/net/` 包）和服务端配置处理（`ServerConfigHandler`，位于 `server/net/` 包）通过包结构物理隔离，各加载器入口点直接实现网络注册，无需额外抽象层
+- **代码隔离**：客户端网络逻辑（`NetManager`，位于 `client/net/` 包）和服务端配置处理（`ServerConfigHandler`，位于 `server/config/` 包）通过包结构物理隔离，各加载器入口点直接实现网络注册，无需额外抽象层
 
 ### 10.2 ConfigSyncPayload — 网络包定义
 
@@ -662,7 +662,19 @@ public record ConfigSyncPayload(String jsonConfig, boolean hasPermission) implem
 
 位于 `config/` 包，使用 Gson 将 `ModConfig` 序列化为 JSON 字符串传输。包标识为 `easyhopper:config_sync`，同一 Payload 类型同时注册为 C2S 和 S2C。新增 `hasPermission` 字段：C2S 方向由客户端构造时置为 `false`（权限由服务端判断），S2C 方向由服务端填充该玩家的权限结果，客户端缓存此值用于 GUI 权限判断。
 
-### 10.3 ServerConfig — 服务端运行时配置
+### 10.3 ConfigRequestPayload — 配置请求网络包
+
+```java
+public record ConfigRequestPayload() implements CustomPacketPayload {
+  // 空 record，仅作为 C2S 信号
+  // TYPE ID: easyhopper:config_request
+  // CODEC: StreamCodec.unit(new ConfigRequestPayload())
+}
+```
+
+位于 `config/` 包，是一个无数据字段的空 record，仅作为 C2S 信号使用。客户端打开配置界面时（多人模式下）发送此包，请求服务端同步最新配置和权限信息；服务端收到后以 `ConfigSyncPayload` 响应。
+
+### 10.4 ServerConfig — 服务端运行时配置
 
 ```java
 public class ServerConfig {
@@ -674,7 +686,7 @@ public class ServerConfig {
 
 位于 `server/config/` 包，是服务端运行时的唯一配置来源。所有 Mixin 和服务端逻辑通过 `ServerConfig.INSTANCE` 读取配置值。初始化时通过 `ConfigManager.load()` 从磁盘加载。客户端的 `NetManager` 也引用 `ServerConfig.INSTANCE` 来读取服务端下发的配置缓存。
 
-### 10.4 NetManager — 客户端网络管理
+### 10.5 NetManager — 客户端网络管理
 
 ```java
 public class NetManager { ... }
@@ -687,11 +699,12 @@ public class NetManager { ... }
 | `hasPermissionToPush()`         | 返回服务端下发的缓存权限值（由 S2C 数据包更新） |
 | `loadConfigFromServer()`        | 获取 `ServerConfig.INSTANCE` 的深拷贝副本（供 GUI 读取） |
 | `pushConfigToServer(ModConfig)` | 通过 `ServerboundCustomPayloadPacket` 将配置推送到服务端 |
+| `requestConfigSync()`          | 通过 `ServerboundCustomPayloadPacket` 发送 `ConfigRequestPayload`，请求服务端同步最新配置和权限 |
 | `updateServerConfig(ModConfig, boolean)` | 接收服务端推送的配置和权限，更新 `ServerConfig.INSTANCE` 和本地权限缓存 |
 | `clearCache()`                  | 断开连接时清除缓存，重新从磁盘加载本地配置 |
 | `deepCopy(ModConfig)`           | 使用 Gson 进行深拷贝 |
 
-### 10.5 ServerConfigHandler — 服务端配置处理器
+### 10.6 ServerConfigHandler — 服务端配置处理器
 
 ```java
 public class ServerConfigHandler {
@@ -699,9 +712,9 @@ public class ServerConfigHandler {
 }
 ```
 
-位于 `server/net/` 包，仅依赖服务端安全的类，处理客户端推送的配置修改：校验权限（`PlayerUtil.hasPermissionToPushConfig()`），应用配置（`ServerConfig.INSTANCE = config`），打印日志。权限校验同时检查 OP 等级和 `ServerConfig.INSTANCE.ALLOW_OP_MODIFY` 配置项。
+位于 `server/config/` 包，仅依赖服务端安全的类，处理客户端推送的配置修改：校验权限（`PlayerUtil.hasPermissionToPushConfig()`），应用配置（`ServerConfig.INSTANCE = config`），**调用 `ConfigManager.save(config)` 持久化到磁盘**，打印日志。权限校验同时检查 OP 等级和 `ServerConfig.INSTANCE.ALLOW_OP_MODIFY` 配置项。
 
-### 10.6 PlayerUtil — 权限工具类
+### 10.7 PlayerUtil — 权限工具类
 
 ```java
 public class PlayerUtil {
@@ -712,16 +725,18 @@ public class PlayerUtil {
 
 使用 Minecraft 原版权限 API 检查玩家权限。`hasPermissionToPushConfig()` 检查 OP 权限和 `ServerConfig.INSTANCE.ALLOW_OP_MODIFY`，只有同时满足时才允许推送配置。
 
-### 10.7 Fabric 网络实现
+### 10.8 Fabric 网络实现
 
 网络逻辑不再通过接口抽象，而是由三个入口点直接实现：
 
 **FabricEntryPoint**（`ModInitializer`，Both 端）：
 - 向 `PayloadTypeRegistry` 注册 C2S 和 S2C 的 `ConfigSyncPayload` 编解码器
+- 向 `PayloadTypeRegistry` 注册 C2S 的 `ConfigRequestPayload` 编解码器
 
 **FabricServerEntryPoint**（`DedicatedServerModInitializer`，服务端）：
 - 调用 `CommonServerEntryPoint.init()` 初始化 `ServerConfig`
-- 注册 `ServerPlayNetworking.registerGlobalReceiver` C2S 接收器：通过 `ServerConfigHandler.applyConfigFromPlayer()` 校验并应用配置，成功后广播给其他在线玩家（附带每个玩家的权限信息）
+- 注册 C2S 接收器（`ConfigSyncPayload`）：通过 `ServerConfigHandler.applyConfigFromPlayer()` 校验并应用配置（含持久化），成功后广播给**所有**在线玩家（含发起者，附带每个玩家的权限信息）
+- 注册 C2S 接收器（`ConfigRequestPayload`）：获取玩家权限，发送 `ConfigSyncPayload(ServerConfig.INSTANCE, hasPermission)` 响应
 - 注册 `ServerPlayConnectionEvents.JOIN`：玩家进服时推送 `ServerConfig.INSTANCE` 和权限信息
 
 **FabricClientEntryPoint**（`ClientModInitializer`，客户端）：
@@ -729,10 +744,13 @@ public class PlayerUtil {
 - 连接建立时注册 `ClientPlayNetworking` S2C 接收器：接收服务端配置同步并调用 `NetManager.updateServerConfig(config, hasPermission)`
 - 断开连接时调用 `NetManager.clearCache()` 恢复本地配置
 
-### 10.8 NeoForge 网络实现
+### 10.9 NeoForge 网络实现
 
-**NeoForgeCommonEntryPoint**（`@EventBusSubscriber`，Both 端）：
-- 监听 `RegisterPayloadHandlersEvent`，使用 `registrar.playToClient()` 注册 S2C 处理器（调用 `NetManager.updateServerConfig(config, hasPermission)`），使用 `registrar.playToServer()` 注册 C2S 处理器（通过 `ServerConfigHandler.applyConfigFromPlayer()` 校验并应用配置，成功后通过 `ServerPlayerMixin` Accessor 获取 `MinecraftServer` 广播给其他玩家）
+**NeoForgeEntryPoint**（`@EventBusSubscriber`，Both 端）：
+- 监听 `RegisterPayloadHandlersEvent`，注册 3 个 Payload 处理器：
+  - `registrar.playToClient()` 注册 S2C 处理器（`ConfigSyncPayload`）：调用 `NetManager.updateServerConfig(config, hasPermission)`
+  - `registrar.playToServer()` 注册 C2S 处理器（`ConfigSyncPayload`）：通过 `ServerConfigHandler.applyConfigFromPlayer()` 校验并应用配置（含持久化），成功后通过 `ServerPlayerMixin` Accessor 获取 `MinecraftServer` 广播给**所有**在线玩家（含发起者）
+  - `registrar.playToServer()` 注册 C2S 处理器（`ConfigRequestPayload`）：获取玩家权限，发送 `ConfigSyncPayload(ServerConfig.INSTANCE, hasPermission)` 给请求者
 
 **NeoForgeServerEntryPoint**（`@EventBusSubscriber(value = Dist.DEDICATED_SERVER)`，服务端）：
 - 调用 `CommonServerEntryPoint.init()` 初始化 `ServerConfig`
@@ -754,6 +772,10 @@ public class PlayerUtil {
 public class CommonConfigGUI {
 
     public static Screen createScreen(Screen parentScreen) {
+        // 多人模式下先请求服务端同步最新配置和权限
+        if (isInMultiplayer()) {
+            NetManager.requestConfigSync();
+        }
         // 优先级: Cloth Config > YACL > Toast 提示
         if (isModLoaded("cloth-config") || isModLoaded("cloth_config")) {
           try {
@@ -775,17 +797,17 @@ public class CommonConfigGUI {
 }
 ```
 
-通过 `Services.PLATFORM.isModLoaded()` 检测当前安装了哪个配置库，按优先级返回对应的配置界面。每次 `createScreen` 调用均包裹 `try-catch`，即使配置库存在但初始化异常时也不会导致崩溃，而是静默降级到下一个备选或弹出 Toast。若都未安装，弹出游戏内 Toast 通知用户。
+通过 `Services.PLATFORM.isModLoaded()` 检测当前安装了哪个配置库，按优先级返回对应的配置界面。**多人模式下打开配置界面前先调用 `NetManager.requestConfigSync()` 请求服务端同步最新配置和权限**，确保缓存实时有效。每次 `createScreen` 调用均包裹 `try-catch`，即使配置库存在但初始化异常时也不会导致崩溃，而是静默降级到下一个备选或弹出 Toast。若都未安装，弹出游戏内 Toast 通知用户。
 
 游戏内/主菜单模式支持的辅助方法：
 
 | 方法                      | 说明                                                                          |
 |-------------------------|-----------------------------------------------------------------------------|
 | `isInWorld()`           | 检查当前是否处于任何世界中（单人/多人） |
-| `isInMultiplayer()`     | 检查当前是否处于多人模式（用于 UI 标题切换） |
-| `getConfig()`           | 在游戏中返回 `NetManager.loadConfigFromServer()`（深拷贝），未进入世界则从配置文件加载 `ConfigManager.load()` |
-| `saveConfig(ModConfig)` | 在游戏中推送指定配置到服务器，未进入世界则调用 `ConfigManager.save(config)` 写入磁盘 |
-| `hasPermission()`       | 未进入世界始终允许（本地编辑）；游戏中使用服务端下发的缓存权限值 |
+| `isInMultiplayer()`     | 检查当前是否处于多人模式（用于 UI 标题切换和同步请求） |
+| `getConfig()`           | 多人游戏→`NetManager.loadConfigFromServer()`（服务端缓存深拷贝）；单人世界→`ConfigManager.load()`（本地文件）；未进入世界→`ConfigManager.load()`（本地文件） |
+| `saveConfig(ModConfig)` | 多人游戏→`NetManager.pushConfigToServer(config)`（推送服务器）；单人世界→`ConfigManager.save(config)` + `NetManager.updateServerConfig(config, true)`（写磁盘 + 更新缓存）；未进入世界→`ConfigManager.save(config)`（写磁盘） |
+| `hasPermission()`       | 未进入世界→始终允许（`true`）；单人世界→始终允许（`true`）；多人游戏→`NetManager.hasPermissionToPush()`（服务端下发缓存权限） |
 
 ### 11.2 ClothConfigGUI
 
@@ -889,7 +911,8 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
       → ServerConfig.init()
         → ConfigManager.load() 从磁盘加载配置
         → ServerConfig.INSTANCE 就绪
-    → 注册 C2S 接收器（ServerConfigHandler 处理 + 广播）
+    → 注册 C2S 接收器（ConfigSyncPayload: ServerConfigHandler 处理 + 广播）
+    → 注册 C2S 接收器（ConfigRequestPayload: 响应配置 + 权限）
     → 注册玩家进服事件（推送配置 + 权限）
 
   → Fabric Loader 发现 entrypoints.client
@@ -907,9 +930,9 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 ```
 游戏启动
   → NeoForge 发现 @EventBusSubscriber(modid = "easyhopper") 注解
-  → NeoForgeCommonEntryPoint 处理 RegisterPayloadHandlersEvent
-    → registrar.playToClient() 注册 S2C 处理器
-    → registrar.playToServer() 注册 C2S 处理器
+  → NeoForgeEntryPoint 处理 RegisterPayloadHandlersEvent
+    → registrar.playToClient() 注册 S2C 处理器（ConfigSyncPayload）
+    → registrar.playToServer() 注册 C2S 处理器（ConfigSyncPayload + ConfigRequestPayload）
 
   → NeoForge 专用服务端加载时：
   → NeoForgeServerEntryPoint.onServerSetup()  (@EventBusSubscriber(Dist.DEDICATED_SERVER))
@@ -933,6 +956,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
       │
       ▼（两者均调用）
   CommonConfigGUI.createScreen(parentScreen)
+    ├─ [多人模式] NetManager.requestConfigSync() 请求服务端同步最新配置和权限
     ├─ 检测到 Cloth Config → ClothConfigGUI.createScreen()
     ├─ 或检测到 YACL → YaclConfigGUI.createScreen()
     └─ 都未安装 → 弹出 Toast 提示 → 返回 null
@@ -946,8 +970,9 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
   → 显示配置界面
   → 玩家修改值并点击保存
     ├─ [未进入世界] CommonConfigGUI.saveConfig(config) → ConfigManager.save(config) 写入磁盘
-    └─ [游戏中] CommonConfigGUI.saveConfig(config) → NetManager.pushConfigToServer()
-        → 服务端校验 OP + ALLOW_OP_MODIFY + 更新 ServerConfig.INSTANCE + 广播给其他玩家（不写入磁盘）
+    ├─ [单人世界] CommonConfigGUI.saveConfig(config) → ConfigManager.save(config) + NetManager.updateServerConfig(config, true) 写磁盘并更新缓存
+    └─ [多人游戏] CommonConfigGUI.saveConfig(config) → NetManager.pushConfigToServer()
+        → 服务端校验 OP + ALLOW_OP_MODIFY + 更新 ServerConfig.INSTANCE + ConfigManager.save() 持久化 + 广播给所有在线玩家
 ```
 
 ### 13.4 Mixin 加载流程
@@ -1060,13 +1085,14 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 | `ModConfig`               | config                            | 配置数据类（纯数据，无静态状态），定义所有可配置项                                                 |
 | `ConfigManager`           | config                            | 配置文件读写（load 返回 ModConfig，save 接收 ModConfig）、YAML 注释生成、数值校正、翻译回退           |
 | `ConfigSyncPayload`       | config                            | 配置同步网络包：JSON 序列化 ModConfig + hasPermission，C2S + S2C 双向                   |
+| `ConfigRequestPayload`     | config                            | 配置请求网络包：空 record C2S 信号，请求服务端同步配置和权限                                 |
 | `EasyConfig`              | config.retention                   | 配置注解，标记可配置字段，声明数值范围、tooltip 键与游戏内可编辑性                                      |
 | `Value`                   | config.retention                   | 数值范围注解（min/max）                                                            |
 | `CommonClientEntryPoint`  | client                            | 客户端公共入口（client 子包，预留）                                                      |
 | `CommonConfigGUI`         | client.gui                        | 配置 GUI 统一入口 + 游戏内/主菜单模式辅助方法（isInWorld/getConfig/saveConfig/hasPermission） |
 | `ClothConfigGUI`          | client.gui                        | Cloth Config 配置界面构建，支持服务器模式权限控制                                            |
 | `YaclConfigGUI`           | client.gui                        | YACL 配置界面构建，支持服务器模式权限控制                                                    |
-| `NetManager`              | client.net                        | 客户端网络管理：服务端下发权限缓存、配置推送/缓存/清除/深拷贝                                           |
+| `NetManager`              | client.net                        | 客户端网络管理：服务端下发权限缓存、配置推送/缓存/请求同步/清除/深拷贝                             |
 | `CommonServerEntryPoint`  | server                            | 服务端公共入口，初始化 ServerConfig                                                   |
 | `ServerConfig`            | server.config                     | 服务端运行时配置缓存（替代 ModConfig.INSTANCE），初始化时从磁盘加载                                |
 | `IHopperBlockEntityImpl`  | server.impl                       | 分类功能接口定义，由 HopperBlockEntityMixin 实现                                       |
@@ -1074,7 +1100,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 | `MinecartHopperMixin`     | server.mixin                      | 漏斗矿车 Mixin：`@Unique` 字段 `easyHopperNeoForge$cooldown` 控制传输频率               |
 | `ServerPlayerMixin`       | server.mixin                      | ServerPlayer Accessor Mixin：暴露 server 字段供网络广播使用                            |
 | `IHopperBlockEntityMixin` | server.mixin                      | Accessor/Invoker Mixin：暴露原版内部字段和方法                                         |
-| `ServerConfigHandler`     | server.net                        | 服务端配置处理器：校验权限并应用配置推送（更新 ServerConfig.INSTANCE）                              |
+| `ServerConfigHandler`     | server.config                     | 服务端配置处理器：校验权限、应用配置、持久化到磁盘（更新 ServerConfig.INSTANCE + ConfigManager.save）    |
 | `PlayerUtil`              | utils                             | 玩家权限检查工具类（hasOpPermission + hasPermissionToPushConfig，读取 ServerConfig）      |
 | `Services`                | platform                          | ServiceLoader 服务加载器，运行时加载平台实现                                              |
 | `IPlatformHelper`         | platform                          | 平台抽象接口                                                                      |
@@ -1083,7 +1109,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 | `FabricServerEntryPoint`  | fabric.server                     | Fabric 服务端入口点（DedicatedServerModInitializer），C2S 处理器 + 进服推送              |
 | `FabricPlatformHelper`    | fabric.platform                   | Fabric 平台实现                                                                |
 | `ModMenuIntegration`      | fabric (root)                     | ModMenu 集成，提供配置界面入口                                                        |
-| `NeoForgeCommonEntryPoint`| neoforge (root)                   | NeoForge Both 入口点（@EventBusSubscriber），注册 S2C/C2S Payload 处理器             |
+| `NeoForgeEntryPoint`     | neoforge (root)                   | NeoForge Both 入口点（@EventBusSubscriber），注册 S2C/C2S Payload 处理器（含 ConfigRequestPayload）   |
 | `NeoForgeClientEntryPoint` | neoforge.client                  | NeoForge 客户端入口点，通过 @EventBusSubscriber(Dist.CLIENT) 注册 IConfigScreenFactory |
 | `NeoForgeServerEntryPoint` | neoforge.server                  | NeoForge 服务端入口点，通过 @EventBusSubscriber(Dist.DEDICATED_SERVER) 进服推送        |
 | `NeoForgePlatformHelper`  | neoforge.platform                 | NeoForge 平台实现                                                              |

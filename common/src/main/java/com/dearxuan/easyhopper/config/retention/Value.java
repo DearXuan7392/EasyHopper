@@ -5,6 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Value {
+    boolean defined() default false;
     float min() default 0;
     float max() default 255;
 }

@@ -98,6 +98,13 @@ public class ConfigManager {
                                 }
                             }
 
+                            if (!anno.canModifyInGame()) {
+                                String configOnlyTip = getTranslationWithFallback("easyhopper.config.edit_in_config_only");
+                                if (!configOnlyTip.equals("easyhopper.config.edit_in_config_only")) {
+                                    finalYamlWithComments.append("# ").append(configOnlyTip).append("\n");
+                                }
+                            }
+
                             // 检查 Field 是否为数值类型（如 int, long, float, double 等）
                             Class<?> fieldType = field.getType();
                             boolean isNumberType = Number.class.isAssignableFrom(fieldType)
@@ -106,7 +113,7 @@ public class ConfigManager {
 
                             if (isNumberType) {
                                 Value val = anno.value();
-                                if (val != null) {
+                                if (val.defined()) {
                                     finalYamlWithComments.append("# Range: [").append((long) val.min()).append(" ~ ").append((long) val.max()).append("]\n");
                                 }
                             }
@@ -209,7 +216,7 @@ public class ConfigManager {
                 EasyConfig anno = field.getAnnotation(EasyConfig.class);
                 Value val = anno.value();
 
-                if (val != null && (field.getType() == int.class || field.getType() == Integer.class)) {
+                if (val.defined() && (field.getType() == int.class || field.getType() == Integer.class)) {
                     try {
                         int currentVal = field.getInt(config);
                         int min = (int) val.min();

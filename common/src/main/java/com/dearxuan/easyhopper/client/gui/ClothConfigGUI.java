@@ -1,11 +1,13 @@
 package com.dearxuan.easyhopper.client.gui;
 
+import com.dearxuan.easyhopper.client.net.NetManager;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -14,9 +16,12 @@ import java.lang.reflect.Field;
 public class ClothConfigGUI {
 
     public static Screen createScreen(Screen parentScreen) {
+        boolean inWorld = CommonConfigGUI.isInWorld();
         boolean inMultiplayer = CommonConfigGUI.isInMultiplayer();
 
-        // 多人模式下读取服务器配置，单人/离线模式下读取本地配置
+        // 检查是否在等待服务器返回数据
+        boolean isWaitingSync = inWorld && !NetManager.isSyncCompleted();
+
         ModConfig targetConfig = CommonConfigGUI.getConfig();
         boolean hasPermission = CommonConfigGUI.hasPermission();
 
@@ -24,7 +29,6 @@ public class ClothConfigGUI {
                 .setParentScreen(parentScreen)
                 .setTitle(Component.translatable("easyhopper.title"));
 
-        // 分类名称加上模式提示
         Component categoryTitle = inMultiplayer
                 ? Component.translatable("easyhopper.gui.server_config")
                 : Component.translatable("easyhopper.gui.local_config");
@@ -33,11 +37,16 @@ public class ClothConfigGUI {
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
         // 顶部模式与权限提示栏
-        Component noticeComponent = inMultiplayer
-                ? (hasPermission
-                ? Component.translatable("easyhopper.gui.notice.server_editable")
-                : Component.translatable("easyhopper.gui.notice.server_readonly"))
-                : Component.translatable("easyhopper.gui.notice.local");
+        Component noticeComponent;
+        if (isWaitingSync) {
+            noticeComponent = Component.translatable("easyhopper.gui.notice.syncing"); // "正在同步服务器数据..."
+        } else if (inMultiplayer) {
+            noticeComponent = hasPermission
+                    ? Component.translatable("easyhopper.gui.notice.server_editable")
+                    : Component.translatable("easyhopper.gui.notice.server_readonly");
+        } else {
+            noticeComponent = Component.translatable("easyhopper.gui.notice.local");
+        }
 
         category.addEntry(entryBuilder.startTextDescription(noticeComponent).build());
 
@@ -58,15 +67,14 @@ public class ClothConfigGUI {
                     : easyConfig.tooltip();
 
             Class<?> type = field.getType();
-            // 在游戏内可修改性判断：注解允许 且 (单人模式 或 拥有服务器修改权限)
-            boolean editable = easyConfig.canModifyInGame() && hasPermission;
+            // 在未同步完成前，强制只读禁用；同步完成后恢复编辑权限
+            boolean editable = !isWaitingSync && easyConfig.canModifyInGame() && hasPermission;
 
             Component tooltipComponent = Component.translatable(tooltipKey);
             if (!easyConfig.canModifyInGame()) {
                 tooltipComponent = tooltipComponent.copy().append("\n").append(Component.translatable("easyhopper.config.edit_in_config_only"));
             }
 
-            // 处理 Integer 类型
             if (type == int.class || type == Integer.class) {
                 int defVal = getFieldValueInt(field, defaultConfig, 0);
                 int currentVal = getFieldValueInt(field, targetConfig, defVal);
@@ -89,9 +97,7 @@ public class ClothConfigGUI {
 
                 entry.setEditable(editable);
                 category.addEntry(entry);
-            }
-            // 处理 Boolean 类型
-            else if (type == boolean.class || type == Boolean.class) {
+            } else if (type == boolean.class || type == Boolean.class) {
                 boolean defVal = getFieldValueBoolean(field, defaultConfig, false);
                 boolean currentVal = getFieldValueBoolean(field, targetConfig, defVal);
 
@@ -110,8 +116,36 @@ public class ClothConfigGUI {
             }
         }
 
-        // 保存逻辑：多人模式推送至服务器，单人模式写回本地磁盘
-        builder.setSavingRunnable(() -> CommonConfigGUI.saveConfig(targetConfig));
+        builder.setSavingRunnable(() -> {
+            if (!isWaitingSync) {
+                CommonConfigGUI.saveConfig(targetConfig);
+            }
+        });
+
+        // 监听服务器数据包更新：当在 GUI 里时收到 S2C 同步包，自动重新渲染更新界面
+        builder.setAfterInitConsumer(screen -> {
+            // 如果还在等待同步，开一个线程或在 render/tick 中检查更新
+            if (isWaitingSync) {
+                // 利用一个轻量定时逻辑在收到回调后重新建立界面
+                new Thread(() -> {
+                    long startTime = System.currentTimeMillis();
+                    while (!NetManager.isSyncCompleted() && System.currentTimeMillis() - startTime < 3000) {
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException ignored) {
+                        }
+                    }
+                    if (NetManager.isSyncCompleted()) {
+                        Minecraft.getInstance().execute(() -> {
+                            if (Minecraft.getInstance().gui.screen() == screen) {
+                                Screen updatedScreen = ClothConfigGUI.createScreen(parentScreen);
+                                Minecraft.getInstance().setScreenAndShow(updatedScreen);
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
 
         return builder.build();
     }

@@ -5,10 +5,8 @@ import com.dearxuan.easyhopper.config.ConfigRequestPayload;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
 import com.dearxuan.easyhopper.server.CommonServerEntryPoint;
 import com.dearxuan.easyhopper.server.config.ServerConfig;
-import com.dearxuan.easyhopper.server.logic.mixin.ServerPlayerMixin;
 import com.dearxuan.easyhopper.server.config.ServerConfigHandler;
 import com.dearxuan.easyhopper.utils.PlayerUtil;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -54,13 +52,7 @@ public class NeoForgeEntryPoint {
     private static void handleServerConfigPush(ConfigSyncPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             ServerPlayer player = (ServerPlayer) context.player();
-            if (ServerConfigHandler.applyConfigFromPlayer(player, payload)) {
-                MinecraftServer server = ((ServerPlayerMixin) player).getServer();
-                for (ServerPlayer otherPlayer : server.getPlayerList().getPlayers()) {
-                    boolean hasPerm = PlayerUtil.hasPermissionToPushConfig(otherPlayer);
-                    PacketDistributor.sendToPlayer(otherPlayer, new ConfigSyncPayload(ServerConfig.INSTANCE, hasPerm));
-                }
-            }
+            ServerConfigHandler.applyConfigFromPlayer(player, payload);
         });
     }
 

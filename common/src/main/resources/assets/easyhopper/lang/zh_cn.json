@@ -12,6 +12,9 @@
   "easyhopper.gui.notice.server_editable": "§a[提示] 当前正在编辑服务器配置",
   "easyhopper.gui.notice.server_readonly": "§c[提示] 当前正在查看服务器配置 (无权限修改)",
   "easyhopper.gui.notice.local": "§b[提示] 当前正在编辑本地配置文件",
+  "easyhopper.gui.loading": "加载中",
+  "easyhopper.gui.loading_text": "正在从服务器获取数据...",
+  "easyhopper.gui.notice.syncing": "正在向服务器获取最新配置，请稍候...",
 
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "漏斗冷却时间",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "控制漏斗输送物品冷却时间",

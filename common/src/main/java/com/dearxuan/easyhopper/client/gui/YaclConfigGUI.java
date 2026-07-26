@@ -1,11 +1,13 @@
 package com.dearxuan.easyhopper.client.gui;
 
+import com.dearxuan.easyhopper.client.net.NetManager;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.retention.EasyConfig;
 import com.dearxuan.easyhopper.config.retention.Value;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -14,9 +16,11 @@ import java.lang.reflect.Field;
 public class YaclConfigGUI {
 
     public static Screen createScreen(Screen parentScreen) {
+        boolean inWorld = CommonConfigGUI.isInWorld();
         boolean inMultiplayer = CommonConfigGUI.isInMultiplayer();
 
-        // 多人模式下读取服务器配置，单人/离线模式下读取本地配置
+        boolean isWaitingSync = inWorld && !NetManager.isSyncCompleted();
+
         ModConfig targetConfig = CommonConfigGUI.getConfig();
         boolean hasPermission = CommonConfigGUI.hasPermission();
 
@@ -30,12 +34,16 @@ public class YaclConfigGUI {
         ConfigCategory.Builder categoryBuilder = ConfigCategory.createBuilder()
                 .name(categoryTitle);
 
-        // 顶部提示组件
-        Component noticeComponent = inMultiplayer
-                ? (hasPermission
-                ? Component.translatable("easyhopper.gui.notice.server_editable")
-                : Component.translatable("easyhopper.gui.notice.server_readonly"))
-                : Component.translatable("easyhopper.gui.notice.local");
+        Component noticeComponent;
+        if (isWaitingSync) {
+            noticeComponent = Component.translatable("easyhopper.gui.notice.syncing");
+        } else if (inMultiplayer) {
+            noticeComponent = hasPermission
+                    ? Component.translatable("easyhopper.gui.notice.server_editable")
+                    : Component.translatable("easyhopper.gui.notice.server_readonly");
+        } else {
+            noticeComponent = Component.translatable("easyhopper.gui.notice.local");
+        }
 
         categoryBuilder.option(LabelOption.create(noticeComponent));
 
@@ -56,7 +64,7 @@ public class YaclConfigGUI {
                     : easyConfig.tooltip();
 
             Class<?> type = field.getType();
-            boolean editable = easyConfig.canModifyInGame() && hasPermission;
+            boolean editable = !isWaitingSync && easyConfig.canModifyInGame() && hasPermission;
 
             Component tooltipComponent = Component.translatable(tooltipKey);
             if (!easyConfig.canModifyInGame()) {
@@ -114,11 +122,37 @@ public class YaclConfigGUI {
             }
         }
 
-        return builder
+        Screen screen = builder
                 .category(categoryBuilder.build())
-                .save(() -> CommonConfigGUI.saveConfig(targetConfig))
+                .save(() -> {
+                    if (!isWaitingSync) {
+                        CommonConfigGUI.saveConfig(targetConfig);
+                    }
+                })
                 .build()
                 .generateScreen(parentScreen);
+
+        if (isWaitingSync) {
+            new Thread(() -> {
+                long startTime = System.currentTimeMillis();
+                while (!NetManager.isSyncCompleted() && System.currentTimeMillis() - startTime < 3000) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ignored) {
+                    }
+                }
+                if (NetManager.isSyncCompleted()) {
+                    Minecraft.getInstance().execute(() -> {
+                        if (Minecraft.getInstance().gui.screen() == screen) {
+                            Screen updatedScreen = ClothConfigGUI.createScreen(parentScreen);
+                            Minecraft.getInstance().setScreenAndShow(updatedScreen);
+                        }
+                    });
+                }
+            }).start();
+        }
+
+        return screen;
     }
 
     private static int getFieldValueInt(Field field, Object instance, int defaultValue) {

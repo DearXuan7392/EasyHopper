@@ -11,6 +11,9 @@
   "easyhopper.gui.notice.server_editable": "§a[Notice] Editing server configuration",
   "easyhopper.gui.notice.server_readonly": "§c[Notice] Viewing server configuration (Read-only)",
   "easyhopper.gui.notice.local": "§b[Notice] Editing local config file",
+  "easyhopper.gui.loading": "Loading",
+  "easyhopper.gui.loading_text": "Fetching data from server...",
+  "easyhopper.gui.notice.syncing": "Fetching latest config from server, please wait...",
 
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "Hopper Transfer Cooldown",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "Controls the cooldown for item transfer by the hopper",

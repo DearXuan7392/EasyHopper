@@ -26,25 +26,27 @@ Mod 版本和遊戲版本，並解釋你進行了哪些操作、出現了什麼�
 
 ## 啟用功能
 
-### 任何情況
+### 編輯權限
 
-- 在**任何情況**下，你都可以在遊戲目錄下 ``./config/easyhopper.yaml`` 裡直接編輯內容，並在重新進入世界後生效。
-- 在**單人遊戲**中，你可以透過圖形介面來修改設定，但需要安裝對應的元件，請查看後續說明。
-- 在**區域網路連線**中，房主可以任意修改設定。
-- 在**伺服器**中 (包括區域網路連線裡的其他玩家)，只有在設定檔中啟用了**管理員修改**，且擁有**管理員**身份的情況下才能修改。
+* 在**任何情況**下，你都可以自遊戲目錄下的 `./config/easyhopper.yaml` 直接編輯內容，並於重新進入世界後生效。
+* 在**單人遊戲**中，你可以透過圖形介面來修改設定，但需要安裝對應的元件，請參閱後續說明。
+* 在區域網路連線（多人房）中，房主可以任意修改設定。
+* 在**伺服器**中（包含區域網路連線裡的其他玩家），只有在設定檔中啟用了**管理員修改**，且擁有**管理員**身份的情況下才能修改。
 
-### 對於 Fabric
+### 圖形介面依賴
+
+#### 對於 Fabric
 
 想要顯示圖形介面，你必須首先下載下列模組：
 
-- [Mod Menu](https://modrinth.com/mod/modmenu)，用於管理模組，並新增設定按鈕。
-- 從 [Cloth Config API](https://modrinth.com/mod/cloth-config) (推薦) 或 [YACL](https://modrinth.com/mod/yacl) 中任選一個下載，
-  用於提供圖形介面。如果同時存在二個模組，則優先使用 Cloth Config API。
+- [Mod Menu](https://modrinth.com/mod/modmenu)：用於管理模組，並新增設定按鈕。
+- 從 [Cloth Config API](https://modrinth.com/mod/cloth-config)（推薦）或 [YACL](https://modrinth.com/mod/yacl)
+  中任選一個下載，用於提供圖形介面。如果同時存在兩個模組，則優先使用 Cloth Config API。
 
-### 對於 NeoForge
+#### 對於 NeoForge
 
-- 從 [Cloth Config API](https://modrinth.com/mod/cloth-config) (推薦) 或 [YACL](https://modrinth.com/mod/yacl) 中任選一個下載，
-  用於提供圖形介面。如果同時存在二個模組，則優先使用 Cloth Config API。
+- 從 [Cloth Config API](https://modrinth.com/mod/cloth-config)（推薦）或 [YACL](https://modrinth.com/mod/yacl)
+  中任選一個下載，用於提供圖形介面。如果同時存在兩個模組，則優先使用 Cloth Config API。
 
 ## 功能
 

@@ -26,14 +26,16 @@ Mod 版本和游戏版本, 并解释你进行了哪些操作, 出现了什么问
 
 ## 启用功能
 
-### 任何情况
+### 编辑权限
 
 - 在**任何情况**下, 你都可以在游戏目录下 ``./config/easyhopper.yaml`` 里直接编辑内容, 并在重新进入世界后生效.
 - 在**单人游戏**中, 你可以通过图形界面来修改配置, 但需要安装对应的组件, 请查看后续说明.
 - 在**本地联机**中, 房主可以任意修改配置.
 - 在**服务器**中 (包括局域网联机里的其他玩家), 只有在配置文件中启用了**管理员修改**, 且拥有**管理员**身份的情况下才能修改.
 
-### 对于 Fabric
+### 图形界面依赖
+
+#### 对于 Fabric
 
 想要显示图形界面, 你必须首先下载下列模组:
 
@@ -41,7 +43,7 @@ Mod 版本和游戏版本, 并解释你进行了哪些操作, 出现了什么问
 - 从 [Cloth Config API](https://modrinth.com/mod/cloth-config) (推荐) 或 [YACL](https://modrinth.com/mod/yacl) 中任选一个下载,
   用于提供图形界面. 如果同时存在两个模组, 则优先使用 Cloth Config API.
 
-### 对于 NeoForge
+#### 对于 NeoForge
 
 - 从 [Cloth Config API](https://modrinth.com/mod/cloth-config) (推荐) 或 [YACL](https://modrinth.com/mod/yacl) 中任选一个下载,
   用于提供图形界面. 如果同时存在两个模组, 则优先使用 Cloth Config API.

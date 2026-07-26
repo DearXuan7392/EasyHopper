@@ -2,7 +2,7 @@
   "easyhopper.title": "轻松漏斗",
 
   "modmenu.nameTranslation.easyhopper": "轻松漏斗",
-  "modmenu.descriptionTranslation.easyhopper": "修改漏斗冷却时间,或启用分类功能,而无需引入新的方块",
+  "modmenu.descriptionTranslation.easyhopper": "修改漏斗冷却时间, 或启用分类功能, 而无需引入新的方块",
 
   "easyhopper.toast.title": "无法打开配置界面",
   "easyhopper.toast.description": "需要安装 Cloth Config 或 YACL 模组!",
@@ -14,7 +14,7 @@
   "easyhopper.gui.notice.local": "§b[提示] 当前正在编辑本地配置文件",
   "easyhopper.gui.loading": "加载中",
   "easyhopper.gui.loading_text": "正在从服务器获取数据...",
-  "easyhopper.gui.notice.syncing": "正在向服务器获取最新配置，请稍候...",
+  "easyhopper.gui.notice.syncing": "正在向服务器获取最新配置, 请稍候...",
 
   "easyhopper.HOPPER_TRANSFER_COOLDOWN": "漏斗冷却时间",
   "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "控制漏斗输送物品冷却时间",
@@ -23,7 +23,7 @@
   "easyhopper.HOPPER_OUTPUT_COUNT": "漏斗单次输出量",
   "easyhopper.HOPPER_OUTPUT_COUNT.tooltip": "漏斗每次输出多少个物品",
   "easyhopper.HOPPER_FILTERING": "漏斗分类",
-  "easyhopper.HOPPER_FILTERING.tooltip": "若启用,会占用漏斗的最后一格作为分类格,这个漏斗只会允许与最后一格相同的物品通过",
+  "easyhopper.HOPPER_FILTERING.tooltip": "若启用,会占用漏斗的最后一格作为分类格, 这个漏斗只会允许与最后一格相同的物品通过",
   "easyhopper.HOPPER_BETTER_EXTRACT": "漏斗传输优化",
   "easyhopper.HOPPER_BETTER_EXTRACT.tooltip": "1. 当漏斗上方为容器或完整方块时, 漏斗将不再检测掉落物\n2. 减少漏斗引发的容器更新次数",
   "easyhopper.HOPPER_BETTER_EXTRACT.disabled": "1.20.5 版本起, Mojang 已对漏斗代码进行优化, 本功能已失效",

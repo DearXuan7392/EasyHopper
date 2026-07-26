@@ -26,7 +26,7 @@ Bitte gib bei einer Fehlermeldung Folgendes an:
 
 ## Downloads
 
-- Download über [Modrinth](https://modrinth.com/mod/easy-hopper) (Empfohlen)
+- Download über [Modrinth](https://modrinth.com/mod/easyhopper) (Empfohlen)
 - Download über [CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper) (Langsamere Updates)
 
 ## Konfiguration & Einrichten der Funktionen

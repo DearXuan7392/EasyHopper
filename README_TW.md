@@ -21,7 +21,7 @@ Mod 版本和遊戲版本，並解釋你進行了哪些操作、出現了什麼�
 
 ## 下載
 
-- 從 [Modrinth](https://modrinth.com/mod/easy-hopper) 下載 (推薦)
+- 從 [Modrinth](https://modrinth.com/mod/easyhopper) 下載 (推薦)
 - 從 [CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper) 下載 (更新較慢)
 
 ## 啟用功能

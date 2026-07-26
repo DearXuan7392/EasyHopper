@@ -26,7 +26,7 @@ When submitting an issue, please include:
 
 ## Downloads
 
-- Download from [Modrinth](https://modrinth.com/mod/easy-hopper) (Recommended)
+- Download from [Modrinth](https://modrinth.com/mod/easyhopper) (Recommended)
 - Download from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper) (Slower updates)
 
 ## Configuration & Feature Setup

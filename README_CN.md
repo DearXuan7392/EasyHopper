@@ -4,20 +4,18 @@ EasyHopper 在原版漏斗的基础上提供分类功能, 而无需引入任何�
 
 ![截图](https://cdn.dearxuan.com/project/easyhopper/screen_zh.png)
 
-# 报告问题
+## 报告问题
 
 由于工作原因, 难以花费大量时间进行测试, 如果出现任何问题,
 请在 [https://github.com/DearXuan7392/EasyHopper/issues](https://github.com/DearXuan7392/EasyHopper/issues) 报告. 请附带
 Mod 版本和游戏版本, 并解释你进行了哪些操作, 出现了什么问题.
 
-# 下载
+## 下载
 
 - 从 [Modrinth](https://modrinth.com/mod/easy-hopper) 下载 (推荐)
 - 从 [CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper) 下载 (更新较慢)
 
-# 如何使用
-
-## 配置文件
+## 启用功能
 
 ### 任何情况
 
@@ -38,7 +36,7 @@ Mod 版本和游戏版本, 并解释你进行了哪些操作, 出现了什么问
 - 从 [Cloth Config API](https://modrinth.com/mod/cloth-config) (推荐) 或 [YACL](https://modrinth.com/mod/yacl) 中任选一个下载,
   用于提供图形界面. 如果同时存在两个模组, 则优先使用 Cloth Config API.
 
-## 新的功能
+## 功能
 
 ### 传输速度
 
@@ -59,3 +57,9 @@ Mod 版本和游戏版本, 并解释你进行了哪些操作, 出现了什么问
 当漏斗上方为完整方块时, 禁用漏斗的凋落物检测, 以提升性能.
 
 从 ``1.20.5`` 版本起, 官方已引入该优化, 无需使用此功能.
+
+## 测试版 (v3.1-alpha)
+
+正在开发并测试以下功能, 可能不稳定:
+
+- 在客户端修改服务器配置. 需要在配置文件中启用该功能, 且玩家为管理员

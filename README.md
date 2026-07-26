@@ -5,7 +5,7 @@ safely uninstall this mod at any time without affecting your save world.
 
 ![screenshot](https://cdn.dearxuan.com/project/easyhopper/screen_us.png)
 
-# Reporting Issues
+## Reporting Issues
 
 Due to work commitments, I am unable to spend a lot of time on extensive testing. If you encounter any issues, please
 report them at [https://github.com/DearXuan7392/EasyHopper/issues](https://github.com/DearXuan7392/EasyHopper/issues).
@@ -13,12 +13,10 @@ report them at [https://github.com/DearXuan7392/EasyHopper/issues](https://githu
 Please include the **mod version** and **Minecraft version**, along with a clear explanation of what you did and what
 went wrong.
 
-# Download
+## Download
 
 * Download from [Modrinth](https://modrinth.com/mod/easy-hopper) (Recommended)
 * Download from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper) (Slower updates)
-
-# Usage
 
 ## Configuration
 
@@ -69,3 +67,10 @@ Disables item pickup checks when a full block is placed directly above the hoppe
 
 *Note: Starting from version `1.20.5`, this optimization has been natively implemented by Minecraft, making this feature
 unnecessary for newer versions.*
+
+## Beta / Preview (v3.1-alpha)
+
+The following features are currently under development and testing, and may be unstable:
+
+- Modifying server configuration from the client side. This feature must be enabled in the configuration file, and the
+  player must have operator (OP) privileges.

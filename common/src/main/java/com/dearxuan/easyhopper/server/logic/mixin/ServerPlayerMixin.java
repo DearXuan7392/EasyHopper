@@ -1,4 +1,4 @@
-package com.dearxuan.easyhopper.server.mixin;
+package com.dearxuan.easyhopper.server.logic.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;

@@ -1,4 +1,4 @@
-package com.dearxuan.easyhopper.server.mixin;
+package com.dearxuan.easyhopper.server.logic.mixin;
 
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.server.config.ServerConfig;

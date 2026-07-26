@@ -1,5 +1,6 @@
 package com.dearxuan.easyhopper.server.config;
 
+import com.dearxuan.easyhopper.Constants;
 import com.dearxuan.easyhopper.config.ConfigManager;
 import com.dearxuan.easyhopper.config.ModConfig;
 import com.google.gson.Gson;
@@ -21,6 +22,16 @@ public class ServerConfig {
      */
     public static void init() {
         INSTANCE = deepCopy(ConfigManager.load());
+        Constants.LOG.info(
+                "Server config loaded: transferCooldown={}, inputCount={}, outputCount={}, filtering={}, extractCooldown={}, minecartCooldown={}, allowOpModify={}",
+                INSTANCE.HOPPER_TRANSFER_COOLDOWN,
+                INSTANCE.HOPPER_INPUT_COUNT,
+                INSTANCE.HOPPER_OUTPUT_COUNT,
+                INSTANCE.HOPPER_FILTERING,
+                INSTANCE.HOPPER_EXTRACT_COOLDOWN,
+                INSTANCE.HOPPER_MINECART_TRANSFER_COOLDOWN,
+                INSTANCE.ALLOW_OP_MODIFY
+        );
     }
 
     /**

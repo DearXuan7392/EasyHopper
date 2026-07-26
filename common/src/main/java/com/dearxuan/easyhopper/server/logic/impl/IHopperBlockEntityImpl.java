@@ -1,4 +1,4 @@
-package com.dearxuan.easyhopper.server.impl;
+package com.dearxuan.easyhopper.server.logic.impl;
 
 import net.minecraft.world.item.ItemStack;
 

@@ -28,39 +28,39 @@ public class CommonConfigGUI {
 
     /**
      * 获取当前环境下的配置
-     * - 多人游戏中: 从服务端缓存获取
-     * - 单人世界: 从本地配置文件加载
-     * - 未进入世界: 从配置文件加载
+     * - 游戏中 (单人/多人): 一律使用服务端缓存 (服务端启动时从配置文件加载)
+     * - 未进入世界: 从本地配置文件加载
      */
     public static ModConfig getConfig() {
         if (isInWorld()) {
-            if (isInMultiplayer()) {
-                return NetManager.loadConfigFromServer();
-            }
-            // 单人世界: 直接从本地文件加载
-            return ConfigManager.load();
+            // 游戏中 (单人/多人): 使用服务端缓存的配置
+            // 单人模式下, 集成服务器启动时已从配置文件加载到 ServerConfig.INSTANCE
+            // 多人模式下, 服务端通过 S2C 包同步到 ServerConfig.INSTANCE
+            return NetManager.loadConfigFromServer();
         }
+        // 未进入世界: 从本地配置文件加载
         return ConfigManager.load();
     }
 
     /**
      * 保存指定的配置副本到当前环境
-     * - 多人游戏中: 将指定配置推送到服务器
-     * - 单人世界: 将指定配置写入本地磁盘并更新缓存
-     * - 未进入世界: 将指定配置写入本地磁盘
+     * - 游戏中 (单人/多人): 通过服务端保存 (多人推送, 单人直接写磁盘 + 更新缓存)
+     * - 未进入世界: 仅修改本地配置文件
      *
      * @param config 要保存的配置对象
      */
     public static void saveConfig(ModConfig config) {
         if (isInWorld()) {
             if (isInMultiplayer()) {
+                // 多人模式: 推送到远程服务端, 由服务端校验权限并持久化
                 NetManager.pushConfigToServer(config);
             } else {
-                // 单人世界: 直接保存到本地磁盘并更新缓存
+                // 单人世界: 直接保存到本地磁盘并更新服务端缓存
                 ConfigManager.save(config);
                 NetManager.updateServerConfig(config, true);
             }
         } else {
+            // 未进入世界: 仅修改本地配置文件
             ConfigManager.save(config);
         }
     }
@@ -83,9 +83,12 @@ public class CommonConfigGUI {
 
     /**
      * 自动检测平台加载的 Mod，按优先级 [Cloth Config -> YACL] 返回对应的界面 Screen
+     * 游戏中 (单人/多人): 配置数据从服务端缓存获取 (通过 getConfig())
+     * 未进入世界时: 配置数据从本地配置文件加载
      */
     public static Screen createScreen(Screen parentScreen) {
         // 多人模式下, 先向服务端请求最新配置和权限, 确保缓存实时有效
+        // 单人模式下, ServerConfig.INSTANCE 已在集成服务器启动时初始化, 无需请求
         if (isInMultiplayer()) {
             NetManager.requestConfigSync();
         }

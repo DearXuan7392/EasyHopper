@@ -1,76 +1,87 @@
 # EasyHopper
 
-EasyHopper adds item filtering functionality to vanilla hoppers without introducing any new blocks. As a result, you can
-safely uninstall this mod at any time without affecting your save world.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/us.svg" width="18" valign="middle"> <b>English</b> | 
+  <a href="./README_CN.md"><img src="https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/cn.svg" width="18" valign="middle"> 简体中文</a> | 
+  <a href="./README_TW.md"><img src="https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/tw.svg" width="18" valign="middle"> 繁體中文</a> | 
+  <a href="./README_DE.md"><img src="https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/de.svg" width="18" valign="middle"> Deutsch</a>
+</p>
 
-![screenshot](https://cdn.dearxuan.com/project/easyhopper/screen_us.png)
+---
+
+EasyHopper adds item filtering capabilities to vanilla hoppers without introducing any new blocks. Because no custom
+blocks are added, you can safely uninstall this mod at any time without affecting your save world.
+
+![Screenshot](https://cdn.dearxuan.com/project/easyhopper/screen_us.png)
 
 ## Reporting Issues
 
-Due to work commitments, I am unable to spend a lot of time on extensive testing. If you encounter any issues, please
-report them at [https://github.com/DearXuan7392/EasyHopper/issues](https://github.com/DearXuan7392/EasyHopper/issues).
+Due to work commitments, thorough testing for every scenario can be difficult. If you encounter any issues or bugs,
+please report them on [GitHub Issues](https://github.com/DearXuan7392/EasyHopper/issues).
 
-Please include the **mod version** and **Minecraft version**, along with a clear explanation of what you did and what
-went wrong.
+When submitting an issue, please include:
 
-## Download
+- Mod version and Minecraft version.
+- Steps to reproduce the issue and a description of what went wrong.
 
-* Download from [Modrinth](https://modrinth.com/mod/easy-hopper) (Recommended)
-* Download from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper) (Slower updates)
+## Downloads
 
-## Configuration
+- Download from [Modrinth](https://modrinth.com/mod/easy-hopper) (Recommended)
+- Download from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/easyhopper) (Slower updates)
 
-### General / Server Configuration
+## Configuration & Feature Setup
 
-In all cases, you can directly edit the config file located at `./config/easyhopper.yaml` within your Minecraft
-directory. Changes will take effect after restarting the game.
+### Configuration Access
 
-When running on a server, configuration can only be modified via this file, and server restart is required. Client-side
-settings do not affect the server.
+- **Any Scenario:** You can directly edit `./config/easyhopper.yaml` in your game directory. Changes will take effect
+  after re-entering the world.
+- **Singleplayer:** You can adjust configurations via the in-game GUI (requires graphical UI dependencies; see below).
+- **LAN Host:** The host can freely modify configurations in-game.
+- **Dedicated Servers:** Players on a server (including non-host LAN players) can only modify configurations in-game if
+  **Operator Modification** (`ALLOW_OP_MODIFY`) is enabled in the server config file AND the player has **Operator (OP)
+  ** permissions.
 
-### For Fabric
+### Graphical UI Dependencies
 
-To enable the in-game configuration UI, you need to install the following mods:
+#### For Fabric
 
-* [Mod Menu](https://modrinth.com/mod/modmenu): Used for managing mods and adding the config button.
-* Either [Cloth Config API](https://modrinth.com/mod/cloth-config) (Recommended)
-  or [YACL](https://modrinth.com/mod/yacl) to render the GUI. If both are installed, Cloth Config API will take
-  priority.
+To enable the config GUI, you must install the following:
 
-### For NeoForge
+- [Mod Menu](https://modrinth.com/mod/modmenu): Adds a configuration button in the mod list.
+- **Either** [Cloth Config API](https://modrinth.com/mod/cloth-config) *(Recommended)* **or
+  ** [YACL](https://modrinth.com/mod/yacl): Provides the graphical interface. If both are installed, Cloth Config API
+  will be used by default.
 
-* Either [Cloth Config API](https://modrinth.com/mod/cloth-config) (Recommended)
-  or [YACL](https://modrinth.com/mod/yacl) to render the GUI. If both are installed, Cloth Config API will take
-  priority.
+#### For NeoForge
+
+To enable the config GUI, install **either**:
+
+- [Cloth Config API](https://modrinth.com/mod/cloth-config) *(Recommended)* **or
+  ** [YACL](https://modrinth.com/mod/yacl). If both are installed, Cloth Config API will be used by default.
 
 ## Features
 
-### Transfer Speed
+### Transfer Speed Adjustment
 
-You can customize the hopper transfer cooldown and the amount of items transferred to speed up or slow down item flow.
+Modify hopper transfer cooldowns and the number of items transferred per tick/batch to speed up or slow down item
+movement.
 
-### Pickup Cooldown
+### Search / Extract Cooldown
 
-Triggers a cooldown every time a hopper attempts to pick up items, preventing excessive entity checks. This
-significantly improves performance when using a large number of hoppers, though it may cause issues with certain
-redstone contraptions (e.g., arrayed super-smelters).
+Adds a cooldown whenever a hopper attempts to search for or extract nearby dropped items. This significantly reduces lag
+when large numbers of hoppers are placed. *Note: This may affect timing-sensitive redstone contraptions, such as
+high-speed super smelters.*
 
-### Hopper Filtering
+### Hopper Item Filtering
 
-The 5th slot of the hopper acts as a filter slot. Only matching items can enter the hopper or be actively pushed out. If
-a player manually inserts an unmatched item, it will remain in the hopper. However, other hoppers underneath can still
-pull items from it as usual.
+Uses the 5th (last) slot of a hopper as a filter slot. Only items matching the item type in the 5th slot will be pulled
+in or outputted. If an invalid item is manually placed into the hopper, it remains in place, but other hoppers below can
+still pull valid items out.
 
-### Performance Optimization (`<=1.20.4`)
+### Performance Optimization (`<= 1.20.4`)
 
-Disables item pickup checks when a full block is placed directly above the hopper, improving performance.
+Disables dropped item entity checks when a hopper is positioned directly below a full solid block or container, reducing
+server tick lag.
 
-*Note: Starting from version `1.20.5`, this optimization has been natively implemented by Minecraft, making this feature
-unnecessary for newer versions.*
-
-## Beta / Preview (v3.1-alpha)
-
-The following features are currently under development and testing, and may be unstable:
-
-- Modifying server configuration from the client side. This feature must be enabled in the configuration file, and the
-  player must have operator (OP) privileges.
+> **Note:** Starting from version `1.20.5`, Mojang natively integrated this optimization into vanilla Minecraft code,
+> making this option no longer necessary for newer versions.

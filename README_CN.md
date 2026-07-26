@@ -1,5 +1,14 @@
 # EasyHopper (轻松漏斗)
 
+<p align="center">
+  <a href="./README.md"><img src="https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/us.svg" width="18" valign="middle"> English</a> | 
+  <img src="https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/cn.svg" width="18" valign="middle"> <b>简体中文</b> | 
+  <a href="./README_TW.md"><img src="https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/tw.svg" width="18" valign="middle"> 繁體中文</a> | 
+  <a href="./README_DE.md"><img src="https://raw.githubusercontent.com/lipis/flag-icons/main/flags/4x3/de.svg" width="18" valign="middle"> Deutsch</a>
+</p>
+
+---
+
 EasyHopper 在原版漏斗的基础上提供分类功能, 而无需引入任何额外方块. 因此可以在任何时候卸载该 Mod, 而不会对存档造成任何影响.
 
 ![截图](https://cdn.dearxuan.com/project/easyhopper/screen_zh.png)
@@ -19,9 +28,10 @@ Mod 版本和游戏版本, 并解释你进行了哪些操作, 出现了什么问
 
 ### 任何情况
 
-在任何情况下, 你都可以在游戏目录下 ``./config/easyhopper.yaml`` 里直接编辑内容, 并在重启游戏后更新.
-
-在服务器上运行时, 你只能通过修改文件的方式来修改配置, 并在服务器重启后更新. 客户端设置对服务器不生效.
+- 在**任何情况**下, 你都可以在游戏目录下 ``./config/easyhopper.yaml`` 里直接编辑内容, 并在重新进入世界后生效.
+- 在**单人游戏**中, 你可以通过图形界面来修改配置, 但需要安装对应的组件, 请查看后续说明.
+- 在**本地联机**中, 房主可以任意修改配置.
+- 在**服务器**中 (包括局域网联机里的其他玩家), 只有在配置文件中启用了**管理员修改**, 且拥有**管理员**身份的情况下才能修改.
 
 ### 对于 Fabric
 
@@ -57,9 +67,3 @@ Mod 版本和游戏版本, 并解释你进行了哪些操作, 出现了什么问
 当漏斗上方为完整方块时, 禁用漏斗的凋落物检测, 以提升性能.
 
 从 ``1.20.5`` 版本起, 官方已引入该优化, 无需使用此功能.
-
-## 测试版 (v3.1-alpha)
-
-正在开发并测试以下功能, 可能不稳定:
-
-- 在客户端修改服务器配置. 需要在配置文件中启用该功能, 且玩家为管理员

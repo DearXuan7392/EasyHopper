@@ -2,8 +2,8 @@ package com.dearxuan.easyhopper.server.config;
 
 import com.dearxuan.easyhopper.Constants;
 import com.dearxuan.easyhopper.config.ConfigManager;
-import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.config.ConfigSyncPayload;
+import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.utils.PlayerUtil;
 import net.minecraft.server.level.ServerPlayer;
 

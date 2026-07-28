@@ -1,7 +1,5 @@
 package com.dearxuan.easyhopper.platform;
 
-import com.dearxuan.easyhopper.Constants;
-
 import java.util.ServiceLoader;
 
 // 服务加载器是 Java 的内置功能, 允许我们定位在不同环境之间有所不同的接口实现.

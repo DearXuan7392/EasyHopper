@@ -1,6 +1,5 @@
 package com.dearxuan.easyhopper.server.logic.mixin;
 
-import com.dearxuan.easyhopper.config.ModConfig;
 import com.dearxuan.easyhopper.server.config.ServerConfig;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;

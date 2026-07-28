@@ -1,6 +1,5 @@
 package com.dearxuan.easyhopper.server;
 
-import com.dearxuan.easyhopper.server.config.ServerConfig;
 import net.fabricmc.api.DedicatedServerModInitializer;
 
 /**

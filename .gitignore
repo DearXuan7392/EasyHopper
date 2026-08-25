@@ -24,3 +24,5 @@ run
 runs
 .codegraph
 .vscode
+.temp
+target

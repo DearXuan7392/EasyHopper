@@ -91,7 +91,7 @@ public class CommonConfigGUI {
             Minecraft client = Minecraft.getInstance();
             if (client != null) {
                 SystemToast.addOrUpdate(
-                        client.gui.toastManager(),
+                        client.getToastManager(),
                         SystemToast.SystemToastId.PACK_LOAD_FAILURE,
                         Component.translatable("easyhopper.toast.title"),
                         Component.translatable("easyhopper.toast.description")

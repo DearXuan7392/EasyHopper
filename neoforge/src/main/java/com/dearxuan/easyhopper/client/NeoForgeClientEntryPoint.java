@@ -3,15 +3,11 @@ package com.dearxuan.easyhopper.client;
 import com.dearxuan.easyhopper.Constants;
 import com.dearxuan.easyhopper.client.gui.CommonConfigGUI;
 import com.dearxuan.easyhopper.server.CommonServerEntryPoint;
-import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.neoforged.neoforge.common.NeoForge;
 
 /**
  * NeoForge 客户端专属入口, 仅在物理客户端加载.

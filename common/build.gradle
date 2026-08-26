@@ -4,10 +4,12 @@ plugins {
 }
 
 dependencies {
-    implementation("maven.modrinth:yacl:${yacl_version}-fabric") {
+    // common 用 NeoForm 官方映射(mojmap)编译, 因此这里应依赖 neoforge(mojmap)变体,
+    // 而非 fabric(intermediary)变体, 否则库的 API(如 Screen)会显示成 class_xxx.
+    implementation("maven.modrinth:yacl:${yacl_version}-neoforge") {
         transitive = false
     }
-    implementation("maven.modrinth:cloth-config:${cloth_config_version}+fabric") {
+    implementation("maven.modrinth:cloth-config:${cloth_config_version}+neoforge") {
         transitive = false
     }
 }
@@ -18,6 +20,10 @@ neoForge {
     def at = file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
+    }
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
     }
 }
 

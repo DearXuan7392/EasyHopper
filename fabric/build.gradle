@@ -1,23 +1,32 @@
 plugins {
     id 'easyhopper-loader'
-    id 'net.fabricmc.fabric-loom'
+    id 'fabric-loom'
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
-    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
+    }
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-    implementation "maven.modrinth:yacl:${yacl_version}-fabric"
-    implementation "maven.modrinth:modmenu:${modmenu_version}"
-    implementation "maven.modrinth:cloth-config:${cloth_config_version}+fabric"
+    modImplementation "maven.modrinth:yacl:${yacl_version}-fabric"
+    modImplementation "maven.modrinth:modmenu:${modmenu_version}"
+    modImplementation "maven.modrinth:cloth-config:${cloth_config_version}+fabric"
     include "org.yaml:snakeyaml:${project.snakeyaml_version}"
 }
 
 loom {
+    enableTransitiveAccessWideners = false
+
     def aw = project(':common').file("src/main/resources/${mod_id}.accesswidener")
     if (aw.exists()) {
         accessWidenerPath.set(aw)
+    }
+    mixin {
+        defaultRefmapName.set("${mod_id}.refmap.json")
     }
     runs {
         client {
@@ -50,6 +59,13 @@ sourceSets.configureEach {
             attributes {
                 attribute(loaderAttribute, 'fabric')
             }
+        }
+    }
+}
+loom.remapConfigurations.configureEach {
+    configurations.named(it.name) {
+        attributes {
+            attribute(loaderAttribute, 'fabric')
         }
     }
 }

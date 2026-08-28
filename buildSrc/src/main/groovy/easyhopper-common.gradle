@@ -42,6 +42,24 @@ repositories {
         name = 'BlameJared'
         url = 'https://maven.blamejared.com'
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'QuiltMC'
+                url = 'https://maven.quiltmc.org/repository/release/'
+            }
+        }
+        filter { includeGroupAndSubgroups('org.quiltmc.parsers') }
+    }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Shedaniel'
+                url = 'https://maven.shedaniel.me/'
+            }
+        }
+        filter { includeGroupAndSubgroups('me.shedaniel') }
+    }
 }
 
 // 在 outgoing 配置上声明 capabilities.

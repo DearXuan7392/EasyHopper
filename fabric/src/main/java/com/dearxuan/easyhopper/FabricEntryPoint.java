@@ -16,13 +16,13 @@ public class FabricEntryPoint implements ModInitializer {
     @Override
     public void onInitialize() {
         // 注册 S2C 编解码器 (服务端推送配置到客户端)
-        PayloadTypeRegistry.clientboundPlay().register(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
 
         // 注册 C2S 编解码器 (客户端推送配置到服务端)
-        PayloadTypeRegistry.serverboundPlay().register(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
 
         // 注册 C2S 编解码器 (客户端请求配置同步)
-        PayloadTypeRegistry.serverboundPlay().register(ConfigRequestPayload.TYPE, ConfigRequestPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(ConfigRequestPayload.TYPE, ConfigRequestPayload.CODEC);
 
         // 监听服务器启动事件 (包括专用服务端和集成服务器/单人世界)
         // 确保在每次进入世界时, 服务端都从配置文件加载配置, 并注册 C2S 网络包处理器

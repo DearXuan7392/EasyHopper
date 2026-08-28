@@ -16,6 +16,19 @@ dependencies {
     modImplementation "maven.modrinth:modmenu:${modmenu_version}"
     modImplementation "maven.modrinth:cloth-config:${cloth_config_version}+fabric"
     include "org.yaml:snakeyaml:${project.snakeyaml_version}"
+
+    // Loom 在 remap 依赖 mod 时会移除 fabric.mod.json 的 jars 字段, 导致其内嵌的库
+    // (META-INF/jars) 在开发运行环境中不会被加载. 以下依赖仅用于开发运行, 版本与各 mod
+    // 的内嵌版本保持一致, 不会进入构建产物.
+    runtimeOnly "org.quiltmc.parsers:gson:${quilt_parsers_version}"
+    runtimeOnly "org.quiltmc.parsers:json:${quilt_parsers_version}"
+    runtimeOnly "me.shedaniel.cloth:basic-math:${cloth_basic_math_version}"
+    runtimeOnly "com.twelvemonkeys.common:common-lang:${twelvemonkeys_version}"
+    runtimeOnly "com.twelvemonkeys.common:common-io:${twelvemonkeys_version}"
+    runtimeOnly "com.twelvemonkeys.common:common-image:${twelvemonkeys_version}"
+    runtimeOnly "com.twelvemonkeys.imageio:imageio-core:${twelvemonkeys_version}"
+    runtimeOnly "com.twelvemonkeys.imageio:imageio-metadata:${twelvemonkeys_version}"
+    runtimeOnly "com.twelvemonkeys.imageio:imageio-webp:${twelvemonkeys_version}"
 }
 
 loom {

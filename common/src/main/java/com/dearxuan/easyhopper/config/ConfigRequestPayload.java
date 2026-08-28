@@ -4,7 +4,7 @@ import com.dearxuan.easyhopper.Constants;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * C2S: 客户端请求服务端同步配置和权限信息
@@ -12,7 +12,7 @@ import net.minecraft.resources.Identifier;
  */
 public record ConfigRequestPayload() implements CustomPacketPayload {
 
-    public static final Type<ConfigRequestPayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "config_request"));
+    public static final Type<ConfigRequestPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "config_request"));
     public static final StreamCodec<FriendlyByteBuf, ConfigRequestPayload> CODEC = StreamCodec.unit(new ConfigRequestPayload());
 
     @Override

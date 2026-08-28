@@ -139,7 +139,7 @@ public class ClothConfigGUI {
                         Minecraft.getInstance().execute(() -> {
                             if (Minecraft.getInstance().screen == screen) {
                                 Screen updatedScreen = ClothConfigGUI.createScreen(parentScreen);
-                                Minecraft.getInstance().setScreenAndShow(updatedScreen);
+                                Minecraft.getInstance().setScreen(updatedScreen);
                             }
                         });
                     }

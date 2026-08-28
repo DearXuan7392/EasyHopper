@@ -31,7 +31,7 @@ neoForge {
             gameDirectory = this.mkdir(this.file("runs/client"))
         }
         data {
-            clientData()
+            data()
             gameDirectory = this.mkdir(this.file("runs/data"))
             // DataGen 可以在终端中通过 "./gradlew :neoforge:runData" 运行.
             // 指定用于数据生成的 modid, 输出生成的资源的路径, 以及查找现有资源的路径.

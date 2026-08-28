@@ -2,8 +2,8 @@ package com.dearxuan.easyhopper.server.logic.mixin;
 
 import com.dearxuan.easyhopper.server.config.ServerConfig;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
-import net.minecraft.world.entity.vehicle.minecart.MinecartHopper;
+import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;
+import net.minecraft.world.entity.vehicle.MinecartHopper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.Hopper;
 import org.spongepowered.asm.mixin.Mixin;

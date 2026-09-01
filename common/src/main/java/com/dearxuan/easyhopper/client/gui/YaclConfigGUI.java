@@ -144,7 +144,7 @@ public class YaclConfigGUI {
                 if (NetManager.isSyncCompleted()) {
                     Minecraft.getInstance().execute(() -> {
                         if (Minecraft.getInstance().screen == screen) {
-                            Screen updatedScreen = ClothConfigGUI.createScreen(parentScreen);
+                            Screen updatedScreen = YaclConfigGUI.createScreen(parentScreen);
                             Minecraft.getInstance().setScreenAndShow(updatedScreen);
                         }
                     });

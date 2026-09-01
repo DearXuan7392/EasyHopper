@@ -145,7 +145,7 @@ public class YaclConfigGUI {
                     Minecraft.getInstance().execute(() -> {
                         if (Minecraft.getInstance().screen == screen) {
                             Screen updatedScreen = YaclConfigGUI.createScreen(parentScreen);
-                            Minecraft.getInstance().setScreenAndShow(updatedScreen);
+                            Minecraft.getInstance().setScreen(updatedScreen);
                         }
                     });
                 }

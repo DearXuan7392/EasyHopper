@@ -7,7 +7,7 @@ dependencies {
     implementation "maven.modrinth:yacl:${yacl_version}-neoforge"
     implementation "maven.modrinth:cloth-config:${cloth_config_version}+neoforge"
 
-    // jarJar 将 snakeyaml 打包进最终 JAR (生产环境), implementation 确保开发运行时类路径可用
+    // jarJar 将 snakeyaml 打包进最终 JAR (生产环境), implementation 确保编译期类路径可用
     implementation "org.yaml:snakeyaml:${project.snakeyaml_version}"
     jarJar("org.yaml:snakeyaml:${project.snakeyaml_version}")
 }
@@ -31,6 +31,10 @@ neoForge {
         client {
             client()
             gameDirectory = this.mkdir(this.file("runs/client"))
+            // ModDevGradle 开发运行环境 (client/server) 的类路径由 legacyClasspath 文件提供,
+            // 普通 implementation 依赖不会进入其中, 因此必须通过 additionalRuntimeClasspath 显式注入,
+            // 否则运行时会抛 NoClassDefFoundError: org.yaml.snakeyaml.constructor.BaseConstructor
+            additionalRuntimeClasspathConfiguration.dependencies.add(project.dependencies.create("org.yaml:snakeyaml:${project.snakeyaml_version}"))
         }
         data {
             data()
@@ -43,6 +47,8 @@ neoForge {
             server()
             this.file("runs/server").createParentDirectories()
             gameDirectory = this.mkdir(this.file("runs/server"))
+            // 同 client: 将 snakeyaml 注入开发运行时 legacyClasspath, 使服务端加载配置时不缺类
+            additionalRuntimeClasspathConfiguration.dependencies.add(project.dependencies.create("org.yaml:snakeyaml:${project.snakeyaml_version}"))
         }
     }
     mods {

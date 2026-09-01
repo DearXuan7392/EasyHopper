@@ -1,7 +1,7 @@
 package com.dearxuan.easyhopper.platform;
 
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLEnvironment;
 
 public class NeoForgePlatformHelper implements IPlatformHelper {
 
@@ -17,6 +17,6 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public boolean isDevelopmentEnvironment() {
 
-        return !FMLLoader.getCurrent().isProduction();
+        return !FMLEnvironment.production;
     }
 }

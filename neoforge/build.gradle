@@ -7,6 +7,8 @@ dependencies {
     implementation "maven.modrinth:yacl:${yacl_version}-neoforge"
     implementation "maven.modrinth:cloth-config:${cloth_config_version}+neoforge"
 
+    // jarJar 将 snakeyaml 打包进最终 JAR (生产环境), implementation 确保开发运行时类路径可用
+    implementation "org.yaml:snakeyaml:${project.snakeyaml_version}"
     jarJar("org.yaml:snakeyaml:${project.snakeyaml_version}")
 }
 

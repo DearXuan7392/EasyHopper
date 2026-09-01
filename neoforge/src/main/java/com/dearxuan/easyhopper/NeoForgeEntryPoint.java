@@ -8,6 +8,7 @@ import com.dearxuan.easyhopper.server.CommonServerEntryPoint;
 import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.server.config.ServerConfigHandler;
 import com.dearxuan.easyhopper.utils.PlayerUtil;
+import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -25,11 +26,11 @@ public class NeoForgeEntryPoint {
         final PayloadRegistrar registrar = event.registrar("1");
 
         // 双向注册: ConfigSyncPayload 同时用于 C2S (客户端推送) 和 S2C (服务端同步)
+        // playBidirectional 只接受单个 handler, 在 handler 内通过 flow() 区分方向
         registrar.playBidirectional(
                 ConfigSyncPayload.TYPE,
                 ConfigSyncPayload.CODEC,
-                NeoForgeEntryPoint::handleServerConfigPush,
-                NeoForgeEntryPoint::handleClientConfigSync
+                NeoForgeEntryPoint::handleConfigSync
         );
 
         // C2S: 客户端请求配置同步 (空信号, 仅 C2S)
@@ -41,19 +42,20 @@ public class NeoForgeEntryPoint {
     }
 
     /**
-     * S2C: 处理服务端下发的配置同步
-     * 更新客户端本地缓存 (ServerConfig.INSTANCE + 权限缓存)
+     * 双向处理 ConfigSyncPayload:
+     * - C2S (SERVERBOUND): 客户端推送配置到服务端, 由服务端处理
+     * - S2C (CLIENTBOUND): 服务端同步配置到客户端, 更新客户端本地缓存
      */
-    private static void handleClientConfigSync(ConfigSyncPayload payload, IPayloadContext context) {
+    private static void handleConfigSync(ConfigSyncPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
-            NetManager.updateServerConfig(payload.toConfig(), payload.hasPermission());
-        });
-    }
-
-    private static void handleServerConfigPush(ConfigSyncPayload payload, IPayloadContext context) {
-        context.enqueueWork(() -> {
-            ServerPlayer player = (ServerPlayer) context.player();
-            ServerConfigHandler.applyConfigFromPlayer(player, payload);
+            if (context.flow() == PacketFlow.SERVERBOUND) {
+                // C2S: 客户端推送配置到服务端
+                ServerPlayer player = (ServerPlayer) context.player();
+                ServerConfigHandler.applyConfigFromPlayer(player, payload);
+            } else {
+                // S2C: 服务端同步配置到客户端
+                NetManager.updateServerConfig(payload.toConfig(), payload.hasPermission());
+            }
         });
     }
 

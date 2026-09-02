@@ -1,3 +1,14 @@
+---
+AIGC:
+  ContentProducer: '001191110102MAD55U9H0F10002'
+  ContentPropagator: '001191110102MAD55U9H0F10002'
+  Label: '1'
+  ProduceID: '6602457d-f166-457d-bc25-17f6191eede1'
+  PropagateID: '6602457d-f166-457d-bc25-17f6191eede1'
+  ReservedCode1: '82cc5bd7-bf50-4536-8614-e68c284ee10b'
+  ReservedCode2: '82cc5bd7-bf50-4536-8614-e68c284ee10b'
+---
+
 这是我的世界双端mod, 同时支持fabric和neoforge平台运行.
 
 该mod的功能是修改漏斗逻辑, 实现:

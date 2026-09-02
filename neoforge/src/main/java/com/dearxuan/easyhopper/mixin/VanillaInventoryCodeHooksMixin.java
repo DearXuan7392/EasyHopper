@@ -1,9 +1,11 @@
 package com.dearxuan.easyhopper.mixin;
 
+import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.server.logic.impl.IHopperBlockEntityImpl;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.Hopper;
+import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.neoforged.neoforge.items.VanillaInventoryCodeHooks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,37 +22,36 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = VanillaInventoryCodeHooks.class, priority = 500)
 public abstract class VanillaInventoryCodeHooksMixin {
 
-    /**
-     * 限制输出槽位数量：过滤模式下只遍历前4个槽位（跳过第5格分类槽）
-     */
     @Redirect(
-            method = "lambda$extractHook$0",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/block/entity/Hopper;getContainerSize()I"
-            )
+            method = "lambda$insertHook$2",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/HopperBlockEntity;getContainerSize()I")
     )
-    private static int redirectGetContainerSize(Hopper instance) {
-        return ((IHopperBlockEntityImpl) instance).getContainerSizeAfterClassification();
+    private static int redirectGetContainerSize(
+            HopperBlockEntity instance
+    ) {
+        if (ServerConfig.INSTANCE.HOPPER_FILTERING) {
+            return instance.getContainerSize() - 1;
+        } else {
+            return instance.getContainerSize();
+        }
     }
 
     /**
-     * 过滤物品类型：跳过与分类物品不匹配的槽位
-     * 原始逻辑：if (stack.isEmpty()) continue;
-     * 修改后：  if (stack.isEmpty() || !canTransferItem(stack)) continue;
+     * Redirect the isEmpty method,
+     * if this item differs from the classified item,
+     * it is treated as empty to avoid being transferred
+     *
+     * @param instance the item stack
+     * @return true if the item stack is empty or differs from the classified item
      */
     @Redirect(
-            method = "lambda$extractHook$0",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z",
-                    ordinal = 0  // 只匹配循环中的第一次 isEmpty 调用
-            )
+            method = "lambda$insertHook$2",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z")
     )
-    private static boolean redirectIsEmpty(
+    private static boolean isEmpty(
             ItemStack instance,
-            @Local(argsOnly = true) Hopper hopper
+            @Local(argsOnly = true) HopperBlockEntity hopperBlockEntity
     ) {
-        return instance.isEmpty() || !((IHopperBlockEntityImpl) hopper).canTransferItem(instance);
+        return instance.isEmpty() || !((IHopperBlockEntityImpl) hopperBlockEntity).canTransferItem(instance);
     }
 }

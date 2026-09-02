@@ -4,7 +4,7 @@
   "package": "com.dearxuan.easyhopper.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-
+    "VanillaInventoryCodeHooksMixin"
   ],
   "client": [],
   "server": [],

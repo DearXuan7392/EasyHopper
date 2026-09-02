@@ -22,5 +22,5 @@ interface IHopperBlockEntityMixin {
     boolean invokeIsOnCooldown();
 
     @Invoker("setCooldown")
-    void invokeSetCooldown(int transferCooldown);
+    void invokeSetCooldown(int cooldownTicks);
 }

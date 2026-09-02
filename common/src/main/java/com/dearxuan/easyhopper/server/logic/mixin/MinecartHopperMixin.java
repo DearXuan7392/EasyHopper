@@ -16,29 +16,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecartHopperMixin extends AbstractMinecartContainer implements Hopper {
 
     @Unique
-    private int easyHopperNeoForge$cooldown = 0;
+    private int easyHopper$cooldown = 0;
 
     protected MinecartHopperMixin(EntityType<?> p_38213_, Level p_38214_) {
         super(p_38213_, p_38214_);
     }
 
-    /**
-     * Inject the tick method,
-     * to make the hopper only transfer items once per cooldown
-     *
-     * @param ci the callback info
-     */
     @Inject(
             method = "tick",
             at = @At("HEAD"),
             cancellable = true
     )
-    private void injectTick(
-            CallbackInfo ci
-    ) {
-        --this.easyHopperNeoForge$cooldown;
-        if (this.easyHopperNeoForge$cooldown <= 0) {
-            this.easyHopperNeoForge$cooldown = ServerConfig.INSTANCE.HOPPER_MINECART_TRANSFER_COOLDOWN;
+    private void injectTick(CallbackInfo ci) {
+        --this.easyHopper$cooldown;
+        if (this.easyHopper$cooldown <= 0) {
+            this.easyHopper$cooldown = ServerConfig.INSTANCE.HOPPER_MINECART_TRANSFER_COOLDOWN;
         } else {
             ci.cancel();
         }

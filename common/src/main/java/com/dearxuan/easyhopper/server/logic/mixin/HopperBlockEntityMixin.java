@@ -2,6 +2,7 @@ package com.dearxuan.easyhopper.server.logic.mixin;
 
 import com.dearxuan.easyhopper.server.config.ServerConfig;
 import com.dearxuan.easyhopper.server.logic.impl.IHopperBlockEntityImpl;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -127,6 +128,35 @@ public abstract class HopperBlockEntityMixin extends RandomizableContainerBlockE
         } else {
             return instance.getItem(slot);
         }
+    }
+
+    /**
+     * 重定向 ejectItems 中的 getContainerSize，
+     * 过滤模式下只输出前4个槽位的物品
+     */
+    @Redirect(
+            method = "ejectItems",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/HopperBlockEntity;getContainerSize()I")
+    )
+    private static int redirectGetContainerSize(
+            HopperBlockEntity instance
+    ) {
+        return ((IHopperBlockEntityImpl) instance).getContainerSizeAfterClassification();
+    }
+
+    /**
+     * 重定向 ejectItems 中的 ItemStack.isEmpty()，
+     * 过滤模式下跳过与分类物品不匹配的物品
+     */
+    @Redirect(
+            method = "ejectItems",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z")
+    )
+    private static boolean redirectIsEmpty(
+            ItemStack instance,
+            @Local(argsOnly = true) HopperBlockEntity hopperBlockEntity
+    ) {
+        return instance.isEmpty() || !((IHopperBlockEntityImpl) hopperBlockEntity).canTransferItem(instance);
     }
 
     /**

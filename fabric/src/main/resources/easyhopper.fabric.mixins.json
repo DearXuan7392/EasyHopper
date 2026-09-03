@@ -4,10 +4,7 @@
   "package": "com.dearxuan.easyhopper.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "HopperBlockEntityFabricMixin",
-    "IHopperBlockEntityFabricMixin"
-  ],
+  "mixins": [],
   "client": [],
   "server": [],
   "injectors": {

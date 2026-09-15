@@ -1,0 +1,49 @@
+{
+  "error.DONT_WORK_IN_SERVER": "你無法修改伺服器設定！",
+  "error.KeyDuplication": "重複的實體類型：",
+  "error.WHITE_LIST_CONTAIN_ILLEGAL_CHARACTERS": "白名單中含有非法字元，只能包含英文字母或逗號",
+  "error.BLACK_LIST_CONTAIN_ILLEGAL_CHARACTERS": "黑名單中含有非法字元，只能包含英文字母或逗號",
+
+  "easyhopper.title": "簡單漏斗",
+
+  "modmenu.nameTranslation.easyhopper": "簡單漏斗",
+  "modmenu.descriptionTranslation.easyhopper": "修改漏斗冷卻時間或啟用分類功能，且無須引入新的方塊",
+
+  "easyhopper.HOPPER_TRANSFER_COOLDOWN": "漏斗冷卻時間",
+  "easyhopper.HOPPER_TRANSFER_COOLDOWN.tooltip": "控制漏斗傳送物品的冷卻時間",
+  "easyhopper.HOPPER_INPUT_COUNT": "漏斗單次輸入量",
+  "easyhopper.HOPPER_INPUT_COUNT.tooltip": "漏斗每次輸入的物品數量",
+  "easyhopper.HOPPER_OUTPUT_COUNT": "漏斗單次輸出量",
+  "easyhopper.HOPPER_OUTPUT_COUNT.tooltip": "漏斗每次輸出的物品數量",
+  "easyhopper.HOPPER_CLASSIFICATION": "漏斗分類",
+  "easyhopper.HOPPER_CLASSIFICATION.tooltip": "若啟用，會佔用漏斗的最後一格作為分類格，此漏斗將只允許與最後一格相同的物品通過",
+  "easyhopper.HOPPER_BETTER_EXTRACT": "漏斗傳輸最佳化",
+  "easyhopper.HOPPER_BETTER_EXTRACT.tooltip": "1. 當漏斗上方為容器或完整方塊時，漏斗將不再偵測掉落物\n2. 減少漏斗引發的容器更新次數",
+  "easyhopper.HOPPER_BETTER_EXTRACT.disabled": "1.20.5 版本起，Mojang 已對漏斗程式碼進行最佳化，本功能已失效",
+  "easyhopper.HOPPER_EXTRACT_COOLDOWN": "漏斗傳輸冷卻",
+  "easyhopper.HOPPER_EXTRACT_COOLDOWN.tooltip": "每次嘗試吸取掉落物都會使漏斗進入冷卻",
+  "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN": "漏斗礦車冷卻時間",
+  "easyhopper.HOPPER_MINECART_TRANSFER_COOLDOWN.tooltip": "控制漏斗礦車傳送物品的冷卻時間",
+  "easyhopper.HOPPER_MINECART_BETTER_EXTRACT": "漏斗礦車效能增強",
+  "easyhopper.HOPPER_MINECART_BETTER_EXTRACT.tooltip": "為漏斗礦車偵測掉落物加入冷卻",
+
+  "easydropper.title": "簡單投擲",
+
+  "modmenu.nameTranslation.easydropper": "簡單投擲",
+  "modmenu.descriptionTranslation.easydropper": "投擲器將會自動投擲，並支援修改投擲力度，並移除其中的隨機因素",
+
+  "easydropper.DROPPER_AUTO_DISPENSE": "投擲器自動投擲",
+  "easydropper.DROPPER_AUTO_DISPENSE.tooltip": "當投擲器中含有物品時，會立即自動投擲",
+  "easydropper.DISPENSER_AUTO_DISPENSE": "發射器自動投擲",
+  "easydropper.DISPENSER_AUTO_DISPENSE.tooltip": "當發射器中含有物品時，會立即自動投擲",
+  "easydropper.BETTER_ITEM_POSITION": "修正拋射物落點",
+  "easydropper.BETTER_ITEM_POSITION.tooltip": "若啟用，則投擲器拋出的物品不會左右偏移，且拋射軌跡固定",
+  "easydropper.DROPPER_COOLDOWN": "投擲器冷卻（刻）",
+  "easydropper.DROPPER_COOLDOWN.tooltip": "投擲器自動投擲的冷卻時間",
+  "easydropper.DISPENSER_COOLDOWN": "發射器冷卻時間（刻）",
+  "easydropper.DISPENSER_COOLDOWN.tooltip": "發射器自動投擲的冷卻時間",
+  "easydropper.DISPENSE_SPEED": "投擲速度",
+  "easydropper.DISPENSE_SPEED.tooltip": "拋射物的速度，直接影響拋射軌跡高度；若為負值，則會向下拋射",
+  "easydropper.DISPENSE_DISTANCE": "投擲距離",
+  "easydropper.DISPENSE_DISTANCE.tooltip": "拋射物投出的距離，與投擲速度一同作用；若為負值，則會掉落在投擲器面前"
+}
